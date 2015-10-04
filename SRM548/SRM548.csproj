@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="KingdomAndDucks.cs" />
+    <Compile Include="KingdomAndPassword.cs" />
     <Compile Include="KingdomAndTrees.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

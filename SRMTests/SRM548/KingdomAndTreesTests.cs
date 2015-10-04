@@ -1,10 +1,9 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SRM548.KingdomAndTrees;
 
 namespace SRMTests.SRM548
 {
-	[TestClass]
+    [TestClass]
 	public class KingdomAndTreesTests
 	{
 		[TestMethod]
