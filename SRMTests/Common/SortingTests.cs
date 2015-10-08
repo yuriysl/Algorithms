@@ -8,47 +8,253 @@ using System.Threading.Tasks;
 
 namespace Common.Tests
 {
+	class SortingTestCase<T>
+	{
+		public string Name;
+		public List<T> Input { get; set; }
+		public List<T> Expected { get; set; }
+	}
+
 	[TestClass()]
 	public class SortingTests
 	{
-		[TestMethod()]
-		public void InsertionSortTest()
+		private TestContext testContextInstance;
+
+		List<SortingTestCase<int>> _testCases;
+
+		public TestContext TestContext
 		{
-			var sorting = new Sorting();
-			int[] input = { };
-			sorting.InsertionSort(input);
-			Assert.IsTrue(input.Length == 0);
+			get
+			{
+				return testContextInstance;
+			}
+
+			set
+			{
+				testContextInstance = value;
+			}
 		}
+
+		[TestInitialize()]
+		public void TestInitialize()
+		{
+			_testCases = new List<SortingTestCase<int>>()
+			{
+				new SortingTestCase<int>
+				{
+					Name = "test case 1",
+					Input = new List<int> {},
+					Expected = new List<int> {}
+				},
+				new SortingTestCase<int>
+				{
+					Name = "test case 2",
+					Input = new List<int> {1, 2},
+					Expected = new List<int> {1, 2}
+				},
+				new SortingTestCase<int>
+				{
+					Name = "test case 3",
+					Input = new List<int> {2, 1},
+					Expected = new List<int> {1, 2}
+				},
+				new SortingTestCase<int>
+				{
+					Name = "test case 4",
+					Input = new List<int> {3, 1, 2},
+					Expected = new List<int> {1, 2, 3}
+				},
+				new SortingTestCase<int>
+				{
+					Name = "test case 5",
+					Input = new List<int> {4, 8, 10, 1, 9, 2, 0, 6, 3, 11, 12, 13, 7, 14, 5, 15},
+					Expected = new List<int> {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
+				},
+				new SortingTestCase<int>
+				{
+					Name = "test case 6",
+					Input = new List<int> {4, -8, 10, 1, -9, 2, 0, 6, -3, 11, 12, 13, -7, 14, -5, 15},
+					Expected = new List<int> {-9, -8, -7, -5, -3, 0, 1, 2, 4, 6, 10, 11, 12, 13, 14, 15}
+				}
+			};
+		}
+
+		#region InsertionSort
 
 		[TestMethod()]
-		public void InsertionSortTest1()
+		public void InsertionSortAscTest()
 		{
 			var sorting = new Sorting();
-			int[] input = {1, 2};
-			sorting.InsertionSort(input);
-			Assert.IsTrue(input[0] == 1);
-			Assert.IsTrue(input[1] == 2);
+			foreach (var testCase in _testCases)
+			{
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+				int m = expected.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				sorting.InsertionSort(input);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
+
+				Assert.AreEqual(m, n);
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[i], input[i]);
+				}
+			}
 		}
 
-		[TestMethod]
-		public void InsertionSortTest2()
+		[TestMethod()]
+		public void InsertionSortDescTest()
 		{
 			var sorting = new Sorting();
-			int[] input = { 2, 1 };
-			sorting.InsertionSort(input);
-			Assert.AreEqual(1, input[0]);
-			Assert.AreEqual(2, input[1]);
+			foreach (var testCase in _testCases)
+			{
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+				int m = expected.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected.Reverse()));
+
+				sorting.InsertionSort(input, SortDirection.Desc);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
+
+				Assert.AreEqual(m, n);
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[m - 1 - i], input[i]);
+				}
+			}
 		}
 
-		[TestMethod]
-		public void InsertionSortTest3()
+		#endregion
+
+		#region SelectionSort
+
+		[TestMethod()]
+		public void SelectionSortAscTest()
 		{
 			var sorting = new Sorting();
-			int[] input = { 3, 1, 2 };
-			sorting.InsertionSort(input);
-			Assert.AreEqual(1, input[0]);
-			Assert.AreEqual(2, input[1]);
-			Assert.AreEqual(3, input[2]);
+			foreach (var testCase in _testCases)
+			{
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+				int m = expected.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				sorting.SelectionSort(input);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
+
+				Assert.AreEqual(m, n);
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[i], input[i]);
+				}
+			}
 		}
+
+		[TestMethod()]
+		public void SelectionSortDescTest()
+		{
+			var sorting = new Sorting();
+			foreach (var testCase in _testCases)
+			{
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+				int m = expected.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected.Reverse()));
+
+				sorting.SelectionSort(input, SortDirection.Desc);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
+
+				Assert.AreEqual(m, n);
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[m - 1 - i], input[i]);
+				}
+			}
+		}
+
+		#endregion
+
+		#region SelectionSort
+
+		[TestMethod()]
+		public void MergeSortAscTest()
+		{
+			var sorting = new Sorting();
+			foreach (var testCase in _testCases)
+			{
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+				int m = expected.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				sorting.MergeSort(input, 0, n - 1);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
+
+				Assert.AreEqual(m, n);
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[i], input[i]);
+				}
+			}
+		}
+
+		[TestMethod()]
+		public void MergeSortDescTest()
+		{
+			var sorting = new Sorting();
+			foreach (var testCase in _testCases)
+			{
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+				int m = expected.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected.Reverse()));
+
+				sorting.MergeSort(input, 0, n - 1, SortDirection.Desc);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
+
+				Assert.AreEqual(m, n);
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[m - 1 - i], input[i]);
+				}
+			}
+		}
+
+		#endregion
 	}
 }
