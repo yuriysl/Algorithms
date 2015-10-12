@@ -88,7 +88,6 @@ namespace Common.Tests
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
-				int m = expected.Length;
 
 				Console.WriteLine("--------------------------------------------------------");
 				Console.WriteLine("Name:[{0}]", testCase.Name);
@@ -99,7 +98,6 @@ namespace Common.Tests
 
 				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
 
-				Assert.AreEqual(m, n);
 				for (int i = 0; i < n; i++)
 				{
 					Assert.AreEqual(expected[i], input[i]);
@@ -116,7 +114,6 @@ namespace Common.Tests
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
-				int m = expected.Length;
 
 				Console.WriteLine("--------------------------------------------------------");
 				Console.WriteLine("Name:[{0}]", testCase.Name);
@@ -127,7 +124,6 @@ namespace Common.Tests
 
 				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
 
-				Assert.AreEqual(m, n);
 				for (int i = 0; i < n; i++)
 				{
 					Assert.AreEqual(expected[i], input[i]);
@@ -144,7 +140,6 @@ namespace Common.Tests
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
-				int m = expected.Length;
 
 				Console.WriteLine("--------------------------------------------------------");
 				Console.WriteLine("Name:[{0}]", testCase.Name);
@@ -155,7 +150,6 @@ namespace Common.Tests
 
 				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
 
-				Assert.AreEqual(m, n);
 				for (int i = 0; i < n; i++)
 				{
 					Assert.AreEqual(expected[i], input[i]);
@@ -172,7 +166,6 @@ namespace Common.Tests
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
-				int m = expected.Length;
 
 				Console.WriteLine("--------------------------------------------------------");
 				Console.WriteLine("Name:[{0}]", testCase.Name);
@@ -183,7 +176,6 @@ namespace Common.Tests
 
 				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
 
-				Assert.AreEqual(m, n);
 				for (int i = 0; i < n; i++)
 				{
 					Assert.AreEqual(expected[i], input[i]);
