@@ -101,9 +101,31 @@ namespace Common.Tests
 
 				Assert.AreEqual(expected, actual);
 			}
+		}
 
+		[TestMethod()]
+		public void BinarySearchTailTest()
+		{
+			var searching = new Searching();
+			foreach (var testCase in _testCases)
+			{
+				int[] input = testCase.Input.ToArray();
+				int key = testCase.Key;
+				int expected = testCase.Expected;
+				int n = input.Length;
 
-			
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Key:[{0}]", key);
+				Console.WriteLine("Expected:[{0}]", expected);
+
+				int actual = searching.BinarySearchTail(input, 0, n - 1, key);
+
+				Console.WriteLine("Actual:[{0}]", actual);
+
+				Assert.AreEqual(expected, actual);
+			}
 		}
 	}
 }

@@ -79,10 +79,8 @@ namespace Common.Tests
 			};
 		}
 
-		#region InsertionSort
-
 		[TestMethod()]
-		public void InsertionSortAscTest()
+		public void InsertionSortTest()
 		{
 			var sorting = new Sorting();
 			foreach (var testCase in _testCases)
@@ -110,38 +108,7 @@ namespace Common.Tests
 		}
 
 		[TestMethod()]
-		public void InsertionSortDescTest()
-		{
-			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
-			{
-				int[] input = testCase.Input.ToArray();
-				int[] expected = testCase.Expected.ToArray();
-				int n = input.Length;
-				int m = expected.Length;
-
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected.Reverse()));
-
-				sorting.InsertionSort(input, SortDirection.Desc);
-
-				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
-
-				Assert.AreEqual(m, n);
-				for (int i = 0; i < n; i++)
-				{
-					Assert.AreEqual(expected[m - 1 - i], input[i]);
-				}
-			}
-		}
-
-		#endregion
-
-		#region SelectionSort
-
-		[TestMethod()]
-		public void SelectionSortAscTest()
+		public void SelectionSortTest()
 		{
 			var sorting = new Sorting();
 			foreach (var testCase in _testCases)
@@ -169,38 +136,7 @@ namespace Common.Tests
 		}
 
 		[TestMethod()]
-		public void SelectionSortDescTest()
-		{
-			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
-			{
-				int[] input = testCase.Input.ToArray();
-				int[] expected = testCase.Expected.ToArray();
-				int n = input.Length;
-				int m = expected.Length;
-
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected.Reverse()));
-
-				sorting.SelectionSort(input, SortDirection.Desc);
-
-				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
-
-				Assert.AreEqual(m, n);
-				for (int i = 0; i < n; i++)
-				{
-					Assert.AreEqual(expected[m - 1 - i], input[i]);
-				}
-			}
-		}
-
-		#endregion
-
-		#region SelectionSort
-
-		[TestMethod()]
-		public void MergeSortAscTest()
+		public void MergeSortTest()
 		{
 			var sorting = new Sorting();
 			foreach (var testCase in _testCases)
@@ -228,7 +164,7 @@ namespace Common.Tests
 		}
 
 		[TestMethod()]
-		public void MergeSortDescTest()
+		public void BubbleSortTest()
 		{
 			var sorting = new Sorting();
 			foreach (var testCase in _testCases)
@@ -241,20 +177,18 @@ namespace Common.Tests
 				Console.WriteLine("--------------------------------------------------------");
 				Console.WriteLine("Name:[{0}]", testCase.Name);
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected.Reverse()));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				sorting.MergeSort(input, 0, n - 1, SortDirection.Desc);
+				sorting.BubbleSort(input);
 
 				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
 
 				Assert.AreEqual(m, n);
 				for (int i = 0; i < n; i++)
 				{
-					Assert.AreEqual(expected[m - 1 - i], input[i]);
+					Assert.AreEqual(expected[i], input[i]);
 				}
 			}
 		}
-
-		#endregion
 	}
 }

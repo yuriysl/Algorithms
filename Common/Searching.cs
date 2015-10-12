@@ -23,5 +23,23 @@ namespace Common
 
 			return BinarySearch(a, p, q, key);
 		}
+
+		public int BinarySearchTail<T>(T[] a, int p, int r, T key)
+			where T : IComparable<T>
+		{
+			while (p < r)
+			{
+				int q = (p + r) / 2;
+				if (a[q].CompareTo(key) == 0)
+					return q;
+				else if (a[q].CompareTo(key) < 0)
+					p = q + 1;
+				else
+					r = q;
+			}
+			if (p > r)
+				return -1;
+			return a[r].CompareTo(key) == 0 ? r : -1;
+		}
 	}
 }

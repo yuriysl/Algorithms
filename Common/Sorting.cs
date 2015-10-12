@@ -6,18 +6,12 @@ using System.Threading.Tasks;
 
 namespace Common
 {
-	public enum SortDirection
-	{
-		Asc = 0,
-		Desc = 1,
-	}
-
 	public class Sorting
 	{
 		/// <summary>
 		/// O(n^2)
 		/// </summary>
-		public void InsertionSort<T>(T[] a, SortDirection sortDirection = SortDirection.Asc)
+		public void InsertionSort<T>(T[] a)
 			where T : IComparable<T>
 		{
 			int n = a.Length;
@@ -25,7 +19,7 @@ namespace Common
 			{
 				T key = a[i];
 				int j = i - 1;
-				while (j >= 0 && (sortDirection == SortDirection.Asc ? a[j].CompareTo(key) > 0 : a[j].CompareTo(key) < 0))
+				while (j >= 0 && a[j].CompareTo(key) > 0)
 				{
 					a[j + 1] = a[j];
 					j--;
@@ -37,7 +31,7 @@ namespace Common
 		/// <summary>
 		/// O(n^2)
 		/// </summary>
-		public void SelectionSort<T>(T[] a, SortDirection sortDirection = SortDirection.Asc)
+		public void SelectionSort<T>(T[] a)
 			where T : IComparable<T>
 		{
 			int n = a.Length;
@@ -46,7 +40,7 @@ namespace Common
 				int index = i;
 				for (int j = i + 1; j < n; j++)
 				{
-					if (sortDirection == SortDirection.Asc ? a[j].CompareTo(a[index]) < 0 : a[j].CompareTo(a[index]) > 0)
+					if (a[j].CompareTo(a[index]) < 0)
 						index = j;
 				}
 				T tmp = a[i];
@@ -58,18 +52,18 @@ namespace Common
 		/// <summary>
 		/// O(nlg(n))
 		/// </summary>
-		public void MergeSort<T>(T[] a, int p, int r, SortDirection sortDirection = SortDirection.Asc)
+		public void MergeSort<T>(T[] a, int p, int r)
 			where T : IComparable<T>
 		{
 			if (p >= r)
 				return;
 			int q = (p + r) / 2;
-			MergeSort(a, p, q, sortDirection);
-			MergeSort(a, q + 1, r, sortDirection);
-			Merge(a, p, q, r, sortDirection);
+			MergeSort(a, p, q);
+			MergeSort(a, q + 1, r);
+			Merge(a, p, q, r);
 		}
 
-		private void Merge<T>(T[] a, int p, int q, int r, SortDirection sortDirection = SortDirection.Asc)
+		private void Merge<T>(T[] a, int p, int q, int r)
 			where T : IComparable<T>
 		{
 			int n1 = q - p + 1;
@@ -85,7 +79,7 @@ namespace Common
 
 			for (int k = p; k <= r; k++)
 			{
-				if (j == n2 || i < n1 && (sortDirection == SortDirection.Asc ? left[i].CompareTo(right[j]) <= 0 : left[i].CompareTo(right[j]) >= 0))
+				if (j == n2 || i < n1 && left[i].CompareTo(right[j]) <= 0)
 				{
 					a[k] = left[i];
 					i++;
@@ -94,6 +88,27 @@ namespace Common
 				{
 					a[k] = right[j];
 					j++;
+				}
+			}
+		}
+
+		/// <summary>
+		/// O(n^2)
+		/// </summary>
+		public void BubbleSort<T>(T[] a)
+			where T : IComparable<T>
+		{
+			int n = a.Length;
+			for (int i = 0; i < n; i++)
+			{
+				for (int j = n - 1; j > i; j--)
+				{
+					if (a[j].CompareTo(a[j - 1]) < 0)
+					{
+						T tmp = a[j];
+						a[j] = a[j - 1];
+						a[j - 1] = tmp;
+					}
 				}
 			}
 		}
