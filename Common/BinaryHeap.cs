@@ -19,14 +19,9 @@ namespace Common
 		public TKey Key { get { return _key; } set { _key = value; } }
 		public TValue Value { get { return _value; } set { _value = value; } }
 
-		public BinaryHeapNode(int index)
+		public BinaryHeapNode(int index, TKey key)
 		{
 			_index = index;
-		}
-
-		public BinaryHeapNode(int index, TKey key)
-			: this(index)
-		{
 			_key = key;
 		}
 
@@ -76,8 +71,10 @@ namespace Common
 		{
 			int left = node.Left;
 			int right = node.Right;
+			int largest = node.Index;
 
-			int largest = (left < HeapSize && _nodes[left].Key.CompareTo(node.Key) > 0) ? left : node.Index;
+			if (left < HeapSize && _nodes[left].Key.CompareTo(node.Key) > 0)
+				largest = left;
 			if (right < HeapSize && _nodes[right].Key.CompareTo(_nodes[largest].Key) > 0)
 				largest = right;
 
@@ -85,6 +82,28 @@ namespace Common
 			{
 				Swap(node, _nodes[largest]);
 				MaxHeapify(_nodes[largest]);
+			}
+		}
+
+		public void MaxHeapifyTail(BinaryHeapNode<TKey, TValue> node)
+		{
+			int left = node.Left;
+			int right = node.Right;
+			int largest = -1;
+
+			while (largest != node.Index)
+			{
+				largest = node.Index;
+				if (left < HeapSize && _nodes[left].Key.CompareTo(node.Key) > 0)
+					largest = left;
+				if (right < HeapSize && _nodes[right].Key.CompareTo(_nodes[largest].Key) > 0)
+					largest = right;
+
+				if (largest != node.Index)
+					Swap(node, _nodes[largest]);
+
+				left = _nodes[largest].Left;
+				right = _nodes[largest].Right;
 			}
 		}
 
