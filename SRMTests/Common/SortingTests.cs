@@ -182,5 +182,125 @@ namespace Common.Tests
 				}
 			}
 		}
+
+		[TestMethod()]
+		public void HeapSortMaxTest()
+		{
+			var sorting = new Sorting();
+			foreach (var testCase in _testCases)
+			{
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				var nodes = new List<BinaryHeapNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BinaryHeapNode<int, object>(i, input[i], "value_" + input[i].ToString()));
+
+				sorting.HeapSortMax(nodes);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key).ToArray()));
+
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[i], nodes[i].Key);
+				}
+			}
+		}
+
+		[TestMethod()]
+		public void HeapSortMaxTailTest()
+		{
+			var sorting = new Sorting();
+			foreach (var testCase in _testCases)
+			{
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				var nodes = new List<BinaryHeapNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BinaryHeapNode<int, object>(i, input[i], "value_" + input[i].ToString()));
+
+				sorting.HeapSortMaxTail(nodes);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key).ToArray()));
+
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[i], nodes[i].Key);
+				}
+			}
+		}
+
+		[TestMethod()]
+		public void HeapSortMinTest()
+		{
+			var sorting = new Sorting();
+			foreach (var testCase in _testCases)
+			{
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				var nodes = new List<BinaryHeapNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BinaryHeapNode<int, object>(i, input[i], "value_" + input[i].ToString()));
+
+				sorting.HeapSortMin(nodes);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key).ToArray()));
+
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[n - i - 1], nodes[i].Key);
+				}
+			}
+		}
+
+		[TestMethod()]
+		public void HeapSortMinTailTest()
+		{
+			var sorting = new Sorting();
+			foreach (var testCase in _testCases)
+			{
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				var nodes = new List<BinaryHeapNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BinaryHeapNode<int, object>(i, input[i], "value_" + input[i].ToString()));
+
+				sorting.HeapSortMinTail(nodes);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key).ToArray()));
+
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[n - i - 1], nodes[i].Key);
+				}
+			}
+		}
 	}
 }

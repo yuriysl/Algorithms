@@ -112,5 +112,77 @@ namespace Common
 				}
 			}
 		}
+
+		/// <summary>
+		/// O(nlg(n))
+		/// </summary>
+		public void HeapSortMax<TKey, TValue>(List<BinaryHeapNode<TKey, TValue>> a)
+			where TKey : IComparable<TKey>
+		{
+			int n = a.Count;
+			var nodes = new List<BinaryHeapNode<TKey, TValue>>();
+			var binaryHeap = new BinaryHeap<TKey, TValue>(a);
+			binaryHeap.BuildMax();
+			for (int i = n - 1; i >= 0; i--)
+			{
+				BinaryHeap<TKey, TValue>.Swap(a[i], a[0]);
+				binaryHeap.HeapSize--;
+				binaryHeap.MaxHeapify(a[0]);
+			}
+		}
+
+		/// <summary>
+		/// O(nlg(n))
+		/// </summary>
+		public void HeapSortMaxTail<TKey, TValue>(List<BinaryHeapNode<TKey, TValue>> a)
+			where TKey : IComparable<TKey>
+		{
+			int n = a.Count;
+			var nodes = new List<BinaryHeapNode<TKey, TValue>>();
+			var binaryHeap = new BinaryHeap<TKey, TValue>(a);
+			binaryHeap.BuildMaxTail();
+			for (int i = n - 1; i >= 0; i--)
+			{
+				BinaryHeap<TKey, TValue>.Swap(a[i], a[0]);
+				binaryHeap.HeapSize--;
+				binaryHeap.MaxHeapifyTail(a[0]);
+			}
+		}
+
+		/// <summary>
+		/// O(nlg(n))
+		/// </summary>
+		public void HeapSortMin<TKey, TValue>(List<BinaryHeapNode<TKey, TValue>> a)
+			where TKey : IComparable<TKey>
+		{
+			int n = a.Count;
+			var nodes = new List<BinaryHeapNode<TKey, TValue>>();
+			var binaryHeap = new BinaryHeap<TKey, TValue>(a);
+			binaryHeap.BuildMin();
+			for (int i = n - 1; i > 0; i--)
+			{
+				BinaryHeap<TKey, TValue>.Swap(a[i], a[0]);
+				binaryHeap.HeapSize--;
+				binaryHeap.MinHeapify(a[0]);
+			}
+		}
+
+		/// <summary>
+		/// O(nlg(n))
+		/// </summary>
+		public void HeapSortMinTail<TKey, TValue>(List<BinaryHeapNode<TKey, TValue>> a)
+			where TKey : IComparable<TKey>
+		{
+			int n = a.Count;
+			var nodes = new List<BinaryHeapNode<TKey, TValue>>();
+			var binaryHeap = new BinaryHeap<TKey, TValue>(a);
+			binaryHeap.BuildMinTail();
+			for (int i = n - 1; i > 0; i--)
+			{
+				BinaryHeap<TKey, TValue>.Swap(a[i], a[0]);
+				binaryHeap.HeapSize--;
+				binaryHeap.MinHeapifyTail(a[0]);
+			}
+		}
 	}
 }
