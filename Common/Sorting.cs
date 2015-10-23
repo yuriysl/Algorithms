@@ -8,6 +8,7 @@ namespace Common
 {
 	public class Sorting
 	{
+		private static Random Rnd = new Random();
 		/// <summary>
 		/// O(n^2)
 		/// </summary>
@@ -93,6 +94,56 @@ namespace Common
 		}
 
 		/// <summary>
+		/// O(nlg(n))
+		/// </summary>
+		public void QuickSort<T>(T[] a, int p, int r)
+			where T : IComparable<T>
+		{
+			if (p >= r)
+				return;
+			int q = QuickPartition(a, p, r);
+			QuickSort(a, p, q - 1);
+			QuickSort(a, q + 1, r);
+		}
+
+		/// <summary>
+		/// O(nlg(n))
+		/// </summary>
+		public void QuickSortTail<T>(T[] a, int p, int r)
+			where T : IComparable<T>
+		{
+			while (p < r)
+			{
+				int q = QuickPartition(a, p, r);
+				QuickSortTail(a, p, q - 1);
+				p = q + 1;
+			}
+		}
+
+		private int QuickPartition<T>(T[] a, int p, int r) 
+			where T : IComparable<T>
+		{
+			int rndR = Rnd.Next(p, r);
+			Swap(a, rndR, r);
+
+			T x = a[r];
+			int i = p - 1;
+			int xN = 0;
+			for (int j = p; j < r; j++)
+			{
+				if(a[j].CompareTo(x) <= 0)
+				{
+					if (a[j].CompareTo(x) == 0)
+						xN++;
+					i++;
+					Swap(a, i, j);
+				}
+			}
+			Swap(a, i + 1, r);
+			return xN + 1 == (r - p + 1) ? (p + r) / 2 : i + 1;
+		}
+
+		/// <summary>
 		/// O(n^2)
 		/// </summary>
 		public void BubbleSort<T>(T[] a)
@@ -122,12 +173,12 @@ namespace Common
 			int n = a.Count;
 			var nodes = new List<BinaryHeapNode<TKey, TValue>>();
 			var binaryHeap = new BinaryHeap<TKey, TValue>(a);
-			binaryHeap.BuildMax();
+			(((IMaxHeap<TKey, TValue>)binaryHeap)).BuildMax();
 			for (int i = n - 1; i >= 0; i--)
 			{
 				BinaryHeap<TKey, TValue>.Swap(a[i], a[0]);
 				binaryHeap.HeapSize--;
-				binaryHeap.MaxHeapify(a[0]);
+				(((IMaxHeap<TKey, TValue>)binaryHeap)).MaxHeapify(a[0]);
 			}
 		}
 
@@ -140,12 +191,12 @@ namespace Common
 			int n = a.Count;
 			var nodes = new List<BinaryHeapNode<TKey, TValue>>();
 			var binaryHeap = new BinaryHeap<TKey, TValue>(a);
-			binaryHeap.BuildMaxTail();
+			(((IMaxHeap<TKey, TValue>)binaryHeap)).BuildMaxTail();
 			for (int i = n - 1; i >= 0; i--)
 			{
 				BinaryHeap<TKey, TValue>.Swap(a[i], a[0]);
 				binaryHeap.HeapSize--;
-				binaryHeap.MaxHeapifyTail(a[0]);
+				(((IMaxHeap<TKey, TValue>)binaryHeap)).MaxHeapifyTail(a[0]);
 			}
 		}
 
@@ -158,12 +209,12 @@ namespace Common
 			int n = a.Count;
 			var nodes = new List<BinaryHeapNode<TKey, TValue>>();
 			var binaryHeap = new BinaryHeap<TKey, TValue>(a);
-			binaryHeap.BuildMin();
+			(((IMinHeap<TKey, TValue>)binaryHeap)).BuildMin();
 			for (int i = n - 1; i > 0; i--)
 			{
 				BinaryHeap<TKey, TValue>.Swap(a[i], a[0]);
 				binaryHeap.HeapSize--;
-				binaryHeap.MinHeapify(a[0]);
+				(((IMinHeap<TKey, TValue>)binaryHeap)).MinHeapify(a[0]);
 			}
 		}
 
@@ -176,13 +227,20 @@ namespace Common
 			int n = a.Count;
 			var nodes = new List<BinaryHeapNode<TKey, TValue>>();
 			var binaryHeap = new BinaryHeap<TKey, TValue>(a);
-			binaryHeap.BuildMinTail();
+			(((IMinHeap<TKey, TValue>)binaryHeap)).BuildMinTail();
 			for (int i = n - 1; i > 0; i--)
 			{
 				BinaryHeap<TKey, TValue>.Swap(a[i], a[0]);
 				binaryHeap.HeapSize--;
-				binaryHeap.MinHeapifyTail(a[0]);
+				(((IMinHeap<TKey, TValue>)binaryHeap)).MinHeapifyTail(a[0]);
 			}
+		}
+
+		public static void Swap<T>(T[] a, int left, int right)
+		{
+			T tmp = a[left];
+			a[left] = a[right];
+			a[right] = tmp;
 		}
 	}
 }

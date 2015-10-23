@@ -54,9 +54,11 @@
     <Compile Include="Common\SortingTests.cs" />
     <Compile Include="Common\SearchingTests.cs" />
     <Compile Include="Common\RandomizationTests.cs" />
+    <Compile Include="Common\QueueTests.cs" />
     <Compile Include="SRM548\KingdomAndPasswordTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SRM548\KingdomAndTreesTests.cs" />
+    <Compile Include="Common\StackTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

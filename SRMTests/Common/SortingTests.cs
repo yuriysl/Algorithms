@@ -76,6 +76,13 @@ namespace Common.Tests
 					Input = new List<int> {4, -8, 10, 1, -9, 2, 0, 6, -3, 11, 12, 13, -7, 14, -5, 15},
 					Expected = new List<int> {-9, -8, -7, -5, -3, 0, 1, 2, 4, 6, 10, 11, 12, 13, 14, 15}
 				}
+				,
+				new SortingTestCase<int>
+				{
+					Name = "test case 7",
+					Input = new List<int> {1, 1, 1, 1, 1, 1},
+					Expected = new List<int> {1, 1, 1, 1, 1, 1}
+				}
 			};
 		}
 
@@ -147,6 +154,58 @@ namespace Common.Tests
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				sorting.MergeSort(input, 0, n - 1);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
+
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[i], input[i]);
+				}
+			}
+		}
+
+		[TestMethod()]
+		public void QuickSortTest()
+		{
+			var sorting = new Sorting();
+			foreach (var testCase in _testCases)
+			{
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				sorting.QuickSort(input, 0, n - 1);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
+
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[i], input[i]);
+				}
+			}
+		}
+
+		[TestMethod()]
+		public void QuickSortTailTest()
+		{
+			var sorting = new Sorting();
+			foreach (var testCase in _testCases)
+			{
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				sorting.QuickSortTail(input, 0, n - 1);
 
 				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
 
