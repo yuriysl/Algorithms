@@ -239,7 +239,7 @@ namespace Common
 		/// <summary>
 		/// O(n)
 		/// </summary>
-		public int[] CountingSort(int[] a, int left, int right, int? r = null)
+		public int[] CountingSort(int[] a, int? r = null, int left = 0, int right = 9)
 		{
 			int n = a.Length;
 			int index;
@@ -247,9 +247,9 @@ namespace Common
 			int[] b = new int[n];
 			if (n == 0)
 				return b;
-			int[] c = new int[k + 1];
+			int[] c = new int[k];
 
-			for (int i = 0; i <= k; i++)
+			for (int i = 0; i < k; i++)
 				c[i] = 0;
 
 			for (int j = 0; j < n; j++)
@@ -258,7 +258,7 @@ namespace Common
 				c[index]++;
 			}
 
-			for (int i = 1; i <= k; i++)
+			for (int i = 1; i < k; i++)
 				c[i] += c[i - 1];
 
 			for (int j = n - 1; j >= 0; j--)
@@ -273,7 +273,7 @@ namespace Common
 		/// <summary>
 		/// O(n)
 		/// </summary>
-		public string[] CountingSort(string[] a, int left, int right, int? r = null)
+		public string[] CountingSort(string[] a, int? r = null, int left = 0, int right = 255)
 		{
 			int n = a.Length;
 			byte index;
@@ -281,9 +281,9 @@ namespace Common
 			string[] b = new string[n];
 			if (n == 0)
 				return b;
-			byte[] c = new byte[k + 1];
+			byte[] c = new byte[k];
 
-			for (int i = 0; i <= k; i++)
+			for (int i = 0; i < k; i++)
 				c[i] = 0;
 
 			for (int j = 0; j < n; j++)
@@ -292,7 +292,7 @@ namespace Common
 				c[index]++;
 			}
 
-			for (int i = 1; i <= k; i++)
+			for (int i = 1; i < k; i++)
 				c[i] += c[i - 1];
 
 			for (int j = n - 1; j >= 0; j--)
@@ -312,7 +312,7 @@ namespace Common
 			int n = a.Length;
 			for (int i = 0; i < d; i++)
 			{
-				a = CountingSort(a, 0, 9, i);
+				a = CountingSort(a, i);
 			}
 			return a;
 		}
@@ -320,12 +320,12 @@ namespace Common
 		/// <summary>
 		/// O(n)
 		/// </summary>
-		public string[] RadixSort(string[] a, int d)
+		public string[] RadixSort(string[] a, int d, int left = 0, int right = 255)
 		{
 			int n = a.Length;
 			for (int i = 0; i < d; i++)
 			{
-				a = CountingSort(a, '0', '9', i);
+				a = CountingSort(a, i, left, right);
 			}
 			return a;
 		}

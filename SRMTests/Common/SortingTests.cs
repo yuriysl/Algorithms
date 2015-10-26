@@ -410,7 +410,7 @@ namespace Common.Tests
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				var output = sorting.CountingSort(input, -15, 15);
+				var output = sorting.CountingSort(input, null, -15, 15);
 
 				Console.WriteLine("Output:[{0}]", string.Join(", ", output));
 
@@ -440,7 +440,7 @@ namespace Common.Tests
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				var output = sorting.CountingSort(input, -15, 15);
+				var output = sorting.CountingSort(input, null, -15, 15);
 
 				Console.WriteLine("Output:[{0}]", string.Join(", ", output));
 
@@ -498,7 +498,7 @@ namespace Common.Tests
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				var output = sorting.RadixSort(input, input.Length == 0 ? 0 : input[0].ToString().Length);
+				var output = sorting.RadixSort(input, input.Length == 0 ? 0 : input[0].ToString().Length, '0', '9');
 
 				Console.WriteLine("Output:[{0}]", string.Join(", ", output));
 
