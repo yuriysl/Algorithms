@@ -18,7 +18,7 @@ namespace Common
 			int q = (p + r) / 2;
 			if (a[q].CompareTo(key) == 0)
 				return q;
-			else if(a[q].CompareTo(key) < 0)
+			if (a[q].CompareTo(key) < 0)
 				return BinarySearch(a, q + 1, r, key);
 
 			return BinarySearch(a, p, q, key);
@@ -32,7 +32,7 @@ namespace Common
 				int q = (p + r) / 2;
 				if (a[q].CompareTo(key) == 0)
 					return q;
-				else if (a[q].CompareTo(key) < 0)
+				if (a[q].CompareTo(key) < 0)
 					p = q + 1;
 				else
 					r = q;

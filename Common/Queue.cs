@@ -8,19 +8,17 @@ namespace Common
 {
 	public class Queue<TValue> : IQueue<TValue>
 	{
-		private BinaryHeap<int, TValue> _binaryHeap;
+		readonly BinaryHeap<int, TValue> _binaryHeap;
 
-		public int Count { get { return _binaryHeap.HeapSize; } }
+		public int Count => _binaryHeap.HeapSize;
 
 		public Queue()
 		{
 			_binaryHeap = new BinaryHeap<int, TValue>();
 		}
 
-		public TValue Dequeue()
-		{
-			return ((IMaxHeap<int, TValue>)_binaryHeap).ExtractMax().Value;
-		}
+		public TValue Dequeue() => ((IMaxHeap<int, TValue>)_binaryHeap).ExtractMax().Value;
+
 		public void Enqueue(TValue value)
 		{
 			((IMinHeap<int, TValue>)_binaryHeap).MinInsert(Count, value);

@@ -64,7 +64,7 @@ Returns: 251
 			long[] h = new long[n];
 			for (int i = 0; i < n; ++i) h[i] = heights[i];
 			long left = -1;
-			long right = (long)1e10;
+			var right = (long)1e10;
 			while (right - left > 1)
 			{
 				long middle = (left + right) / 2;

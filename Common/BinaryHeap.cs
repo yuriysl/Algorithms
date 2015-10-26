@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Common
 {
@@ -12,9 +10,9 @@ namespace Common
 		TKey _key;
 		TValue _value;
 
-		public int Parent { get { return (_index + 1) / 2 - 1; }}
-		public int Left { get { return _index * 2 + 1; }}
-		public int Right { get { return _index * 2 + 2; }}
+		public int Parent => (_index + 1) / 2 - 1;
+		public int Left => _index * 2 + 1;
+		public int Right => _index * 2 + 2;
 		public int Index{ get { return _index; } set { _index = value; } }
 		public TKey Key { get { return _key; } set { _key = value; } }
 		public TValue Value { get { return _value; } set { _value = value; } }
@@ -37,7 +35,7 @@ namespace Common
 	{
 		#region Fields
 
-		List<BinaryHeapNode<TKey, TValue>> _nodes;
+		readonly List<BinaryHeapNode<TKey, TValue>> _nodes;
 		int _heapSize;
 
 		#endregion
@@ -58,15 +56,9 @@ namespace Common
 
 		#region Properties
 
-		public BinaryHeapNode<TKey, TValue> this[int index]
-		{
-			get { return _nodes[index]; }
-		}
+		public BinaryHeapNode<TKey, TValue> this[int index] => _nodes[index];
 
-		public int Length
-		{
-			get { return _nodes.Count; }
-		}
+		public int Length => _nodes.Count;
 
 		public int HeapSize
 		{
@@ -362,8 +354,8 @@ namespace Common
 		private string ToStringTree()
 		{
 			var treeBuilder = new StringBuilder();
-			int h = (int)Math.Floor(Math.Log(_heapSize, 2));
-			int levelN = (int)Math.Ceiling(_heapSize / Math.Pow(2, h + 1));
+			var h = (int)Math.Floor(Math.Log(_heapSize, 2));
+			var levelN = (int)Math.Ceiling(_heapSize / Math.Pow(2, h + 1));
 			int currLevelN = 0;
 			for (int i = 0; i < _heapSize; i++)
 			{

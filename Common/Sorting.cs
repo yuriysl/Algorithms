@@ -281,7 +281,7 @@ namespace Common
 			string[] b = new string[n];
 			if (n == 0)
 				return b;
-			byte[] c = new byte[k];
+			int[] c = new int[k];
 
 			for (int i = 0; i < k; i++)
 				c[i] = 0;
@@ -311,9 +311,7 @@ namespace Common
 		{
 			int n = a.Length;
 			for (int i = 0; i < d; i++)
-			{
 				a = CountingSort(a, i);
-			}
 			return a;
 		}
 
@@ -324,9 +322,7 @@ namespace Common
 		{
 			int n = a.Length;
 			for (int i = 0; i < d; i++)
-			{
 				a = CountingSort(a, i, left, right);
-			}
 			return a;
 		}
 
