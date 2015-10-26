@@ -236,6 +236,53 @@ namespace Common
 			}
 		}
 
+		/// <summary>
+		/// O(n)
+		/// </summary>
+		public int[] CountingSort(int[] a, int left, int right, int? r = null)
+		{
+			int n = a.Length;
+			int index;
+			int k = right - left + 1;
+			int[] b = new int[n];
+			if (n == 0)
+				return b;
+			int[] c = new int[k + 1];
+
+			for (int i = 0; i <= k; i++)
+				c[i] = 0;
+
+			for (int j = 0; j < n; j++)
+			{
+				index = (r.HasValue ? ((a[j] / (int)Math.Pow(10, r.Value)) % 10) : a[j]) - left;
+				c[index]++;
+			}
+
+			for (int i = 1; i <= k; i++)
+				c[i] += c[i - 1];
+
+			for (int j = n - 1; j >= 0; j--)
+			{
+				index = (r.HasValue ? ((a[j] / (int)Math.Pow(10, r.Value)) % 10) : a[j]) - left;
+				b[c[index] - 1] = a[j];
+				c[index]--;
+			}
+			return b;
+		}
+
+		/// <summary>
+		/// O(n)
+		/// </summary>
+		public int[] RadixSort(int[] a, int d)
+		{
+			int n = a.Length;
+			for (int i = 0; i < d; i++)
+			{
+				a = CountingSort(a, 0, 9, i);
+			}
+			return a;
+		}
+
 		public static void Swap<T>(T[] a, int left, int right)
 		{
 			T tmp = a[left];
