@@ -14,6 +14,7 @@ namespace Common.Tests
 		public List<T> Input { get; set; }
 		public List<T> Expected { get; set; }
 		public bool IsForCounting;
+		public bool IsForCountingString;
 		public bool IsForRadix;
 	}
 
@@ -48,6 +49,7 @@ namespace Common.Tests
 					Input = new List<int> {},
 					Expected = new List<int> {},
 					IsForCounting = true,
+					IsForCountingString = true,
 					IsForRadix = true
 				},
 				new SortingTestCase<int>
@@ -56,6 +58,7 @@ namespace Common.Tests
 					Input = new List<int> {1, 2},
 					Expected = new List<int> {1, 2},
 					IsForCounting = true,
+					IsForCountingString = true,
 					IsForRadix = true
 				},
 				new SortingTestCase<int>
@@ -64,6 +67,7 @@ namespace Common.Tests
 					Input = new List<int> {2, 1},
 					Expected = new List<int> {1, 2},
 					IsForCounting = true,
+					IsForCountingString = true,
 					IsForRadix = true
 				},
 				new SortingTestCase<int>
@@ -72,6 +76,7 @@ namespace Common.Tests
 					Input = new List<int> {3, 1, 2},
 					Expected = new List<int> {1, 2, 3},
 					IsForCounting = true,
+					IsForCountingString = true,
 					IsForRadix = true
 				},
 				new SortingTestCase<int>
@@ -80,6 +85,7 @@ namespace Common.Tests
 					Input = new List<int> {4, 8, 10, 1, 9, 2, 0, 6, 3, 11, 12, 13, 7, 14, 5, 15},
 					Expected = new List<int> {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15},
 					IsForCounting = true,
+					IsForCountingString = true,
 					IsForRadix = false
 				},
 				new SortingTestCase<int>
@@ -88,6 +94,7 @@ namespace Common.Tests
 					Input = new List<int> {4, -8, 10, 1, -9, 2, 0, 6, -3, 11, 12, 13, -7, 14, -5, 15},
 					Expected = new List<int> {-9, -8, -7, -5, -3, 0, 1, 2, 4, 6, 10, 11, 12, 13, 14, 15},
 					IsForCounting = true,
+					IsForCountingString = false,
 					IsForRadix = false
 				},
 				new SortingTestCase<int>
@@ -104,6 +111,7 @@ namespace Common.Tests
 					Input = new List<int> {329, 457, 657, 839, 436, 720, 355},
 					Expected = new List<int> {329, 355, 436, 457, 657, 720, 839},
 					IsForCounting = false,
+					IsForCountingString = false,
 					IsForRadix = true
 				}
 			};
@@ -414,6 +422,36 @@ namespace Common.Tests
 		}
 
 		[TestMethod()]
+		public void CountingStringSortTest()
+		{
+			var sorting = new Sorting();
+			foreach (var testCase in _testCases)
+			{
+				if (!testCase.IsForCountingString)
+					continue;
+				string[] input = new string[testCase.Input.Count];
+				for (int i = 0; i <testCase.Input.Count; i++)
+					input[i] = testCase.Input[i].ToString();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				var output = sorting.CountingSort(input, -15, 15);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", output));
+
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[i].ToString(), output[i]);
+				}
+			}
+		}
+
+		[TestMethod()]
 		public void RadixSortTest()
 		{
 			var sorting = new Sorting();
@@ -437,6 +475,36 @@ namespace Common.Tests
 				for (int i = 0; i < n; i++)
 				{
 					Assert.AreEqual(expected[i], output[i]);
+				}
+			}
+		}
+
+		[TestMethod()]
+		public void RadixSortStringTest()
+		{
+			var sorting = new Sorting();
+			foreach (var testCase in _testCases)
+			{
+				if (!testCase.IsForRadix)
+					continue;
+				string[] input = new string[testCase.Input.Count];
+				for (int i = 0; i < testCase.Input.Count; i++)
+					input[i] = testCase.Input[i].ToString();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				var output = sorting.RadixSort(input, input.Length == 0 ? 0 : input[0].ToString().Length);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", output));
+
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[i].ToString(), output[i]);
 				}
 			}
 		}

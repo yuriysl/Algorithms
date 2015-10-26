@@ -273,12 +273,59 @@ namespace Common
 		/// <summary>
 		/// O(n)
 		/// </summary>
+		public string[] CountingSort(string[] a, int left, int right, int? r = null)
+		{
+			int n = a.Length;
+			byte index;
+			int k = right - left + 1;
+			string[] b = new string[n];
+			if (n == 0)
+				return b;
+			byte[] c = new byte[k + 1];
+
+			for (int i = 0; i <= k; i++)
+				c[i] = 0;
+
+			for (int j = 0; j < n; j++)
+			{
+				index = (byte)((r.HasValue ? Convert.ToByte(a[j][a[j].Length - r.Value - 1]) : byte.Parse(a[j])) - left);
+				c[index]++;
+			}
+
+			for (int i = 1; i <= k; i++)
+				c[i] += c[i - 1];
+
+			for (int j = n - 1; j >= 0; j--)
+			{
+				index = (byte)((r.HasValue ? Convert.ToByte(a[j][a[j].Length - r.Value -1]) : byte.Parse(a[j])) - left);
+				b[c[index] - 1] = a[j];
+				c[index]--;
+			}
+			return b;
+		}
+
+		/// <summary>
+		/// O(n)
+		/// </summary>
 		public int[] RadixSort(int[] a, int d)
 		{
 			int n = a.Length;
 			for (int i = 0; i < d; i++)
 			{
 				a = CountingSort(a, 0, 9, i);
+			}
+			return a;
+		}
+
+		/// <summary>
+		/// O(n)
+		/// </summary>
+		public string[] RadixSort(string[] a, int d)
+		{
+			int n = a.Length;
+			for (int i = 0; i < d; i++)
+			{
+				a = CountingSort(a, '0', '9', i);
 			}
 			return a;
 		}
