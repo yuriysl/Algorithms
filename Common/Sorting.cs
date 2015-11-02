@@ -29,6 +29,12 @@ namespace Common
 			}
 		}
 
+		public int[] GetInsertionSort(int[] a)
+		{
+			InsertionSort(a);
+			return a;
+		}
+
 		/// <summary>
 		/// O(n^2)
 		/// </summary>
@@ -273,6 +279,43 @@ namespace Common
 		/// <summary>
 		/// O(n)
 		/// </summary>
+		public int[] CountingSortForIntervalChecking(int[] a, int? r = null, int left = 0, int right = 9)
+		{
+			int n = a.Length;
+			int index;
+			int k = right - left + 1;
+			int[] c = new int[k];
+			if (n == 0)
+				return c;
+
+			for (int i = 0; i < k; i++)
+				c[i] = 0;
+
+			for (int j = 0; j < n; j++)
+			{
+				index = (r.HasValue ? ((a[j] / (int)Math.Pow(10, r.Value)) % 10) : a[j]) - left;
+				c[index]++;
+			}
+
+			for (int i = 1; i < k; i++)
+				c[i] += c[i - 1];
+
+			return c;
+		}
+
+		/// <summary>
+		/// O(1)
+		/// </summary>
+		public int GetCountInInterval(int[] items, int a, int b, int left = 0, int right = 9)
+		{
+			int lower = Math.Min(items.Length - 1, a - 1);
+			int upper = Math.Min(items.Length - 1, b);
+			return Math.Max(0, ((upper - left) < 0 ? 0 : items[upper - left]) - ((lower - left) < 0 ? 0 : items[lower - left]));
+		}
+
+		/// <summary>
+		/// O(n)
+		/// </summary>
 		public string[] CountingSort(string[] a, int? r = null, int left = 0, int right = 255)
 		{
 			int n = a.Length;
@@ -324,6 +367,30 @@ namespace Common
 			for (int i = 0; i < d; i++)
 				a = CountingSort(a, i, left, right);
 			return a;
+		}
+
+		/// <summary>
+		/// O(n)
+		/// </summary>
+		public int[] BucketSort(int[] a, int k = 16, int left = 0, int right = 255)
+		{
+			int n = a.Length;
+			var b = new List<int>();
+			int interval = (int)Math.Ceiling((right - left + 1) / (double)k);
+			List<int>[] buckets = new List<int>[k];
+			for (int i = 0; i < buckets.Length; i++)
+				buckets[i] = new List<int>();
+			for (int i = 0; i < n; i++)
+			{
+				int index = (a[i] - left - 1) / interval;
+				buckets[index].Add(a[i]);
+			}
+			for (int i = 0; i < buckets.Length; i++)
+			{
+				var res = GetInsertionSort(buckets[i].ToArray());
+				b.AddRange(res);
+			}
+			return b.ToArray();
 		}
 
 		public static void Swap<T>(T[] a, int left, int right)

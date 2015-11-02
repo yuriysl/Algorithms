@@ -12,7 +12,13 @@ namespace Common.Tests
 	{
 		public string Name;
 		public List<T> Input { get; set; }
+		public T Left { get; set; }
+		public T Right { get; set; }
 		public List<T> Expected { get; set; }
+		public T Count { get; set; }
+		public int BucketLeft { get; set; }
+		public int BucketRight { get; set; }
+		public int BucketCount { get; set; }
 		public bool IsForCounting;
 		public bool IsForCountingString;
 		public bool IsForRadix;
@@ -50,7 +56,13 @@ namespace Common.Tests
 					Expected = new List<int> {},
 					IsForCounting = true,
 					IsForCountingString = true,
-					IsForRadix = true
+					IsForRadix = true,
+					Left = 0,
+					Right = 0,
+					Count = 0,
+					BucketLeft = 0,
+					BucketRight = 0,
+					BucketCount = 1
 				},
 				new SortingTestCase<int>
 				{
@@ -59,7 +71,13 @@ namespace Common.Tests
 					Expected = new List<int> {1, 2},
 					IsForCounting = true,
 					IsForCountingString = true,
-					IsForRadix = true
+					IsForRadix = true,
+					Left = 1,
+					Right = 2,
+					Count = 2,
+					BucketLeft = 1,
+					BucketRight = 2,
+					BucketCount = 1
 				},
 				new SortingTestCase<int>
 				{
@@ -68,7 +86,13 @@ namespace Common.Tests
 					Expected = new List<int> {1, 2},
 					IsForCounting = true,
 					IsForCountingString = true,
-					IsForRadix = true
+					IsForRadix = true,
+					Left = 0,
+					Right = 3,
+					Count = 2,
+					BucketLeft = 1,
+					BucketRight = 2,
+					BucketCount = 1
 				},
 				new SortingTestCase<int>
 				{
@@ -77,7 +101,13 @@ namespace Common.Tests
 					Expected = new List<int> {1, 2, 3},
 					IsForCounting = true,
 					IsForCountingString = true,
-					IsForRadix = true
+					IsForRadix = true,
+					Left = 0,
+					Right = 2,
+					Count = 2,
+					BucketLeft = 1,
+					BucketRight = 3,
+					BucketCount = 1
 				},
 				new SortingTestCase<int>
 				{
@@ -86,7 +116,13 @@ namespace Common.Tests
 					Expected = new List<int> {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15},
 					IsForCounting = true,
 					IsForCountingString = true,
-					IsForRadix = false
+					IsForRadix = false,
+					Left = 0,
+					Right = 8,
+					Count = 9,
+					BucketLeft = 0,
+					BucketRight = 15,
+					BucketCount = 4
 				},
 				new SortingTestCase<int>
 				{
@@ -95,7 +131,13 @@ namespace Common.Tests
 					Expected = new List<int> {-9, -8, -7, -5, -3, 0, 1, 2, 4, 6, 10, 11, 12, 13, 14, 15},
 					IsForCounting = true,
 					IsForCountingString = false,
-					IsForRadix = false
+					IsForRadix = false,
+					Left = -8,
+					Right = 8,
+					Count = 9,
+					BucketLeft = -15,
+					BucketRight = 15,
+					BucketCount = 8
 				},
 				new SortingTestCase<int>
 				{
@@ -103,7 +145,10 @@ namespace Common.Tests
 					Input = new List<int> {1, 1, 1, 1, 1, 1},
 					Expected = new List<int> {1, 1, 1, 1, 1, 1},
 					IsForCounting = true,
-					IsForRadix = true
+					IsForRadix = true,
+					BucketLeft = 0,
+					BucketRight = 2,
+					BucketCount = 1
 				},
 				new SortingTestCase<int>
 				{
@@ -112,7 +157,10 @@ namespace Common.Tests
 					Expected = new List<int> {329, 355, 436, 457, 657, 720, 839},
 					IsForCounting = false,
 					IsForCountingString = false,
-					IsForRadix = true
+					IsForRadix = true,
+					BucketLeft = 300,
+					BucketRight = 900,
+					BucketCount = 3
 				}
 			};
 		}
@@ -422,6 +470,34 @@ namespace Common.Tests
 		}
 
 		[TestMethod()]
+		public void GetCountInIntervalTest()
+		{
+			var sorting = new Sorting();
+			foreach (var testCase in _testCases)
+			{
+				if (!testCase.IsForCounting)
+					continue;
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Input:[Left:{0}]", testCase.Left);
+				Console.WriteLine("Input:[Right:{0}]", testCase.Right);
+				Console.WriteLine("Expected:[Count:{0}]", testCase.Count);
+
+				var output = sorting.CountingSortForIntervalChecking(input, null, -15, 15);
+				int count = sorting.GetCountInInterval(output, testCase.Left, testCase.Right, -15, 15);
+
+				Console.WriteLine("Output:[{0}], [Count:{1}]", string.Join(", ", output), count);
+
+				Assert.AreEqual(testCase.Count, count);
+			}
+		}
+
+		[TestMethod()]
 		public void CountingStringSortTest()
 		{
 			var sorting = new Sorting();
@@ -506,6 +582,64 @@ namespace Common.Tests
 				{
 					Assert.AreEqual(expected[i].ToString(), output[i]);
 				}
+			}
+		}
+
+		[TestMethod()]
+		public void BucketSortTest()
+		{
+			var sorting = new Sorting();
+			foreach (var testCase in _testCases)
+			{
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Input:[BucketLeft:{0}]", testCase.BucketLeft);
+				Console.WriteLine("Input:[BucketRight:{0}]", testCase.BucketRight);
+				Console.WriteLine("Input:[BucketCount:{0}]", testCase.BucketCount);
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				var output = sorting.BucketSort(input, testCase.BucketCount, testCase.BucketLeft, testCase.BucketRight);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", output));
+
+				for (int i = 0; i < n; i++)
+				{
+					Assert.AreEqual(expected[i], output[i]);
+				}
+			}
+		}
+
+		[TestMethod()]
+		public void BucketSortRandomTest()
+		{
+			var rnd = new Random();
+			var sorting = new Sorting();
+			int[] input = new int[1000];
+			int n = input.Length;
+			for (int i = 0; i < n; i++)
+				input[i] = (int)Math.Floor(rnd.NextDouble() * 1000);
+
+			Console.WriteLine("--------------------------------------------------------");
+			Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+			Console.WriteLine("Input:[BucketLeft:{0}]", 0);
+			Console.WriteLine("Input:[BucketRight:{0}]", 1000);
+			Console.WriteLine("Input:[BucketCount:{0}]", 16);
+
+			var output = sorting.BucketSort(input, 16, 0, 1000);
+
+			Console.WriteLine("Output:[{0}]", string.Join(", ", output));
+
+			for (int i = 0; i < n; i++)
+			{
+				if(i > 0)
+					Assert.IsTrue(output[i] >= output[i]);
+				else
+					Assert.IsTrue(output[i] >= 0);
 			}
 		}
 	}
