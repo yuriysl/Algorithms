@@ -13,11 +13,14 @@ namespace Common.Tests
 		public string Name;
 		public List<T> Input { get; set; }
 		public T Key { get; set; }
+		public int Order{ get; set; }
 		public int Expected { get; set; }
 		public T ExpectedMin { get; set; }
 		public T ExpectedMax { get; set; }
+		public T ExpectedItem { get; set; }
 		public bool IsBinarySearch { get; set; }
 		public bool IsForMinMax { get; set; }
+		public bool IsForSelection { get; set; }
 	}
 
 	[TestClass()]
@@ -46,44 +49,56 @@ namespace Common.Tests
 					Name = "test case 2",
 					Input = new List<int> {1, 2},
 					Key = 2,
-					Expected = 1,
+					Expected = 2,
 					ExpectedMin = 1,
 					ExpectedMax = 2,
+					Order = 1,
+					ExpectedItem = 1,
 					IsBinarySearch = true,
-					IsForMinMax = true
+					IsForMinMax = true,
+					IsForSelection = true
 				},
 				new SearchingTestCase<int>
 				{
 					Name = "test case 3",
 					Input = new List<int> {1, 2, 3},
 					Key = 1,
-					Expected = 0,
+					Expected = 1,
 					ExpectedMin = 1,
 					ExpectedMax = 3,
+					Order = 3,
+					ExpectedItem = 3,
 					IsBinarySearch = true,
-					IsForMinMax = true
+					IsForMinMax = true,
+					IsForSelection = true
 				},
 				new SearchingTestCase<int>
 				{
 					Name = "test case 4",
 					Input = new List<int> {1, 2, 3},
 					Key = 2,
-					Expected = 1,
+					Expected = 2,
 					ExpectedMin = 1,
 					ExpectedMax = 3,
+					Order = 2,
+					ExpectedItem = 2,
 					IsBinarySearch = true,
-					IsForMinMax = true
+					IsForMinMax = true,
+					IsForSelection = true
 				},
 				new SearchingTestCase<int>
 				{
 					Name = "test case 5",
 					Input = new List<int> {1, 2, 3},
 					Key = 3,
-					Expected = 2,
+					Expected = 3,
 					ExpectedMin = 1,
 					ExpectedMax = 3,
+					Order = 1,
+					ExpectedItem = 1,
 					IsBinarySearch = true,
-					IsForMinMax = true
+					IsForMinMax = true,
+					IsForSelection = true
 				},
 				new SearchingTestCase<int>
 				{
@@ -93,30 +108,39 @@ namespace Common.Tests
 					Expected = -1,
 					ExpectedMin = 1,
 					ExpectedMax = 3,
+					Order = 1,
+					ExpectedItem = 1,
 					IsBinarySearch = true,
-					IsForMinMax = true
+					IsForMinMax = true,
+					IsForSelection = true
 				},
 				new SearchingTestCase<int>
 				{
 					Name = "test case 7",
 					Input = new List<int> {-9, -8, -7, -5, -3, 0, 1, 2, 4, 6, 10, 11, 12, 13, 14, 15},
 					Key = 6,
-					Expected = 9,
+					Expected = 6,
 					ExpectedMin = -9,
 					ExpectedMax = 15,
+					Order = 2,
+					ExpectedItem = -8,
 					IsBinarySearch = true,
-					IsForMinMax = true
+					IsForMinMax = true,
+					IsForSelection = true
 				},
 				new SearchingTestCase<int>
 				{
 					Name = "test case 8",
 					Input = new List<int> {15, -9, -8, -7, -6, -5, -3, 0, 1, 2, 4, 6, 10, 11, 12, 13, 14},
-					Key = 6,
-					Expected = 10,
+					Key = 11,
+					Expected = 11,
 					ExpectedMin = -9,
 					ExpectedMax = 15,
+					Order = 9,
+					ExpectedItem = 2,
 					IsBinarySearch = false,
-					IsForMinMax = true
+					IsForMinMax = true,
+					IsForSelection = true
 				}
 			};
 		}
@@ -128,7 +152,7 @@ namespace Common.Tests
 			foreach (var testCase in _testCases)
 			{
 				if (!testCase.IsBinarySearch)
-					return;
+					continue;
 				int[] input = testCase.Input.ToArray();
 				int key = testCase.Key;
 				int expected = testCase.Expected;
@@ -138,13 +162,23 @@ namespace Common.Tests
 				Console.WriteLine("Name:[{0}]", testCase.Name);
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Key:[{0}]", key);
-				Console.WriteLine("Expected:[{0}]", expected);
+				Console.WriteLine("Expected:[{0}]", expected == -1 ? "null" : expected.ToString());
 
-				int actual = searching.BinarySearch(input, 0, n - 1, key);
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
 
-				Console.WriteLine("Actual:[{0}]", actual);
+				var actual = searching.BinarySearch(nodes, 0, n - 1, key);
 
-				Assert.AreEqual(expected, actual);
+				Console.WriteLine("Actual:[{0}]", actual == null ? "null" : actual.Key.ToString());
+
+				if (expected == -1)
+					Assert.IsNull(actual);
+				else
+				{
+					Assert.IsNotNull(actual);
+					Assert.AreEqual(expected, actual.Key);
+				}
 			}
 		}
 
@@ -155,7 +189,7 @@ namespace Common.Tests
 			foreach (var testCase in _testCases)
 			{
 				if (!testCase.IsBinarySearch)
-					return;
+					continue;
 				int[] input = testCase.Input.ToArray();
 				int key = testCase.Key;
 				int expected = testCase.Expected;
@@ -165,13 +199,23 @@ namespace Common.Tests
 				Console.WriteLine("Name:[{0}]", testCase.Name);
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Key:[{0}]", key);
-				Console.WriteLine("Expected:[{0}]", expected);
+				Console.WriteLine("Expected:[{0}]", expected == -1 ? "null" : expected.ToString());
 
-				int actual = searching.BinarySearchTail(input, 0, n - 1, key);
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
 
-				Console.WriteLine("Actual:[{0}]", actual);
+				var actual = searching.BinarySearchTail(nodes, 0, n - 1, key);
 
-				Assert.AreEqual(expected, actual);
+				Console.WriteLine("Actual:[{0}]", actual == null ? "null" : actual.Key.ToString());
+
+				if (expected == -1)
+					Assert.IsNull(actual);
+				else
+				{
+					Assert.IsNotNull(actual);
+					Assert.AreEqual(expected, actual.Key);
+				}
 			}
 		}
 
@@ -182,11 +226,11 @@ namespace Common.Tests
 			foreach (var testCase in _testCases)
 			{
 				if (!testCase.IsForMinMax)
-					return;
+					continue;
 				int[] input = testCase.Input.ToArray();
 				int key = testCase.Key;
-				int? expectedMin = testCase.ExpectedMin;
-				int? expectedMax = testCase.ExpectedMax;
+				int expectedMin = testCase.ExpectedMin;
+				int expectedMax = testCase.ExpectedMax;
 				int n = input.Length;
 
 				Console.WriteLine("--------------------------------------------------------");
@@ -195,13 +239,103 @@ namespace Common.Tests
 				Console.WriteLine("Expected:[Min:{0}]", expectedMin == -1 ? "null" : expectedMin.ToString());
 				Console.WriteLine("Expected:[Max:{0}]", expectedMax == -1 ? "null" : expectedMax.ToString());
 
-				Tuple<int, int> minMax = searching.SelectMinMax(input, 0, n - 1);
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
+
+				var minMax = searching.SelectMinMax(nodes, 0, n - 1);
 
 				Console.WriteLine("Actual:[Min:{0}]", minMax == null ? "null" : minMax.Item1.ToString());
 				Console.WriteLine("Actual:[Max:{0}]", minMax == null ? "null" : minMax.Item2.ToString());
 
-				Assert.AreEqual(expectedMin, minMax == null ? -1 : minMax.Item1);
-				Assert.AreEqual(expectedMax, minMax == null ? -1 : minMax.Item2);
+				if (expectedMin == -1)
+					Assert.IsNull(minMax);
+				else
+				{
+					Assert.IsNotNull(minMax);
+					Assert.AreEqual(expectedMin, minMax.Item1.Key);
+				}
+				if (expectedMax == -1)
+					Assert.IsNull(minMax);
+				else
+				{
+					Assert.IsNotNull(minMax);
+					Assert.AreEqual(expectedMax, minMax.Item2.Key);
+				}
+			}
+		}
+
+		[TestMethod()]
+		public void RandomizedSelectTest()
+		{
+			var searching = new Searching();
+			foreach (var testCase in _testCases)
+			{
+				if (!testCase.IsForSelection)
+					continue;
+				int[] input = testCase.Input.ToArray();
+				int order = testCase.Order;
+				int expectedItem = testCase.ExpectedItem;
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Order:[{0}]", order);
+				Console.WriteLine("Expected:[Item:{0}]", expectedItem == -1 ? "null" : expectedItem.ToString());
+
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
+
+				var actualItem = searching.RandomizedSelect(nodes, 0, n - 1, order);
+
+				Console.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
+
+				if (expectedItem == -1)
+					Assert.IsNull(actualItem);
+				else
+				{
+					Assert.IsNotNull(actualItem);
+					Assert.AreEqual(expectedItem, actualItem.Key);
+				}
+			}
+		}
+
+		[TestMethod()]
+		public void SelectTest()
+		{
+			var searching = new Searching();
+			foreach (var testCase in _testCases)
+			{
+				if (!testCase.IsForSelection)
+					continue;
+				int[] input = testCase.Input.ToArray();
+				int order = testCase.Order;
+				int expectedItem = testCase.ExpectedItem;
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Order:[{0}]", order);
+				Console.WriteLine("Expected:[Item:{0}]", expectedItem == -1 ? "null" : expectedItem.ToString());
+
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
+
+				var actualItem = searching.Select(nodes, 0, n - 1, order);
+
+				Console.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
+
+				if (expectedItem == -1)
+					Assert.IsNull(actualItem);
+				else
+				{
+					Assert.IsNotNull(actualItem);
+					Assert.AreEqual(expectedItem, actualItem.Key);
+				}
 			}
 		}
 	}

@@ -180,14 +180,16 @@ namespace Common.Tests
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				sorting.InsertionSort(input);
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
+				sorting.InsertionSort(nodes);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-				{
-					Assert.AreEqual(expected[i], input[i]);
-				}
+					Assert.AreEqual(expected[i], nodes[i].Key);
 			}
 		}
 
@@ -206,14 +208,16 @@ namespace Common.Tests
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				sorting.SelectionSort(input);
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
+				sorting.SelectionSort(nodes);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-				{
-					Assert.AreEqual(expected[i], input[i]);
-				}
+					Assert.AreEqual(expected[i], nodes[i].Key);
 			}
 		}
 
@@ -232,14 +236,16 @@ namespace Common.Tests
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				sorting.MergeSort(input, 0, n - 1);
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
+				sorting.MergeSort(nodes, 0, n - 1);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-				{
-					Assert.AreEqual(expected[i], input[i]);
-				}
+					Assert.AreEqual(expected[i], nodes[i].Key);
 			}
 		}
 
@@ -258,14 +264,16 @@ namespace Common.Tests
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				sorting.QuickSort(input, 0, n - 1);
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
+				sorting.QuickSort(nodes, 0, n - 1);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-				{
-					Assert.AreEqual(expected[i], input[i]);
-				}
+					Assert.AreEqual(expected[i], nodes[i].Key);
 			}
 		}
 
@@ -284,14 +292,16 @@ namespace Common.Tests
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				sorting.QuickSortTail(input, 0, n - 1);
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
+				sorting.QuickSortTail(nodes, 0, n - 1);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-				{
-					Assert.AreEqual(expected[i], input[i]);
-				}
+					Assert.AreEqual(expected[i], nodes[i].Key);
 			}
 		}
 
@@ -310,14 +320,16 @@ namespace Common.Tests
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				sorting.BubbleSort(input);
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", input));
+				sorting.BubbleSort(nodes);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-				{
-					Assert.AreEqual(expected[i], input[i]);
-				}
+					Assert.AreEqual(expected[i], nodes[i].Key);
 			}
 		}
 
@@ -342,12 +354,10 @@ namespace Common.Tests
 
 				sorting.HeapSortMax(nodes);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key).ToArray()));
+				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-				{
 					Assert.AreEqual(expected[i], nodes[i].Key);
-				}
 			}
 		}
 
@@ -372,12 +382,10 @@ namespace Common.Tests
 
 				sorting.HeapSortMaxTail(nodes);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key).ToArray()));
+				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-				{
 					Assert.AreEqual(expected[i], nodes[i].Key);
-				}
 			}
 		}
 
@@ -402,12 +410,10 @@ namespace Common.Tests
 
 				sorting.HeapSortMin(nodes);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key).ToArray()));
+				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-				{
 					Assert.AreEqual(expected[n - i - 1], nodes[i].Key);
-				}
 			}
 		}
 
@@ -432,12 +438,10 @@ namespace Common.Tests
 
 				sorting.HeapSortMinTail(nodes);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key).ToArray()));
+				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-				{
 					Assert.AreEqual(expected[n - i - 1], nodes[i].Key);
-				}
 			}
 		}
 
@@ -458,14 +462,16 @@ namespace Common.Tests
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				var output = sorting.CountingSort(input, null, -15, 15);
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", output));
+				var output = sorting.CountingSort(nodes, null, -15, 15);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-				{
-					Assert.AreEqual(expected[i], output[i]);
-				}
+					Assert.AreEqual(expected[i], output[i].Key);
 			}
 		}
 
@@ -488,7 +494,11 @@ namespace Common.Tests
 				Console.WriteLine("Input:[Right:{0}]", testCase.Right);
 				Console.WriteLine("Expected:[Count:{0}]", testCase.Count);
 
-				var output = sorting.CountingSortForIntervalChecking(input, null, -15, 15);
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
+
+				var output = sorting.CountingSortForIntervalChecking(nodes, null, -15, 15);
 				int count = sorting.GetCountInInterval(output, testCase.Left, testCase.Right, -15, 15);
 
 				Console.WriteLine("Output:[{0}], [Count:{1}]", string.Join(", ", output), count);
@@ -516,14 +526,16 @@ namespace Common.Tests
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				var output = sorting.CountingSort(input, null, -15, 15);
+				var nodes = new List<BaseNode<string, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<string, object>(i, input[i], "value_" + input[i].ToString()));
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", output));
+				var output = sorting.CountingSort(nodes, null, -15, 15);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-				{
-					Assert.AreEqual(expected[i].ToString(), output[i]);
-				}
+					Assert.AreEqual(expected[i].ToString(), output[i].Key);
 			}
 		}
 
@@ -544,14 +556,16 @@ namespace Common.Tests
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				var output = sorting.RadixSort(input, input.Length == 0 ? 0 : input[0].ToString().Length);
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", output));
+				var output = sorting.RadixSort(nodes, input.Length == 0 ? 0 : input[0].ToString().Length);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-				{
-					Assert.AreEqual(expected[i], output[i]);
-				}
+					Assert.AreEqual(expected[i], output[i].Key);
 			}
 		}
 
@@ -574,14 +588,16 @@ namespace Common.Tests
 				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				var output = sorting.RadixSort(input, input.Length == 0 ? 0 : input[0].ToString().Length, '0', '9');
+				var nodes = new List<BaseNode<string, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<string, object>(i, input[i], "value_" + input[i].ToString()));
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", output));
+				var output = sorting.RadixSort(nodes, input.Length == 0 ? 0 : input[0].ToString().Length, '0', '9');
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-				{
-					Assert.AreEqual(expected[i].ToString(), output[i]);
-				}
+					Assert.AreEqual(expected[i].ToString(), output[i].Key);
 			}
 		}
 
@@ -603,13 +619,17 @@ namespace Common.Tests
 				Console.WriteLine("Input:[BucketCount:{0}]", testCase.BucketCount);
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
-				var output = sorting.BucketSort(input, testCase.BucketCount, testCase.BucketLeft, testCase.BucketRight);
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", output));
+				var output = sorting.BucketSort(nodes, testCase.BucketCount, testCase.BucketLeft, testCase.BucketRight);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 				{
-					Assert.AreEqual(expected[i], output[i]);
+					Assert.AreEqual(expected[i], output[i].Key);
 				}
 			}
 		}
@@ -630,16 +650,20 @@ namespace Common.Tests
 			Console.WriteLine("Input:[BucketRight:{0}]", 1000);
 			Console.WriteLine("Input:[BucketCount:{0}]", 16);
 
-			var output = sorting.BucketSort(input, 16, 0, 1000);
+			var nodes = new List<BaseNode<int, object>>();
+			for (int i = 0; i < n; i++)
+				nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
 
-			Console.WriteLine("Output:[{0}]", string.Join(", ", output));
+			var output = sorting.BucketSort(nodes, 16, 0, 1000);
+
+			Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 			for (int i = 0; i < n; i++)
 			{
 				if(i > 0)
-					Assert.IsTrue(output[i] >= output[i]);
+					Assert.IsTrue(output[i].Key >= output[i].Key);
 				else
-					Assert.IsTrue(output[i] >= 0);
+					Assert.IsTrue(output[i].Key >= 0);
 			}
 		}
 	}

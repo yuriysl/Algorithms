@@ -12,24 +12,32 @@ namespace Common
 		/// <summary>
 		/// O(n^2)
 		/// </summary>
-		public void InsertionSort<T>(T[] a)
-			where T : IComparable<T>
+		public void InsertionSort<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int? p = null, int? r = null)
+			where TKey : IComparable<TKey>
 		{
-			int n = a.Length;
-			for (int i = 1; i < n; i++)
+			int left = p ?? 0;
+			int right = r ?? (a.Count - 1);
+			int n = right - left + 1;
+			for (int i = left + 1; i <= right; i++)
 			{
-				T key = a[i];
+				var key = a[i].Key;
+				var value = a[i].Value;
+				var index = a[i].Index;
 				int j = i - 1;
-				while (j >= 0 && a[j].CompareTo(key) > 0)
+				while (j >= 0 && a[j].Key.CompareTo(key) > 0)
 				{
-					a[j + 1] = a[j];
+					a[j + 1].Key = a[j].Key;
+					a[j + 1].Value = a[j].Value;
 					j--;
 				}
-				a[j + 1] = key;
+				a[j + 1].Key = key;
+				a[j + 1].Value = value;
+				a[j + 1].Index = index;
 			}
 		}
 
-		public int[] GetInsertionSort(int[] a)
+		public List<BaseNode<TKey, TValue>> GetInsertionSort<TKey, TValue>(List<BaseNode<TKey, TValue>> a)
+			where TKey : IComparable<TKey>
 		{
 			InsertionSort(a);
 			return a;
@@ -38,29 +46,27 @@ namespace Common
 		/// <summary>
 		/// O(n^2)
 		/// </summary>
-		public void SelectionSort<T>(T[] a)
-			where T : IComparable<T>
+		public void SelectionSort<TKey, TValue>(List<BaseNode<TKey, TValue>> a)
+			where TKey : IComparable<TKey>
 		{
-			int n = a.Length;
+			int n = a.Count;
 			for (int i = 0; i < n - 1; i++)
 			{
 				int index = i;
 				for (int j = i + 1; j < n; j++)
 				{
-					if (a[j].CompareTo(a[index]) < 0)
+					if (a[j].Key.CompareTo(a[index].Key) < 0)
 						index = j;
 				}
-				T tmp = a[i];
-				a[i] = a[index];
-				a[index] = tmp;
+				NodeHelper<TKey, TValue>.SwapWithIndex(a[i], a[index]);
 			}
 		}
 
 		/// <summary>
 		/// O(nlg(n))
 		/// </summary>
-		public void MergeSort<T>(T[] a, int p, int r)
-			where T : IComparable<T>
+		public void MergeSort<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r)
+			where TKey : IComparable<TKey>
 		{
 			if (p >= r)
 				return;
@@ -70,30 +76,32 @@ namespace Common
 			Merge(a, p, q, r);
 		}
 
-		private void Merge<T>(T[] a, int p, int q, int r)
-			where T : IComparable<T>
+		private void Merge<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int q, int r)
+			where TKey : IComparable<TKey>
 		{
 			int n1 = q - p + 1;
 			int n2 = r - q;
-			T[] left = new T[n1];
-			T[] right = new T[n2];
+			var left = new List<BaseNode<TKey, TValue>>();
+			var right = new List<BaseNode<TKey, TValue>>();
 			for (int i1 = 0; i1 < n1; i1++)
-				left[i1] = a[p + i1];
+				left.Add(a[p + i1]);
 			for (int i1 = 0; i1 < n2; i1++)
-				right[i1] = a[q + i1 + 1];
+				right.Add(a[q + i1 + 1]);
 
 			int i = 0, j = 0;
 
 			for (int k = p; k <= r; k++)
 			{
-				if (j == n2 || i < n1 && left[i].CompareTo(right[j]) <= 0)
+				if (j == n2 || i < n1 && left[i].Key.CompareTo(right[j].Key) <= 0)
 				{
 					a[k] = left[i];
+					a[k].Index = k;
 					i++;
 				}
 				else
 				{
 					a[k] = right[j];
+					a[k].Index = k;
 					j++;
 				}
 			}
@@ -102,8 +110,8 @@ namespace Common
 		/// <summary>
 		/// O(nlg(n))
 		/// </summary>
-		public void QuickSort<T>(T[] a, int p, int r)
-			where T : IComparable<T>
+		public void QuickSort<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r)
+			where TKey : IComparable<TKey>
 		{
 			if (p >= r)
 				return;
@@ -115,57 +123,74 @@ namespace Common
 		/// <summary>
 		/// O(nlg(n))
 		/// </summary>
-		public void QuickSortTail<T>(T[] a, int p, int r)
-			where T : IComparable<T>
+		public void QuickSortTail<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r)
+			where TKey : IComparable<TKey>
 		{
 			while (p < r)
 			{
-				int q = QuickPartition(a, p, r);
+				int q = QuickRandomizedPartition(a, p, r);
 				QuickSortTail(a, p, q - 1);
 				p = q + 1;
 			}
 		}
 
-		private int QuickPartition<T>(T[] a, int p, int r) 
-			where T : IComparable<T>
+		public int QuickPartition<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r, int? xI = null) 
+			where TKey : IComparable<TKey>
 		{
-			int rndR = Rnd.Next(p, r);
-			Swap(a, rndR, r);
-
-			T x = a[r];
+			NodeHelper<TKey, TValue>.SwapWithIndex(a[xI.HasValue ? xI.Value : r], a[r]);
+			var x = a[r];
 			int i = p - 1;
 			int xN = 0;
 			for (int j = p; j < r; j++)
 			{
-				if(a[j].CompareTo(x) <= 0)
+				if(a[j].Key.CompareTo(x.Key) <= 0)
 				{
-					if (a[j].CompareTo(x) == 0)
+					if (a[j].Key.CompareTo(x.Key) == 0)
 						xN++;
 					i++;
-					Swap(a, i, j);
+					NodeHelper<TKey, TValue>.SwapWithIndex(a[i], a[j]);
 				}
 			}
-			Swap(a, i + 1, r);
+			NodeHelper<TKey, TValue>.SwapWithIndex(a[i + 1], a[r]);
+			return xN + 1 == (r - p + 1) ? (p + r) / 2 : i + 1;
+		}
+
+		public int QuickRandomizedPartition<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r)
+			where TKey : IComparable<TKey>
+		{
+			int rndR = Rnd.Next(p, r);
+			NodeHelper<TKey, TValue>.SwapWithIndex(a[rndR], a[r]);
+
+			var x = a[r];
+			int i = p - 1;
+			int xN = 0;
+			for (int j = p; j < r; j++)
+			{
+				if (a[j].Key.CompareTo(x.Key) <= 0)
+				{
+					if (a[j].Key.CompareTo(x.Key) == 0)
+						xN++;
+					i++;
+					NodeHelper<TKey, TValue>.SwapWithIndex(a[i], a[j]);
+				}
+			}
+			NodeHelper<TKey, TValue>.SwapWithIndex(a[i + 1], a[r]);
 			return xN + 1 == (r - p + 1) ? (p + r) / 2 : i + 1;
 		}
 
 		/// <summary>
 		/// O(n^2)
 		/// </summary>
-		public void BubbleSort<T>(T[] a)
-			where T : IComparable<T>
+		public void BubbleSort<TKey, TValue>(List<BaseNode<TKey, TValue>> a)
+			where TKey : IComparable<TKey>
 		{
-			int n = a.Length;
+			int n = a.Count;
 			for (int i = 0; i < n; i++)
 			{
 				for (int j = n - 1; j > i; j--)
 				{
-					if (a[j].CompareTo(a[j - 1]) < 0)
-					{
-						T tmp = a[j];
-						a[j] = a[j - 1];
-						a[j - 1] = tmp;
-					}
+					if (a[j].Key.CompareTo(a[j - 1].Key) < 0)
+						NodeHelper<TKey, TValue>.SwapWithIndex(a[j], a[j - 1]);
 				}
 			}
 		}
@@ -182,7 +207,7 @@ namespace Common
 			(((IMaxHeap<TKey, TValue>)binaryHeap)).BuildMax();
 			for (int i = n - 1; i >= 0; i--)
 			{
-				BinaryHeap<TKey, TValue>.Swap(a[i], a[0]);
+				NodeHelper<TKey, TValue>.Swap(a[i], a[0]);
 				binaryHeap.HeapSize--;
 				(((IMaxHeap<TKey, TValue>)binaryHeap)).MaxHeapify(a[0]);
 			}
@@ -200,7 +225,7 @@ namespace Common
 			(((IMaxHeap<TKey, TValue>)binaryHeap)).BuildMaxTail();
 			for (int i = n - 1; i >= 0; i--)
 			{
-				BinaryHeap<TKey, TValue>.Swap(a[i], a[0]);
+				NodeHelper<TKey, TValue>.Swap(a[i], a[0]);
 				binaryHeap.HeapSize--;
 				(((IMaxHeap<TKey, TValue>)binaryHeap)).MaxHeapifyTail(a[0]);
 			}
@@ -218,7 +243,7 @@ namespace Common
 			(((IMinHeap<TKey, TValue>)binaryHeap)).BuildMin();
 			for (int i = n - 1; i > 0; i--)
 			{
-				BinaryHeap<TKey, TValue>.Swap(a[i], a[0]);
+				NodeHelper<TKey, TValue>.Swap(a[i], a[0]);
 				binaryHeap.HeapSize--;
 				(((IMinHeap<TKey, TValue>)binaryHeap)).MinHeapify(a[0]);
 			}
@@ -236,7 +261,7 @@ namespace Common
 			(((IMinHeap<TKey, TValue>)binaryHeap)).BuildMinTail();
 			for (int i = n - 1; i > 0; i--)
 			{
-				BinaryHeap<TKey, TValue>.Swap(a[i], a[0]);
+				NodeHelper<TKey, TValue>.Swap(a[i], a[0]);
 				binaryHeap.HeapSize--;
 				(((IMinHeap<TKey, TValue>)binaryHeap)).MinHeapifyTail(a[0]);
 			}
@@ -245,12 +270,12 @@ namespace Common
 		/// <summary>
 		/// O(n)
 		/// </summary>
-		public int[] CountingSort(int[] a, int? r = null, int left = 0, int right = 9)
+		public BaseNode<int, TValue>[] CountingSort<TValue>(List<BaseNode<int, TValue>> a, int? r = null, int left = 0, int right = 9)
 		{
-			int n = a.Length;
+			int n = a.Count;
 			int index;
 			int k = right - left + 1;
-			int[] b = new int[n];
+			var b = new BaseNode<int, TValue>[n];
 			if (n == 0)
 				return b;
 			int[] c = new int[k];
@@ -260,7 +285,7 @@ namespace Common
 
 			for (int j = 0; j < n; j++)
 			{
-				index = (r.HasValue ? ((a[j] / (int)Math.Pow(10, r.Value)) % 10) : a[j]) - left;
+				index = (r.HasValue ? ((a[j].Key / (int)Math.Pow(10, r.Value)) % 10) : a[j].Key) - left;
 				c[index]++;
 			}
 
@@ -269,7 +294,8 @@ namespace Common
 
 			for (int j = n - 1; j >= 0; j--)
 			{
-				index = (r.HasValue ? ((a[j] / (int)Math.Pow(10, r.Value)) % 10) : a[j]) - left;
+				index = (r.HasValue ? ((a[j].Key / (int)Math.Pow(10, r.Value)) % 10) : a[j].Key) - left;
+				a[j].Index = c[index] - 1;
 				b[c[index] - 1] = a[j];
 				c[index]--;
 			}
@@ -279,9 +305,9 @@ namespace Common
 		/// <summary>
 		/// O(n)
 		/// </summary>
-		public int[] CountingSortForIntervalChecking(int[] a, int? r = null, int left = 0, int right = 9)
+		public int[] CountingSortForIntervalChecking<TValue>(List<BaseNode<int, TValue>> a, int? r = null, int left = 0, int right = 9)
 		{
-			int n = a.Length;
+			int n = a.Count;
 			int index;
 			int k = right - left + 1;
 			int[] c = new int[k];
@@ -293,7 +319,7 @@ namespace Common
 
 			for (int j = 0; j < n; j++)
 			{
-				index = (r.HasValue ? ((a[j] / (int)Math.Pow(10, r.Value)) % 10) : a[j]) - left;
+				index = (r.HasValue ? ((a[j].Key / (int)Math.Pow(10, r.Value)) % 10) : a[j].Key) - left;
 				c[index]++;
 			}
 
@@ -316,12 +342,12 @@ namespace Common
 		/// <summary>
 		/// O(n)
 		/// </summary>
-		public string[] CountingSort(string[] a, int? r = null, int left = 0, int right = 255)
+		public BaseNode<string, TValue>[] CountingSort<TValue>(List<BaseNode<string, TValue>> a, int? r = null, int left = 0, int right = 255)
 		{
-			int n = a.Length;
+			int n = a.Count;
 			byte index;
 			int k = right - left + 1;
-			string[] b = new string[n];
+			var b = new BaseNode<string, TValue>[n];
 			if (n == 0)
 				return b;
 			int[] c = new int[k];
@@ -331,7 +357,7 @@ namespace Common
 
 			for (int j = 0; j < n; j++)
 			{
-				index = (byte)((r.HasValue ? Convert.ToByte(a[j][a[j].Length - r.Value - 1]) : byte.Parse(a[j])) - left);
+				index = (byte)((r.HasValue ? Convert.ToByte(a[j].Key[a[j].Key.Length - r.Value - 1]) : byte.Parse(a[j].Key)) - left);
 				c[index]++;
 			}
 
@@ -340,7 +366,8 @@ namespace Common
 
 			for (int j = n - 1; j >= 0; j--)
 			{
-				index = (byte)((r.HasValue ? Convert.ToByte(a[j][a[j].Length - r.Value -1]) : byte.Parse(a[j])) - left);
+				index = (byte)((r.HasValue ? Convert.ToByte(a[j].Key[a[j].Key.Length - r.Value -1]) : byte.Parse(a[j].Key)) - left);
+				a[j].Index = c[index] - 1;
 				b[c[index] - 1] = a[j];
 				c[index]--;
 			}
@@ -350,54 +377,50 @@ namespace Common
 		/// <summary>
 		/// O(n)
 		/// </summary>
-		public int[] RadixSort(int[] a, int d)
+		public BaseNode<int, TValue>[] RadixSort<TValue>(List<BaseNode<int, TValue>> a, int d)
 		{
-			int n = a.Length;
+			BaseNode<int, TValue>[] res = null;
 			for (int i = 0; i < d; i++)
-				a = CountingSort(a, i);
-			return a;
+				res = CountingSort(res == null ? a : res.ToList(), i);
+			return res == null ? new BaseNode<int, TValue>[0] : res;
 		}
 
 		/// <summary>
 		/// O(n)
 		/// </summary>
-		public string[] RadixSort(string[] a, int d, int left = 0, int right = 255)
+		public BaseNode<string, TValue>[] RadixSort<TValue>(List<BaseNode<string, TValue>> a, int d, int left = 0, int right = 255)
 		{
-			int n = a.Length;
+			BaseNode<string, TValue>[] res = null;
 			for (int i = 0; i < d; i++)
-				a = CountingSort(a, i, left, right);
-			return a;
+				res = CountingSort(res == null ? a : res.ToList(), i, left, right);
+			return res == null ? new BaseNode<string, TValue>[0] : res;
 		}
 
 		/// <summary>
 		/// O(n)
 		/// </summary>
-		public int[] BucketSort(int[] a, int k = 16, int left = 0, int right = 255)
+		public List<BaseNode<int, TValue>> BucketSort<TValue>(List<BaseNode<int, TValue>> a, int k = 16, int left = 0, int right = 255)
 		{
-			int n = a.Length;
-			var b = new List<int>();
+			int n = a.Count;
+			var b = new List<BaseNode<int, TValue>>();
 			int interval = (int)Math.Ceiling((right - left + 1) / (double)k);
-			List<int>[] buckets = new List<int>[k];
+			var buckets = new List<BaseNode<int, TValue>>[k];
 			for (int i = 0; i < buckets.Length; i++)
-				buckets[i] = new List<int>();
+				buckets[i] = new List<BaseNode<int, TValue>>();
 			for (int i = 0; i < n; i++)
 			{
-				int index = (a[i] - left - 1) / interval;
+				int index = (a[i].Key - left - 1) / interval;
 				buckets[index].Add(a[i]);
 			}
 			for (int i = 0; i < buckets.Length; i++)
 			{
-				var res = GetInsertionSort(buckets[i].ToArray());
+				var res = GetInsertionSort(buckets[i]);
 				b.AddRange(res);
 			}
-			return b.ToArray();
-		}
+			for (int i = 0; i < n; i++)
+				b[i].Index = i;
 
-		public static void Swap<T>(T[] a, int left, int right)
-		{
-			T tmp = a[left];
-			a[left] = a[right];
-			a[right] = tmp;
+			return b;
 		}
 	}
 }

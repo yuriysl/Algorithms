@@ -4,29 +4,72 @@ using System.Text;
 
 namespace Common
 {
-	public class BinaryHeapNode<TKey, TValue>
+	public class NodeHelper<TKey, TValue>
+	{
+		static public void Swap(BaseNode<TKey, TValue> left, BaseNode<TKey, TValue> right)
+		{
+			TKey tmpKey = left.Key;
+			left.Key = right.Key;
+			right.Key = tmpKey;
+
+			TValue tmpValue = left.Value;
+			left.Value = right.Value;
+			right.Value = tmpValue;
+		}
+
+		static public void SwapWithIndex(BaseNode<TKey, TValue> left, BaseNode<TKey, TValue> right)
+		{
+			TKey tmpKey = left.Key;
+			left.Key = right.Key;
+			right.Key = tmpKey;
+
+			TValue tmpValue = left.Value;
+			left.Value = right.Value;
+			right.Value = tmpValue;
+
+			int tmpIndex = left.Index;
+			left.Index = right.Index;
+			right.Index = tmpIndex;
+		}
+	}
+
+	public class BaseNode<TKey, TValue>
 	{
 		int _index;
 		TKey _key;
 		TValue _value;
 
-		public int Parent => (_index + 1) / 2 - 1;
-		public int Left => _index * 2 + 1;
-		public int Right => _index * 2 + 2;
-		public int Index{ get { return _index; } set { _index = value; } }
+		public int Index { get { return _index; } set { _index = value; } }
 		public TKey Key { get { return _key; } set { _key = value; } }
 		public TValue Value { get { return _value; } set { _value = value; } }
 
-		public BinaryHeapNode(int index, TKey key)
+		public BaseNode(int index, TKey key)
 		{
 			_index = index;
 			_key = key;
 		}
 
-		public BinaryHeapNode(int index, TKey key, TValue value)
+		public BaseNode(int index, TKey key, TValue value)
 			: this(index, key)
 		{
 			_value = value;
+		}
+	}
+
+	public class BinaryHeapNode<TKey, TValue> : BaseNode<TKey, TValue>
+	{
+		public int Parent => (Index + 1) / 2 - 1;
+		public int Left => Index * 2 + 1;
+		public int Right => Index * 2 + 2;
+
+		public BinaryHeapNode(int index, TKey key)
+			: base(index, key)
+		{
+		}
+
+		public BinaryHeapNode(int index, TKey key, TValue value)
+			: base(index, key, value)
+		{
 		}
 	}
 
@@ -101,7 +144,7 @@ namespace Common
 
 			if (largest != node.Index)
 			{
-				Swap(node, _nodes[largest]);
+				NodeHelper<TKey, TValue>.Swap(node, _nodes[largest]);
 				((IMaxHeap<TKey, TValue>)this).MaxHeapify(_nodes[largest]);
 			}
 		}
@@ -126,7 +169,7 @@ namespace Common
 
 				if (largest != currentNode.Index)
 				{
-					Swap(currentNode, _nodes[largest]);
+					NodeHelper<TKey, TValue>.Swap(currentNode, _nodes[largest]);
 					Console.WriteLine(ToStringTree());
 				}
 
@@ -178,7 +221,7 @@ namespace Common
 			currentNode.Key = newKey;
 			while (currentNode.Index > 0 && _nodes[currentNode.Parent].Key.CompareTo(currentNode.Key) < 0)
 			{
-				Swap(_nodes[currentNode.Parent], currentNode);
+				NodeHelper<TKey, TValue>.Swap(_nodes[currentNode.Parent], currentNode);
 				currentNode = _nodes[currentNode.Parent];
 			}
 		}
@@ -239,7 +282,7 @@ namespace Common
 
 			if (lowest != node.Index)
 			{
-				Swap(node, _nodes[lowest]);
+				NodeHelper<TKey, TValue>.Swap(node, _nodes[lowest]);
 				((IMinHeap<TKey, TValue>)this).MinHeapify(_nodes[lowest]);
 			}
 		}
@@ -262,7 +305,7 @@ namespace Common
 					lowest = right;
 
 				if (lowest != currentNode.Index)
-					Swap(currentNode, _nodes[lowest]);
+					NodeHelper<TKey, TValue>.Swap(currentNode, _nodes[lowest]);
 
 				left = _nodes[lowest].Left;
 				right = _nodes[lowest].Right;
@@ -312,7 +355,7 @@ namespace Common
 			currentNode.Key = newKey;
 			while (currentNode.Index > 0 && _nodes[currentNode.Parent].Key.CompareTo(currentNode.Key) > 0)
 			{
-				Swap(_nodes[currentNode.Parent], currentNode);
+				NodeHelper<TKey, TValue>.Swap(_nodes[currentNode.Parent], currentNode);
 				currentNode = _nodes[currentNode.Parent];
 			}
 		}
@@ -339,17 +382,6 @@ namespace Common
 		#endregion
 
 		#region Methods
-
-		static public void Swap(BinaryHeapNode<TKey, TValue> left, BinaryHeapNode<TKey, TValue> right)
-		{
-			TKey tmpKey = left.Key;
-			left.Key = right.Key;
-			right.Key = tmpKey;
-
-			TValue tmpValue = left.Value;
-			left.Value = right.Value;
-			right.Value = tmpValue;
-		}
 
 		private string ToStringTree()
 		{
