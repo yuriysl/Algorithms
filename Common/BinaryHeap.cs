@@ -239,10 +239,11 @@ namespace Common
 				throw new Exception("heap is empty");
 
 			var deletedIndex = node.Index;
-			node = _nodes[_heapSize - 1];
-			node.Index = deletedIndex;
+			_nodes[deletedIndex] = _nodes[_heapSize - 1];
+			_nodes[deletedIndex].Index = deletedIndex;
 			_heapSize--;
-			((IMaxHeap<TKey, TValue>)this).MaxHeapify(node);
+			if(_heapSize > 0 && deletedIndex != _heapSize)
+				((IMaxHeap<TKey, TValue>)this).MaxHeapify(_nodes[deletedIndex]);
 		}
 
 		#endregion
@@ -373,10 +374,11 @@ namespace Common
 				throw new Exception("heap is empty");
 
 			var deletedIndex = node.Index;
-			node = _nodes[_heapSize - 1];
-			node.Index = deletedIndex;
+			_nodes[deletedIndex] = _nodes[_heapSize - 1];
+			_nodes[deletedIndex].Index = deletedIndex;
 			_heapSize--;
-			((IMinHeap<TKey, TValue>)this).MinHeapify(node);
+			if (_heapSize > 0 && deletedIndex != _heapSize)
+				((IMinHeap<TKey, TValue>)this).MinHeapify(_nodes[deletedIndex]);
 		}
 
 		#endregion
