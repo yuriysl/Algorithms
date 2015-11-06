@@ -254,16 +254,20 @@ namespace Common
 			if (node == null)
 				return;
 
-			subsequentItems.Add(node.Key);
+			var cloneSubsequentItems = new List<TKeyItem>();
+			foreach (var item in subsequentItems)
+			{
+				cloneSubsequentItems.Add(item);
+			}
 
 			if (node.AWordEndsHere)
 			{
-				_subsequentItems.Add(subsequentItems);
+				_subsequentItems.Add(cloneSubsequentItems);
 				//return;
 			}
 
 			foreach (var subnode in node.SubTrees)
-				GenerateSubsequentItems(subnode, subsequentItems);
+				GenerateSubsequentItems(subnode, cloneSubsequentItems);
 		}
 
 		#endregion
