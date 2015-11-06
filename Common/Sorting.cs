@@ -8,7 +8,6 @@ namespace Common
 {
 	public class Sorting
 	{
-		private static Random Rnd = new Random();
 		/// <summary>
 		/// O(n^2)
 		/// </summary>
@@ -158,7 +157,7 @@ namespace Common
 		public int QuickRandomizedPartition<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r)
 			where TKey : IComparable<TKey>
 		{
-			int rndR = Rnd.Next(p, r);
+			int rndR = NodeHelper<TKey, TValue>.Rnd.Next(p, r);
 			NodeHelper<TKey, TValue>.SwapWithIndex(a[rndR], a[r]);
 
 			var x = a[r];

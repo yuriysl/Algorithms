@@ -4,58 +4,6 @@ using System.Text;
 
 namespace Common
 {
-	public class NodeHelper<TKey, TValue>
-	{
-		static public void Swap(BaseNode<TKey, TValue> left, BaseNode<TKey, TValue> right)
-		{
-			TKey tmpKey = left.Key;
-			left.Key = right.Key;
-			right.Key = tmpKey;
-
-			TValue tmpValue = left.Value;
-			left.Value = right.Value;
-			right.Value = tmpValue;
-		}
-
-		static public void SwapWithIndex(BaseNode<TKey, TValue> left, BaseNode<TKey, TValue> right)
-		{
-			TKey tmpKey = left.Key;
-			left.Key = right.Key;
-			right.Key = tmpKey;
-
-			TValue tmpValue = left.Value;
-			left.Value = right.Value;
-			right.Value = tmpValue;
-
-			int tmpIndex = left.Index;
-			left.Index = right.Index;
-			right.Index = tmpIndex;
-		}
-	}
-
-	public class BaseNode<TKey, TValue>
-	{
-		int _index;
-		TKey _key;
-		TValue _value;
-
-		public int Index { get { return _index; } set { _index = value; } }
-		public TKey Key { get { return _key; } set { _key = value; } }
-		public TValue Value { get { return _value; } set { _value = value; } }
-
-		public BaseNode(int index, TKey key)
-		{
-			_index = index;
-			_key = key;
-		}
-
-		public BaseNode(int index, TKey key, TValue value)
-			: this(index, key)
-		{
-			_value = value;
-		}
-	}
-
 	public class BinaryHeapNode<TKey, TValue> : BaseNode<TKey, TValue>
 	{
 		public int Parent => (Index + 1) / 2 - 1;

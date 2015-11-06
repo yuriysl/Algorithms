@@ -446,6 +446,32 @@ namespace Common.Tests
 		}
 
 		[TestMethod()]
+		public void BinaryTreeSortMaxTest()
+		{
+			foreach (var testCase in _testCases)
+			{
+				var binaryTree = new BinaryTree<int, object>();
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				for (int i = 0; i < n; i++)
+					binaryTree.Add(input[i], "value_" + input[i].ToString());
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", binaryTree.Select(node => node.Key)));
+
+				int j = 0;
+				foreach (var node in binaryTree)
+					Assert.AreEqual(expected[j++], node.Key);
+			}
+		}
+
+		[TestMethod()]
 		public void CountingSortTest()
 		{
 			var sorting = new Sorting();
