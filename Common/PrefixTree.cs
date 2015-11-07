@@ -7,9 +7,73 @@ using System.Threading.Tasks;
 
 namespace Common
 {
-	public class PrefixTreeNode<TKeyItem, TValue> : BaseNode<TKeyItem, TValue>
+	public class PrefixTreeNode<TKeyItem, TValue> : BaseNode<TKeyItem, TValue>, IEnumerable<PrefixTreeNode<TKeyItem, TValue>>
 		where TKeyItem : IComparable<TKeyItem>
 	{
+		#region Nested
+
+		public class PreOrderEnumerator : IEnumerator<PrefixTreeNode<TKeyItem, TValue>>
+		{
+			private readonly PrefixTreeNode<TKeyItem, TValue> _rootNode;
+			private Stack<IEnumerator<PrefixTreeNode<TKeyItem, TValue>>> _iterators;
+			private bool _initialized;
+
+			public PreOrderEnumerator(PrefixTreeNode<TKeyItem, TValue> rootNode)
+			{
+				_rootNode = rootNode;
+			}
+
+			public bool MoveNext()
+			{
+				if (!_initialized)
+				{
+					First();
+					return _iterators.Count > 0;
+				}
+
+				if(_iterators.Count > 0 && !_iterators.Peek().MoveNext())
+				{
+					_iterators.Pop();
+					_iterators.Peek().MoveNext();
+				}
+
+				return _iterators.Count > 0;
+			}
+
+			private void First()
+			{
+				_iterators = new Stack<IEnumerator<PrefixTreeNode<TKeyItem, TValue>>>();
+				var i = _rootNode.GetEnumerator();
+				i.MoveNext();
+				_iterators.Push(i);
+				_initialized = true;
+			}
+
+			public void Reset()
+			{
+				_initialized = false;
+			}
+
+			public PrefixTreeNode<TKeyItem, TValue> Current
+			{
+				get { return _iterators.Peek().Current; }
+			}
+
+			object IEnumerator.Current
+			{
+				get
+				{
+					return Current;
+				}
+			}
+
+			public void Dispose()
+			{
+			}
+		}
+
+		#endregion
+
 		#region Fields
 
 		List<PrefixTreeNode<TKeyItem, TValue>> _subTrees;
@@ -33,7 +97,7 @@ namespace Common
 				if(_subTrees == null)
 					_subTrees = new List<PrefixTreeNode<TKeyItem, TValue>>();
 				return _subTrees;
-            }
+			}
 			set { _subTrees = value; }
 		}
 
@@ -55,7 +119,7 @@ namespace Common
 
 		#endregion
 
-		public PrefixTreeNode<TKeyItem, TValue> GetChild(TKeyItem keyItem)
+		public PrefixTreeNode<TKeyItem, TValue> GetSubTree(TKeyItem keyItem)
 		{
 			if (SubTrees.Count != 0)
 				foreach (var node in SubTrees)
@@ -63,69 +127,26 @@ namespace Common
 						return node;
 			return null;
 		}
-	}
 
-	public class PrefixTree<TKey, TKeyItem, TValue> : IEnumerable<PrefixTreeNode<TKeyItem, TValue>> 
-		where TKey : IEnumerable<TKeyItem>
-		where TKeyItem : IComparable<TKeyItem>
-	{
-		#region Nested
+		#region IEnumerable
 
-		public class PreOrderEnumerator : IEnumerator<PrefixTreeNode<TKeyItem, TValue>>
+		public IEnumerator<PrefixTreeNode<TKeyItem, TValue>> GetEnumerator()
 		{
-			private readonly PrefixTree<TKey, TKeyItem, TValue> _prefixTree;
-			private PrefixTreeNode<TKeyItem, TValue> _current;
-			private bool _initialized;
+			return new PreOrderEnumerator(this);
+		}
 
-			public PreOrderEnumerator(PrefixTree<TKey, TKeyItem, TValue> prefixTree)
-			{
-				_prefixTree = prefixTree;
-			}
-
-			public bool MoveNext()
-			{
-				if (!_initialized)
-				{
-					First();
-					return _current != null;
-				}
-
-				
-				return _current != null;
-			}
-
-			private void First()
-			{
-				
-				_initialized = true;
-			}
-
-			public void Reset()
-			{
-				_current = null;
-				_initialized = false;
-			}
-
-			public PrefixTreeNode<TKeyItem, TValue> Current
-			{
-				get { return _current; }
-			}
-
-			object IEnumerator.Current
-			{
-				get
-				{
-					return Current;
-				}
-			}
-
-			public void Dispose()
-			{
-			}
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
 		}
 
 		#endregion
+	}
 
+	public class PrefixTree<TKey, TKeyItem, TValue>
+		where TKey : IEnumerable<TKeyItem>
+		where TKeyItem : IComparable<TKeyItem>
+	{
 		#region Fields
 
 		PrefixTreeNode<TKeyItem, TValue> _root;
@@ -172,32 +193,40 @@ namespace Common
 			return Add(_root, key.ToList(), value, 0);
 		}
 
-		private PrefixTreeNode<TKeyItem, TValue> Add(PrefixTreeNode<TKeyItem, TValue> node, List<TKeyItem> keyItems, TValue value, int matched)
+		private PrefixTreeNode<TKeyItem, TValue> Add(PrefixTreeNode<TKeyItem, TValue> node, List<TKeyItem> keyItems, TValue value, int matchedItems)
 		{
 			if (keyItems.Count == 0)
 				return null;
-			if (matched == keyItems.Count)
-				return node;
-			foreach (var subTree in node.SubTrees)
+
+			var currentNode = node;
+			while (matchedItems < keyItems.Count)
 			{
-				if (subTree.Key.CompareTo(keyItems[matched]) == 0)
+				bool isFound = false;
+				foreach (var subTree in currentNode.SubTrees)
 				{
-					matched++;
-					return Add(subTree, keyItems, value, matched);
+					if (subTree.Key.CompareTo(keyItems[matchedItems]) == 0)
+					{
+						matchedItems++;
+						isFound = true;
+						currentNode = subTree;
+						break;
+					}
+				}
+
+				if (!isFound)
+				{
+					var newNode = NewNode(keyItems[matchedItems], default(TValue), currentNode, false);
+					int count = currentNode.SubTrees.Count(subTree => subTree.Key.CompareTo(newNode.Key) <= 0);
+					currentNode.SubTrees.Insert(count, newNode);
+					matchedItems++;
+
+					currentNode = newNode;
 				}
 			}
 
-			var newNode = NewNode(keyItems[matched], value, node, false);
-			node.SubTrees.Add(newNode);
-			matched++;
-
-			if (matched == keyItems.Count)
-			{
-				newNode.AWordEndsHere = true;
-				return newNode;
-			}
-			else
-				return Add(newNode, keyItems, value, matched);
+			currentNode.Value = value;
+			currentNode.AWordEndsHere = true;
+			return currentNode;
 		}
 
 		public bool Contains(TKey key)
@@ -211,7 +240,13 @@ namespace Common
 			PrefixTreeNode<TKeyItem, TValue> child = null;
 			for (int counter = 0; counter < keyItems.Count; counter++)
 			{
-				child = currentNode.GetChild(keyItems[counter]);
+				if(node != _root && counter == 0)
+				{
+					if (node.Key.CompareTo(keyItems[counter]) != 0)
+						return false;
+					continue;
+				}
+				child = currentNode.GetSubTree(keyItems[counter]);
 				if (child == null)
 					return false;
 				currentNode = child;
@@ -235,7 +270,7 @@ namespace Common
 				if (counter < queryItems.Count - 1)
 					previous.Add(queryItems[counter]);
 
-				child = currentNode.GetChild(queryItems[counter]);
+				child = currentNode.GetSubTree(queryItems[counter]);
 				if (child == null)
 					break;
 				currentNode = child;
@@ -248,40 +283,24 @@ namespace Common
 			return _subsequentItems;
 		}
 
-		private void GenerateSubsequentItems(PrefixTreeNode<TKeyItem, TValue> node,
-														List<TKeyItem> subsequentItems)
+		private void GenerateSubsequentItems(PrefixTreeNode<TKeyItem, TValue> node, List<TKeyItem> subsequentItems)
 		{
 			if (node == null)
 				return;
 
-			var cloneSubsequentItems = new List<TKeyItem>();
-			foreach (var item in subsequentItems)
-			{
-				cloneSubsequentItems.Add(item);
-			}
+			if (node != _root)
+				subsequentItems.Add(node.Key);
 
 			if (node.AWordEndsHere)
-			{
-				_subsequentItems.Add(cloneSubsequentItems);
-				//return;
-			}
+				_subsequentItems.Add(subsequentItems);
 
 			foreach (var subnode in node.SubTrees)
+			{
+				var cloneSubsequentItems = new List<TKeyItem>();
+				foreach (var item in subsequentItems)
+					cloneSubsequentItems.Add(item);
 				GenerateSubsequentItems(subnode, cloneSubsequentItems);
-		}
-
-		#endregion
-
-		#region IEnumerable
-
-		public IEnumerator<PrefixTreeNode<TKeyItem, TValue>> GetEnumerator()
-		{
-			return new PreOrderEnumerator(this);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
+			}
 		}
 
 		#endregion
