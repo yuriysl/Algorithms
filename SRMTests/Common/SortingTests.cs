@@ -222,6 +222,20 @@ namespace Common.Tests
 		}
 
 		[TestMethod()]
+		public void PermutationTest()
+		{
+			var perm = new Perm();
+			int[] input = { 0, 1, 2, 3, 5, 6 };
+			var permutations = perm.GetPerms(input, input.Length);
+			int i = 0;
+			foreach(var p in permutations)
+			{
+				Console.WriteLine("Permutation:[Number{0}], Item:{1}", i, string.Join(", ", p));
+				i++;
+			}
+		}
+
+		[TestMethod()]
 		public void MergeSortTest()
 		{
 			var sorting = new Sorting();

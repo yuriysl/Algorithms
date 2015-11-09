@@ -18,6 +18,38 @@ namespace Common
 		}
 	}
 
+	public class Perm
+	{
+		public IEnumerable<int[]> GetPerms(int[] a, int n)
+		{
+			int m = a.Length;
+			if (n == 2)
+			{
+				yield return a;
+				Swap(a, m - 2, m - 1);
+				yield return a;
+			}
+			else
+			{
+				for (int i = m - n; i < m; i++)
+				{
+					var p = GetPerms(a, n - 1);
+					foreach (var pItem in p)
+						yield return pItem;
+					if(i < m - 1)
+						Swap(a, m - n, m - n + 1);
+				}
+			}
+		}
+
+		private void Swap(int[] a, int p, int r)
+		{
+			int tmp = a[p];
+			a[p] = a[r];
+			a[r] = tmp;
+		}
+	}
+
 	public class RadixTreeNode<TKey, TKeyItem, TValue> : BaseNode<TKey, TValue>, IEnumerable<RadixTreeNode<TKey, TKeyItem, TValue>>
 		where TKey : IEnumerable<TKeyItem>, IComparable<TKey>
 		where TKeyItem : IComparable<TKeyItem>
