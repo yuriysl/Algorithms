@@ -233,15 +233,24 @@ namespace Common
 				startIndex += searchResult.MatchedItems;
 				if (keyItems.Count != searchResult.MatchedItems)
 				{
-					var newKeyItems = new List<TKeyItem>();
-					for (int i = startIndex; i < keyItems.Count; i++)
-						newKeyItems.Add(keyItems[i]);
-					var newNode = NewNode(newKeyItems, currentNode.Value, currentNode);
+					var commonKeyItems = new List<TKeyItem>();
+					var branchKeyItems = new List<TKeyItem>();
+					for (int i = 0; i < keyItems.Count; i++)
+					{
+						if(i < searchResult.MatchedItems)
+							commonKeyItems.Add(keyItems[i]);
+						else
+							branchKeyItems.Add(keyItems[i]);
+					}
+					currentNode.KeyItems = commonKeyItems;
+					var newNode = NewNode(branchKeyItems, currentNode.Value, currentNode);
 					newNode.Value = currentNode.Value;
+					newNode.SubTrees.AddRange(currentNode.SubTrees);
 					newNode.AWordEndsHere = true;
 					currentNode.Value = default(TValue);
+					currentNode.SubTrees.Clear();
 					currentNode.AWordEndsHere = false;
-					int count = currentNode.SubTrees.Count(subTree => LookUp(subTree.KeyItems, newNode.KeyItems, startIndex).Result <= 0);
+					int count = currentNode.SubTrees.Count(subTree => LookUp(subTree.KeyItems, newNode.KeyItems, 0).Result <= 0);
 					currentNode.SubTrees.Insert(count, newNode);
 					break;
 				}
@@ -261,7 +270,7 @@ namespace Common
 				for (int i = startIndex; i < addItems.Count; i++)
 					newKeyItems.Add(addItems[i]);
 				var newNode = NewNode(newKeyItems, default(TValue), currentNode);
-				int count = currentNode.SubTrees.Count(subTree => LookUp(subTree.KeyItems, newNode.KeyItems, startIndex).Result <= 0);
+				int count = currentNode.SubTrees.Count(subTree => LookUp(subTree.KeyItems, newNode.KeyItems, 0).Result <= 0);
 				currentNode.SubTrees.Insert(count, newNode);
 				currentNode = newNode;
 			}
@@ -329,7 +338,7 @@ namespace Common
 			int matchedItems = 0;
 			for (int counter = 0; counter < queryItems.Count; counter += matchedItems)
 			{
-				if (counter < queryItems.Count - matchedItems)
+				if (counter <= queryItems.Count - 1)
 				{
 					for (int i = counter - matchedItems; i < counter; i++)
 						previous.Add(queryItems[i]);
@@ -374,6 +383,16 @@ namespace Common
 				foreach (var item in subsequentItems)
 					cloneSubsequentItems.Add(item);
 				GenerateSubsequentItems(subnode, cloneSubsequentItems);
+			}
+		}
+
+		public void Print(RadixTreeNode<string, char, object> node)
+		{
+			Console.WriteLine("Key:{0}", string.Join("", node.KeyItems));
+			Console.Write("Count:{0}", node.SubTrees.Count);
+			for (int i = 0; i < node.SubTrees.Count; i++)
+			{
+				Print(node.SubTrees[i]);
 			}
 		}
 
