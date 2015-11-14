@@ -25,5 +25,10 @@ namespace Common
 		{
 			((IMaxHeap<int, TValue>)_binaryHeap).MaxInsert(Count, value);
 		}
+
+		public void Clear()
+		{
+			_binaryHeap.Clear();
+		}
 	}
 }

@@ -125,6 +125,78 @@ namespace Common
 			}
 		}
 
+		public class InOrderStackEnumerator : IEnumerator<BinaryTreeNode<TKey, TValue>>
+		{
+			private readonly BinaryTree<TKey, TValue> _binaryTree;
+			private Stack<BinaryTreeNode<TKey, TValue>> _currentPath;
+			private bool _initialized;
+
+			public InOrderStackEnumerator(BinaryTree<TKey, TValue> binaryTree)
+			{
+				_binaryTree = binaryTree;
+				_currentPath = new Stack<BinaryTreeNode<TKey, TValue>>();
+			}
+
+			public bool MoveNext()
+			{
+				if (!_initialized)
+				{
+					First();
+					return Current != null;
+				}
+
+				if (Current == null)
+					return false;
+
+				var current = _currentPath.Pop().Right;
+				while (current != null)
+				{
+					_currentPath.Push(current);
+					current = current.Left;
+				}
+
+				return Current != null;
+			}
+
+			private void First()
+			{
+				_currentPath.Clear();
+				if (_binaryTree.Root != null)
+				{
+					var current = _binaryTree.Root;
+					while (current != null)
+					{
+						_currentPath.Push(current);
+						current = current.Left;
+					}
+				}
+				_initialized = true;
+			}
+
+			public void Reset()
+			{
+				_currentPath.Clear();
+				_initialized = false;
+			}
+
+			public BinaryTreeNode<TKey, TValue> Current
+			{
+				get { return _currentPath.Count == 0 ? null : _currentPath.Peek(); }
+			}
+
+			object IEnumerator.Current
+			{
+				get
+				{
+					return Current;
+				}
+			}
+
+			public void Dispose()
+			{
+			}
+		}
+
 		#endregion
 
 		#region Fields
@@ -317,6 +389,11 @@ namespace Common
 		public IEnumerator<BinaryTreeNode<TKey, TValue>> GetEnumerator()
 		{
 			return new InOrderEnumerator(this);
+		}
+
+		public IEnumerator<BinaryTreeNode<TKey, TValue>> GetInOrderStackEnumerator()
+		{
+			return new InOrderStackEnumerator(this);
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

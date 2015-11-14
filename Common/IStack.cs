@@ -11,5 +11,6 @@ namespace Common
 		TValue Peek();
 		TValue Pop();
 		void Push(TValue value);
+		void Clear();
 	}
 }

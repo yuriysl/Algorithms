@@ -472,6 +472,35 @@ namespace Common.Tests
 		}
 
 		[TestMethod()]
+		public void BinaryTreeStackSortMaxTest()
+		{
+			foreach (var testCase in _testCases)
+			{
+				var binaryTree = new BinaryTree<int, object>();
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				for (int i = 0; i < n; i++)
+					binaryTree.Add(input[i], "value_" + input[i].ToString());
+
+
+				int j = 0;
+				var inOrderStackEnumerator = binaryTree.GetInOrderStackEnumerator();
+				while (inOrderStackEnumerator.MoveNext())
+				{
+					Console.WriteLine("Output:[{0}]", inOrderStackEnumerator.Current.Key);
+					Assert.AreEqual(expected[j++], inOrderStackEnumerator.Current.Key);
+				}
+			}
+		}
+
+		[TestMethod()]
 		public void CountingSortTest()
 		{
 			var sorting = new Sorting();

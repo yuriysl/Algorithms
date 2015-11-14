@@ -59,6 +59,12 @@ namespace Common
 
 		#endregion
 
+		public void Clear()
+		{
+			_nodes.Clear();
+			_heapSize = 0;
+		}
+
 		#region IMaxHeap
 
 		void IMaxHeap<TKey, TValue>.BuildMax()
@@ -177,7 +183,7 @@ namespace Common
 		void IMaxHeap<TKey, TValue>.MaxInsert(TKey key, TValue value)
 		{
 			_heapSize++;
-			_nodes.Add(new BinaryHeapNode<TKey, TValue>(_heapSize - 1, key, value));
+			_nodes.Insert(_heapSize - 1, new BinaryHeapNode<TKey, TValue>(_heapSize - 1, key, value));
 			((IMaxHeap<TKey, TValue>)this).IncreaseKey(_nodes[_heapSize - 1], key);
 		}
 
@@ -312,7 +318,7 @@ namespace Common
 		void IMinHeap<TKey, TValue>.MinInsert(TKey key, TValue value)
 		{
 			_heapSize++;
-			_nodes.Add(new BinaryHeapNode<TKey, TValue>(_heapSize - 1, key, value));
+			_nodes.Insert(_heapSize - 1, new BinaryHeapNode<TKey, TValue>(_heapSize - 1, key, value));
 			((IMinHeap<TKey, TValue>)this).DecreaseKey(_nodes[_heapSize - 1], key);
 		}
 
