@@ -55,6 +55,7 @@
     <Compile Include="PrefixTree.cs" />
     <Compile Include="RadixTree.cs" />
     <Compile Include="Randomization.cs" />
+    <Compile Include="RBBinaryTree.cs" />
     <Compile Include="Searching.cs" />
     <Compile Include="Sorting.cs" />
     <Compile Include="Stack.cs" />
