@@ -246,6 +246,10 @@ namespace Common
 			return newNode;
 		}
 
+		public virtual void DoAddNode(BinaryTreeNode<TKey, TValue> newNode)
+		{
+		}
+
 		private void Add(ref BinaryTreeNode<TKey, TValue> node, BinaryTreeNode<TKey, TValue> parent, TKey key, TValue value, out BinaryTreeNode<TKey, TValue> newNode)
 		{
 			if (node == null)
@@ -253,12 +257,14 @@ namespace Common
 				node = NewNode(key, value, parent);
 				newNode = node;
 				_count++;
+				DoAddNode(node);
 				return;
 			}
 
 			if (((IComparable<TKey>)node.Key).CompareTo(key) > 0)
 			{
 				var leftNode = node.Left;
+				DoAddNode(node);
 				Add(ref leftNode, node, key, value, out newNode);
 				node.Left = leftNode;
 				newNode = leftNode;
@@ -266,6 +272,7 @@ namespace Common
 			else if (((IComparable<TKey>)node.Key).CompareTo(key) < 0)
 			{
 				var rightNode = node.Right;
+				DoAddNode(node);
 				Add(ref rightNode, node, key, value, out newNode);
 				node.Right = rightNode;
 				newNode = rightNode;
@@ -275,6 +282,7 @@ namespace Common
 				int rndR = NodeHelper<TKey, TValue>.Rnd.Next(2);
 
 				var childNode = rndR == 0 ? node.Left : node.Right;
+				DoAddNode(node);
 				Add(ref childNode, node, key, value, out newNode);
 				node.Right = childNode;
 				newNode = childNode;
@@ -322,6 +330,10 @@ namespace Common
 			return removedNode;
 		}
 
+		public virtual void DoRemoveNode(BinaryTreeNode<TKey, TValue> newNode)
+		{
+		}
+
 		private void Remove(BinaryTreeNode<TKey, TValue> node, TKey key, out BinaryTreeNode<TKey, TValue> removedNode, out BinaryTreeNode<TKey, TValue> replacedNode)
 		{
 			if (node == null)
@@ -331,11 +343,18 @@ namespace Common
 				return;
 			}
 			if (((IComparable<TKey>)node.Key).CompareTo(key) > 0)
+			{
+				DoRemoveNode(node);
 				Remove(node.Left, key, out removedNode, out replacedNode);
+			}
 			else if (((IComparable<TKey>)node.Key).CompareTo(key) < 0)
+			{
+				DoRemoveNode(node);
 				Remove(node.Right, key, out removedNode, out replacedNode);
+			}
 			else
 			{
+				DoRemoveNode(node);
 				if (node.Left != null && node.Right != null)
 				{
 					var successor = GetMinNode(node.Right);

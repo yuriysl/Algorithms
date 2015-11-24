@@ -18,6 +18,7 @@ namespace Common.Tests
 		public T ExpectedMin { get; set; }
 		public T ExpectedMax { get; set; }
 		public T ExpectedItem { get; set; }
+		public int ExpectedRank { get; set; }
 		public bool IsBinarySearch { get; set; }
 		public bool IsForMinMax { get; set; }
 		public bool IsForSelection { get; set; }
@@ -54,6 +55,7 @@ namespace Common.Tests
 					ExpectedMax = 2,
 					Order = 1,
 					ExpectedItem = 1,
+					ExpectedRank = 1,
 					IsBinarySearch = true,
 					IsForMinMax = true,
 					IsForSelection = true
@@ -68,6 +70,7 @@ namespace Common.Tests
 					ExpectedMax = 3,
 					Order = 3,
 					ExpectedItem = 3,
+					ExpectedRank = 3,
 					IsBinarySearch = true,
 					IsForMinMax = true,
 					IsForSelection = true
@@ -82,6 +85,7 @@ namespace Common.Tests
 					ExpectedMax = 3,
 					Order = 2,
 					ExpectedItem = 2,
+					ExpectedRank = 2,
 					IsBinarySearch = true,
 					IsForMinMax = true,
 					IsForSelection = true
@@ -96,6 +100,7 @@ namespace Common.Tests
 					ExpectedMax = 3,
 					Order = 1,
 					ExpectedItem = 1,
+					ExpectedRank = 1,
 					IsBinarySearch = true,
 					IsForMinMax = true,
 					IsForSelection = true
@@ -110,6 +115,7 @@ namespace Common.Tests
 					ExpectedMax = 3,
 					Order = 1,
 					ExpectedItem = 1,
+					ExpectedRank = 1,
 					IsBinarySearch = true,
 					IsForMinMax = true,
 					IsForSelection = true
@@ -124,6 +130,7 @@ namespace Common.Tests
 					ExpectedMax = 15,
 					Order = 2,
 					ExpectedItem = -8,
+					ExpectedRank = 2,
 					IsBinarySearch = true,
 					IsForMinMax = true,
 					IsForSelection = true
@@ -138,6 +145,7 @@ namespace Common.Tests
 					ExpectedMax = 15,
 					Order = 9,
 					ExpectedItem = 2,
+					ExpectedRank = 9,
 					IsBinarySearch = false,
 					IsForMinMax = true,
 					IsForSelection = true
@@ -336,6 +344,133 @@ namespace Common.Tests
 					Assert.IsNotNull(actualItem);
 					Assert.AreEqual(expectedItem, actualItem.Key);
 				}
+			}
+		}
+
+		[TestMethod()]
+		public void OSSelectTest()
+		{
+			foreach (var testCase in _testCases)
+			{
+				if (!testCase.IsForSelection)
+					continue;
+				var rbBinaryTree = new RBBinaryTree<int, object>();
+				int[] input = testCase.Input.ToArray();
+				int order = testCase.Order;
+				int expectedItem = testCase.ExpectedItem;
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Order:[{0}]", order);
+				Console.WriteLine("Expected:[Item:{0}]", expectedItem == -1 ? "null" : expectedItem.ToString());
+
+				for (int i = 0; i < n; i++)
+					rbBinaryTree.Add(input[i], "value_" + input[i].ToString());
+
+				var rbNode = (RBNode<int, object>)rbBinaryTree.Root;
+				var actualItem = rbBinaryTree.Select(rbNode, order);
+
+				Console.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
+
+				if (expectedItem == -1)
+					Assert.IsNull(actualItem);
+				else
+				{
+					Assert.IsNotNull(actualItem);
+					Assert.AreEqual(expectedItem, actualItem.Key);
+				}
+			}
+		}
+
+		[TestMethod()]
+		public void OSSelectTailTest()
+		{
+			foreach (var testCase in _testCases)
+			{
+				if (!testCase.IsForSelection)
+					continue;
+				var rbBinaryTree = new RBBinaryTree<int, object>();
+				int[] input = testCase.Input.ToArray();
+				int order = testCase.Order;
+				int expectedItem = testCase.ExpectedItem;
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Order:[{0}]", order);
+				Console.WriteLine("Expected:[Item:{0}]", expectedItem == -1 ? "null" : expectedItem.ToString());
+
+				for (int i = 0; i < n; i++)
+					rbBinaryTree.Add(input[i], "value_" + input[i].ToString());
+
+				var rbNode = (RBNode<int, object>)rbBinaryTree.Root;
+				var actualItem = rbBinaryTree.SelectTail(rbNode, order);
+
+				Console.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
+
+				if (expectedItem == -1)
+					Assert.IsNull(actualItem);
+				else
+				{
+					Assert.IsNotNull(actualItem);
+					Assert.AreEqual(expectedItem, actualItem.Key);
+				}
+			}
+		}
+
+		[TestMethod()]
+		public void OSRankTest()
+		{
+			var searching = new Searching();
+			foreach (var testCase in _testCases)
+			{
+				if (!testCase.IsForSelection)
+					continue;
+				var rbBinaryTree = new RBBinaryTree<int, object>();
+				int[] input = testCase.Input.ToArray();
+				int order = testCase.Order;
+				int expectedRank = testCase.ExpectedRank;
+				int n = input.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
+				Console.WriteLine("Order:[{0}]", order);
+				Console.WriteLine("Expected:[Rank:{0}]", expectedRank == -1 ? "0" : expectedRank.ToString());
+
+				for (int i = 0; i < n; i++)
+					rbBinaryTree.Add(input[i], "value_" + input[i].ToString());
+
+				var nodes = new List<BaseNode<int, object>>();
+				for (int i = 0; i < n; i++)
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
+
+				var actualItem = searching.Select(nodes, 0, n - 1, order);
+
+				Console.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
+
+				RBNode<int, object> rbNode = null;
+				foreach (var node in rbBinaryTree)
+				{
+					if (actualItem.Key == node.Key)
+					{
+						rbNode = (RBNode<int, object>)node;
+						break;
+					}
+				}
+
+				Assert.IsNotNull(rbNode);
+				var actualRank = rbBinaryTree.Rank(rbNode);
+
+				Console.WriteLine("Actual:[Rank:{0}]", actualRank.ToString());
+
+				if (expectedRank == -1)
+					Assert.IsTrue(actualRank == 0);
+				else
+					Assert.AreEqual(expectedRank, actualRank);
 			}
 		}
 	}

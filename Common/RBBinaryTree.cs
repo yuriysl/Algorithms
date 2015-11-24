@@ -17,6 +17,7 @@ namespace Common
 		#region Fields
 
 		NodeColor _color;
+		int _size;
 
 		#endregion
 
@@ -28,19 +29,26 @@ namespace Common
 			set { _color = value; }
 		}
 
+		public int Size
+		{
+			get { return _size; }
+			set { _size = value; }
+		}
+
 		#endregion
 
 		#region Constructors
 
-		public RBNode(TKey key, TValue value, BinaryTreeNode<TKey, TValue> parent)
-			: this(key, value, parent, NodeColor.Red)
+		public RBNode(TKey key, TValue value, BinaryTreeNode<TKey, TValue> parent, int size)
+			: this(key, value, parent, NodeColor.Red, size)
 		{
 		}
 
-		public RBNode(TKey key, TValue value, BinaryTreeNode<TKey, TValue> parent, NodeColor color)
+		public RBNode(TKey key, TValue value, BinaryTreeNode<TKey, TValue> parent, NodeColor color, int size)
 			: base(key, value, parent)
 		{
 			_color = color;
+			_size = size;
 		}
 
 		#endregion
@@ -52,12 +60,12 @@ namespace Common
 
 		public override BinaryTreeNode<TKey, TValue> NewNode(TKey key, TValue value, BinaryTreeNode<TKey, TValue> parent)
 		{
-			return new RBNode<TKey, TValue>(key, value, parent);
+			return new RBNode<TKey, TValue>(key, value, parent, 0);
 		}
 
 		public void LeftRotate(RBNode<TKey, TValue> node)
 		{
-			var y = node.Right;
+			var y = (RBNode<TKey, TValue>)node.Right;
 			node.Right = y.Left;
 
 			if (y.Left != null)
@@ -73,12 +81,16 @@ namespace Common
 				node.Parent.Right = y;
 
 			y.Left = node;
+			y.Size = node.Size;
+			var left = (RBNode<TKey, TValue>)node.Left;
+			var right = (RBNode<TKey, TValue>)node.Right;
+			node.Size = (left == null ? 0 : left.Size) + (right == null ? 0 : right.Size) + 1;
 			node.Parent = y;
 		}
 
 		public void RightRotate(RBNode<TKey, TValue> node)
 		{
-			var y = node.Left;
+			var y = (RBNode<TKey, TValue>)node.Left;
 			node.Left = y.Right;
 
 			if (y.Right != null)
@@ -94,7 +106,71 @@ namespace Common
 				node.Parent.Left = y;
 
 			y.Right = node;
+			y.Size = node.Size;
+			var left = (RBNode<TKey, TValue>)node.Left;
+			var right = (RBNode<TKey, TValue>)node.Right;
+			node.Size = (left == null ? 0 : left.Size) + (right == null ? 0 : right.Size) + 1;
 			node.Parent = y;
+		}
+
+		public RBNode<TKey, TValue> Select(RBNode<TKey, TValue> node, int index)
+		{
+			if (node == null)
+				return null;
+			var left = (RBNode<TKey, TValue>)node.Left;
+			int r = (left == null ? 0 : left.Size) + 1;
+			if (index == r)
+				return node;
+			else if (index < r)
+				return Select(left, index);
+
+			var right = (RBNode<TKey, TValue>)node.Right;
+			return Select(right, index - r);
+		}
+
+		public RBNode<TKey, TValue> SelectTail(RBNode<TKey, TValue> node, int index)
+		{
+			if (node == null)
+				return null;
+			var currentNode = node;
+			var left = (RBNode<TKey, TValue>)currentNode.Left;
+			int r = (left == null ? 0 : left.Size) + 1;
+			while (index != r)
+			{
+				if (index < r)
+					currentNode = (RBNode<TKey, TValue>)currentNode.Left;
+				else
+				{
+					currentNode = (RBNode<TKey, TValue>)currentNode.Right;
+					index -= r;
+				}
+				if (currentNode == null)
+					return null;
+
+				left = (RBNode<TKey, TValue>)currentNode.Left;
+				r = (left == null ? 0 : left.Size) + 1;
+			}
+			return currentNode;
+		}
+
+		public int Rank(RBNode<TKey, TValue> node)
+		{
+			if (node == null)
+				return 0;
+			var currentNode = node;
+			var left = (RBNode<TKey, TValue>)currentNode.Left;
+			int r = (left == null ? 0 : left.Size) + 1;
+			while (currentNode != Root)
+			{
+				if (currentNode.Parent.Right == currentNode)
+				{
+					left = (RBNode<TKey, TValue>)currentNode.Parent.Left;
+					r += (left == null ? 0 : left.Size) + 1;
+				}
+				currentNode = (RBNode<TKey, TValue>)currentNode.Parent;
+				
+			}
+			return r;
 		}
 
 		public override BinaryTreeNode<TKey, TValue> Add(TKey key, TValue value)
@@ -104,6 +180,14 @@ namespace Common
 			AddFixUp(ref newNode);
 
 			return newNode;
+		}
+
+		public override void DoAddNode(BinaryTreeNode<TKey, TValue> newNode)
+		{
+			if (newNode == null)
+				return;
+			var newRBNode = (RBNode<TKey, TValue>)newNode;
+			newRBNode.Size++;
 		}
 
 		private void AddFixUp(ref BinaryTreeNode<TKey, TValue> node)
@@ -167,6 +251,13 @@ namespace Common
 			return removedNode;
 		}
 
+		public override void DoRemoveNode(BinaryTreeNode<TKey, TValue> node)
+		{
+			if (node == null)
+				return;
+			var rbNode = (RBNode<TKey, TValue>)node;
+			rbNode.Size--;
+		}
 
 		private void RemoveFixUp(BinaryTreeNode<TKey, TValue> node)
 		{
