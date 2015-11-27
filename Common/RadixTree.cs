@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common
 {
@@ -214,17 +212,16 @@ namespace Common
 
 		public virtual RadixTreeNode<TKey, TKeyItem, TValue> Add(TKey key, TValue value)
 		{
-			return Add(_root, key.ToList(), value, 0);
+			return Add(_root, key.ToList(), value);
 		}
 
-		private RadixTreeNode<TKey, TKeyItem, TValue> Add(RadixTreeNode<TKey, TKeyItem, TValue> node, List<TKeyItem> addItems, TValue value, int matchedItems)
+		private RadixTreeNode<TKey, TKeyItem, TValue> Add(RadixTreeNode<TKey, TKeyItem, TValue> node, List<TKeyItem> addItems, TValue value)
 		{
 			if (addItems.Count == 0)
 				return null;
 
 			var currentNode = node;
 			int startIndex = 0;
-			RadixTreeNode<TKey, TKeyItem, TValue> child = null;
 			var keyItems = node.KeyItems;
 			var searchResult = LookUp(keyItems, addItems, startIndex);
 
@@ -255,7 +252,7 @@ namespace Common
 					break;
 				}
 
-				child = currentNode.GetSubTree(addItems[startIndex]);
+				var child = currentNode.GetSubTree(addItems[startIndex]);
 				if (child == null)
 					break;
 
@@ -286,7 +283,6 @@ namespace Common
 		{
 			var currentNode = node;
 			int startIndex = 0;
-			RadixTreeNode<TKey, TKeyItem, TValue> child = null;
 			var keyItems = node.KeyItems;
 			var searchResult = LookUp(keyItems, queryItems, startIndex);
 			if (searchResult.Result == 0)
@@ -298,7 +294,7 @@ namespace Common
 				if (keyItems.Count != searchResult.MatchedItems)
 					return false;
 
-				child = currentNode.GetSubTree(queryItems[startIndex]);
+				var child = currentNode.GetSubTree(queryItems[startIndex]);
 				if (child == null)
 					return false;
 				currentNode = child;
@@ -334,7 +330,6 @@ namespace Common
 		{
 			var previous = new List<TKeyItem>();
 			RadixTreeNode<TKey, TKeyItem, TValue> currentNode = _root;
-			RadixTreeNode<TKey, TKeyItem, TValue> child = null;
 			int matchedItems = 0;
 			for (int counter = 0; counter < queryItems.Count; counter += matchedItems)
 			{
@@ -344,7 +339,7 @@ namespace Common
 						previous.Add(queryItems[i]);
 				}
 
-				child = currentNode.GetSubTree(queryItems[counter]);
+				var child = currentNode.GetSubTree(queryItems[counter]);
 				if (child == null)
 					break;
 				var keyItems = child.KeyItems;

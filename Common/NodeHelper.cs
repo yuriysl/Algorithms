@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common
 {
-	public class NodeHelper<TKey, TValue>
+	public static class NodeHelper<TKey, TValue>
 	{
-		public static Random Rnd = new Random();
+		public static readonly Random Rnd = new Random();
 
-		static public void Swap(BaseNode<TKey, TValue> left, BaseNode<TKey, TValue> right)
+		public static void Swap(BaseNode<TKey, TValue> left, BaseNode<TKey, TValue> right)
 		{
 			TKey tmpKey = left.Key;
 			left.Key = right.Key;
@@ -21,7 +17,7 @@ namespace Common
 			right.Value = tmpValue;
 		}
 
-		static public void SwapWithIndex(BaseNode<TKey, TValue> left, BaseNode<TKey, TValue> right)
+		public static void SwapWithIndex(BaseNode<TKey, TValue> left, BaseNode<TKey, TValue> right)
 		{
 			TKey tmpKey = left.Key;
 			left.Key = right.Key;

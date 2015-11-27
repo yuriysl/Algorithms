@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common
 {
@@ -16,7 +14,6 @@ namespace Common
 		{
 			int left = p ?? 0;
 			int right = r ?? (a.Count - 1);
-			int n = right - left + 1;
 			for (int i = left + 1; i <= right; i++)
 			{
 				var key = a[i].Key;
@@ -201,7 +198,6 @@ namespace Common
 			where TKey : IComparable<TKey>
 		{
 			int n = a.Count;
-			var nodes = new List<BinaryHeapNode<TKey, TValue>>();
 			var binaryHeap = new BinaryHeap<TKey, TValue>(a);
 			(((IMaxHeap<TKey, TValue>)binaryHeap)).BuildMax();
 			for (int i = n - 1; i >= 0; i--)
@@ -219,7 +215,6 @@ namespace Common
 			where TKey : IComparable<TKey>
 		{
 			int n = a.Count;
-			var nodes = new List<BinaryHeapNode<TKey, TValue>>();
 			var binaryHeap = new BinaryHeap<TKey, TValue>(a);
 			(((IMaxHeap<TKey, TValue>)binaryHeap)).BuildMaxTail();
 			for (int i = n - 1; i >= 0; i--)
@@ -237,7 +232,6 @@ namespace Common
 			where TKey : IComparable<TKey>
 		{
 			int n = a.Count;
-			var nodes = new List<BinaryHeapNode<TKey, TValue>>();
 			var binaryHeap = new BinaryHeap<TKey, TValue>(a);
 			(((IMinHeap<TKey, TValue>)binaryHeap)).BuildMin();
 			for (int i = n - 1; i > 0; i--)
@@ -255,7 +249,6 @@ namespace Common
 			where TKey : IComparable<TKey>
 		{
 			int n = a.Count;
-			var nodes = new List<BinaryHeapNode<TKey, TValue>>();
 			var binaryHeap = new BinaryHeap<TKey, TValue>(a);
 			(((IMinHeap<TKey, TValue>)binaryHeap)).BuildMinTail();
 			for (int i = n - 1; i > 0; i--)

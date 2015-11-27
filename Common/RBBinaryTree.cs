@@ -327,7 +327,8 @@ namespace Common
 				}
 			}
 
-			((RBNode<TKey, TValue>)node).Color = NodeColor.Black;
+			if(node != null)
+				((RBNode<TKey, TValue>)node).Color = NodeColor.Black;
 		}
 
 		#endregion

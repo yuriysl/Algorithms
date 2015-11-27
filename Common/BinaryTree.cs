@@ -280,7 +280,6 @@ namespace Common
 			else
 			{
 				int rndR = NodeHelper<TKey, TValue>.Rnd.Next(2);
-
 				var childNode = rndR == 0 ? node.Left : node.Right;
 				DoAddNode(node);
 				Add(ref childNode, node, key, value, out newNode);
@@ -354,7 +353,6 @@ namespace Common
 			}
 			else
 			{
-				DoRemoveNode(node);
 				if (node.Left != null && node.Right != null)
 				{
 					var successor = GetMinNode(node.Right);

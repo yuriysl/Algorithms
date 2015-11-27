@@ -473,5 +473,57 @@ namespace Common.Tests
 					Assert.AreEqual(expectedRank, actualRank);
 			}
 		}
+
+		[TestMethod()]
+		public void OSHordsTest()
+		{
+			var rnd = new Random();
+			var rbBinaryTree = new RBBinaryTree<int, Tuple<int, int>>();
+			int n = 99;
+			var hords = new List<Tuple<int, int>>();
+			int i = 0;
+			while (i < n)
+			{
+				int end1 = rnd.Next(0, 360);
+				int end2 = rnd.Next(0, 360);
+				end2 = (end1 + 180) % 360;
+				if (end1 == end2)
+					continue;
+				var hasSameHords = hords.Any(hord => hord.Item1 == end1 || hord.Item1 == end2 || hord.Item2 == end1 || hord.Item2 == end2);
+				if (hasSameHords)
+					continue;
+				hords.Add(new Tuple<int, int>(Math.Min(end1, end2), Math.Max(end1, end2)));
+				i++;
+			}
+
+			var sorting = new Sorting();
+			var ends = new List<BaseNode<int, Tuple<int, int>>>();
+			for (int j = 0; j < n; j++)
+			{
+				ends.Add(new BaseNode<int, Tuple<int, int>>(j, hords[j].Item1, hords[j]));
+				ends.Add(new BaseNode<int, Tuple<int, int>>(j, hords[j].Item2, hords[j]));
+			}
+
+			sorting.QuickSort(ends, 0, ends.Count - 1);
+
+			int intersects = 0;
+			int m = 2 * n;
+			for (int j = 0; j < m; j++)
+			{
+				bool isLeft = ends[j].Key == ends[j].Value.Item1;
+				if(isLeft)
+					rbBinaryTree.Add(ends[j].Key, ends[j].Value);
+				else
+				{
+					BinaryTreeNode<int, Tuple<int, int>> replacedNode;
+					var removedNode = rbBinaryTree.Remove(ends[j].Value.Item1, out replacedNode);
+					if(removedNode != null && removedNode.Right != null)
+						intersects += ((RBNode<int, Tuple<int, int>>)removedNode.Right).Size;
+				}
+			}
+
+			Console.WriteLine("Output:[Intersects:{0}]", intersects);
+			Assert.AreEqual(n * (n - 1) / 2, intersects);
+		}
 	}
 }

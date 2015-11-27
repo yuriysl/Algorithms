@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common
 {
@@ -237,7 +235,6 @@ namespace Common
 		public bool Contains(PrefixTreeNode<TKeyItem, TValue> node, List<TKeyItem> keyItems)
 		{
 			var currentNode = node;
-			PrefixTreeNode<TKeyItem, TValue> child = null;
 			for (int counter = 0; counter < keyItems.Count; counter++)
 			{
 				if(node != _root && counter == 0)
@@ -246,7 +243,7 @@ namespace Common
 						return false;
 					continue;
 				}
-				child = currentNode.GetSubTree(keyItems[counter]);
+				var child = currentNode.GetSubTree(keyItems[counter]);
 				if (child == null)
 					return false;
 				currentNode = child;
@@ -264,13 +261,12 @@ namespace Common
 		{
 			var previous = new List<TKeyItem>();
 			PrefixTreeNode<TKeyItem, TValue> currentNode = _root;
-			PrefixTreeNode<TKeyItem, TValue> child = null;
 			for (int counter = 0; counter < queryItems.Count; counter++)
 			{
 				if (counter < queryItems.Count - 1)
 					previous.Add(queryItems[counter]);
 
-				child = currentNode.GetSubTree(queryItems[counter]);
+				var child = currentNode.GetSubTree(queryItems[counter]);
 				if (child == null)
 					break;
 				currentNode = child;
