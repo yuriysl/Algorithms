@@ -86,8 +86,13 @@ Returns: 239676554423331
 		public long newPassword(long oldPassword, int[] restrictedDigits)
 		{
 			int n = restrictedDigits.Length;
+			int[] a = new int[n];
+			long currPassword = oldPassword;
+			for (int i = 0; i < n; i++, currPassword /= 10)
+				a[n - i - 1] = (int)(currPassword % 10);
 			int[] r = new int[n];
-			for (int i = 0; i < n; i++) r[i] = restrictedDigits[i];
+			for (int i = 0; i < n; i++)
+				r[i] = restrictedDigits[i];
 
 
 

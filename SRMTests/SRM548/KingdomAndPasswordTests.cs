@@ -14,7 +14,9 @@ namespace SRMTests.SRM548
 		[TestMethod]
 		public void newPasswordTest()
 		{
-			Assert.Fail();
+			var pass = new KingdomAndPassword();
+			long res = pass.newPassword(548, new[]{5, 1, 8});
+			Assert.AreEqual(485, res);
 		}
 	}
 }
