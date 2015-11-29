@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common
 {
@@ -46,7 +43,7 @@ namespace Common
 		{
 		}
 
-		public BinaryTreeNode(int index, TKey key, TValue value, BinaryTreeNode<TKey, TValue> parent)
+		private BinaryTreeNode(int index, TKey key, TValue value, BinaryTreeNode<TKey, TValue> parent)
 			: base(index, key, value)
 		{
 			_parent = parent;
@@ -59,7 +56,7 @@ namespace Common
 	{
 		#region Nested
 
-		public class InOrderEnumerator : IEnumerator<BinaryTreeNode<TKey, TValue>>
+		private class InOrderEnumerator : IEnumerator<BinaryTreeNode<TKey, TValue>>
 		{
 			private readonly BinaryTree<TKey, TValue> _binaryTree;
 			private BinaryTreeNode<TKey, TValue> _current;
@@ -107,28 +104,19 @@ namespace Common
 				_initialized = false;
 			}
 
-			public BinaryTreeNode<TKey, TValue> Current
-			{
-				get { return _current; }
-			}
+			public BinaryTreeNode<TKey, TValue> Current => _current;
 
-			object IEnumerator.Current
-			{
-				get
-				{
-					return Current;
-				}
-			}
+			object IEnumerator.Current => Current;
 
 			public void Dispose()
 			{
 			}
 		}
 
-		public class InOrderStackEnumerator : IEnumerator<BinaryTreeNode<TKey, TValue>>
+		private class InOrderStackEnumerator : IEnumerator<BinaryTreeNode<TKey, TValue>>
 		{
 			private readonly BinaryTree<TKey, TValue> _binaryTree;
-			private Stack<BinaryTreeNode<TKey, TValue>> _currentPath;
+			private readonly Stack<BinaryTreeNode<TKey, TValue>> _currentPath;
 			private bool _initialized;
 
 			public InOrderStackEnumerator(BinaryTree<TKey, TValue> binaryTree)
@@ -184,13 +172,7 @@ namespace Common
 				get { return _currentPath.Count == 0 ? null : _currentPath.Peek(); }
 			}
 
-			object IEnumerator.Current
-			{
-				get
-				{
-					return Current;
-				}
-			}
+			object IEnumerator.Current => Current;
 
 			public void Dispose()
 			{
@@ -214,15 +196,9 @@ namespace Common
 			set { _root = value; }
 		}
 
-		public BinaryTreeNode<TKey, TValue> Min
-		{
-			get { return GetMinNode(_root); }
-		}
+		public BinaryTreeNode<TKey, TValue> Min => GetMinNode(_root);
 
-		public BinaryTreeNode<TKey, TValue> Max
-		{
-			get { return GetMaxNode(_root); }
-		}
+		public BinaryTreeNode<TKey, TValue> Max => GetMaxNode(_root);
 
 		public int Count
 		{
@@ -234,7 +210,7 @@ namespace Common
 
 		#region Methods
 
-		public virtual BinaryTreeNode<TKey, TValue> NewNode(TKey key, TValue value, BinaryTreeNode<TKey, TValue> parent)
+		protected virtual BinaryTreeNode<TKey, TValue> NewNode(TKey key, TValue value, BinaryTreeNode<TKey, TValue> parent)
 		{
 			return new BinaryTreeNode<TKey, TValue>(key, value, parent);
 		}
@@ -246,7 +222,7 @@ namespace Common
 			return newNode;
 		}
 
-		public virtual void DoAddNode(BinaryTreeNode<TKey, TValue> newNode)
+		protected virtual void DoAddNode(BinaryTreeNode<TKey, TValue> newNode)
 		{
 		}
 
@@ -293,7 +269,7 @@ namespace Common
 			return Contains(_root, key);
 		}
 
-		public bool Contains(BinaryTreeNode<TKey, TValue> node, TKey key)
+		private bool Contains(BinaryTreeNode<TKey, TValue> node, TKey key)
 		{
 			if (node == null)
 				return false;
@@ -306,7 +282,7 @@ namespace Common
 			return false;
 		}
 
-		public BinaryTreeNode<TKey, TValue> GetMinNode(BinaryTreeNode<TKey, TValue> node)
+		private BinaryTreeNode<TKey, TValue> GetMinNode(BinaryTreeNode<TKey, TValue> node)
 		{
 			var currentNode = node;
 			while (currentNode.Left != null)
@@ -314,7 +290,7 @@ namespace Common
 			return currentNode;
 		}
 
-		public BinaryTreeNode<TKey, TValue> GetMaxNode(BinaryTreeNode<TKey, TValue> node)
+		private BinaryTreeNode<TKey, TValue> GetMaxNode(BinaryTreeNode<TKey, TValue> node)
 		{
 			var currentNode = node;
 			while (currentNode.Right != null)
@@ -329,7 +305,7 @@ namespace Common
 			return removedNode;
 		}
 
-		public virtual void DoRemoveNode(BinaryTreeNode<TKey, TValue> newNode)
+		protected virtual void DoRemoveNode(BinaryTreeNode<TKey, TValue> newNode)
 		{
 		}
 
@@ -337,8 +313,8 @@ namespace Common
 		{
 			if (node == null)
 			{
-				removedNode = node;
-				replacedNode = node;
+				removedNode = null;
+				replacedNode = null;
 				return;
 			}
 			if (((IComparable<TKey>)node.Key).CompareTo(key) > 0)
@@ -383,7 +359,7 @@ namespace Common
 			}
 		}
 
-		public void ReplaceInParent(BinaryTreeNode<TKey, TValue> node, BinaryTreeNode<TKey, TValue> newNode)
+		private void ReplaceInParent(BinaryTreeNode<TKey, TValue> node, BinaryTreeNode<TKey, TValue> newNode)
 		{
 			if (node.Parent != null)
 			{

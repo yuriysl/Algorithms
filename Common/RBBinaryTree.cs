@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Common
 {
@@ -58,7 +54,7 @@ namespace Common
 	{
 		#region Methods
 
-		public override BinaryTreeNode<TKey, TValue> NewNode(TKey key, TValue value, BinaryTreeNode<TKey, TValue> parent)
+		protected override BinaryTreeNode<TKey, TValue> NewNode(TKey key, TValue value, BinaryTreeNode<TKey, TValue> parent)
 		{
 			return new RBNode<TKey, TValue>(key, value, parent, 0);
 		}
@@ -74,7 +70,7 @@ namespace Common
 			y.Parent = node.Parent;
 
 			if (node.Parent == null)
-				this.Root = y;
+				Root = y;
 			else if (node.Parent.Left == node)
 				node.Parent.Left = y;
 			else
@@ -99,7 +95,7 @@ namespace Common
 			y.Parent = node.Parent;
 
 			if (node.Parent == null)
-				this.Root = y;
+				Root = y;
 			else if (node.Parent.Right == node)
 				node.Parent.Right = y;
 			else
@@ -182,7 +178,7 @@ namespace Common
 			return newNode;
 		}
 
-		public override void DoAddNode(BinaryTreeNode<TKey, TValue> newNode)
+		protected override void DoAddNode(BinaryTreeNode<TKey, TValue> newNode)
 		{
 			if (newNode == null)
 				return;
@@ -251,7 +247,7 @@ namespace Common
 			return removedNode;
 		}
 
-		public override void DoRemoveNode(BinaryTreeNode<TKey, TValue> node)
+		protected override void DoRemoveNode(BinaryTreeNode<TKey, TValue> node)
 		{
 			if (node == null)
 				return;
@@ -283,7 +279,6 @@ namespace Common
 						((RBNode<TKey, TValue>)w.Left).Color = NodeColor.Black;
 						((RBNode<TKey, TValue>)w).Color = NodeColor.Red;
 						RightRotate((RBNode<TKey, TValue>)w);
-						w = node.Parent.Right;
 					}
 					else
 					{
@@ -314,7 +309,6 @@ namespace Common
 						((RBNode<TKey, TValue>)w.Right).Color = NodeColor.Black;
 						((RBNode<TKey, TValue>)w).Color = NodeColor.Red;
 						LeftRotate((RBNode<TKey, TValue>)w);
-						w = node.Parent.Left;
 					}
 					else
 					{
