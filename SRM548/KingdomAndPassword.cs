@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SRM548.KingdomAndTrees
 {
@@ -83,20 +80,82 @@ Returns: 239676554423331
 	*/
 	public class KingdomAndPassword
 	{
+		readonly Dictionary<long, long> _diffs = new Dictionary<long, long>();
+
 		public long newPassword(long oldPassword, int[] restrictedDigits)
 		{
 			int n = restrictedDigits.Length;
-			int[] a = new int[n];
 			long currPassword = oldPassword;
-			for (int i = 0; i < n; i++, currPassword /= 10)
-				a[n - i - 1] = (int)(currPassword % 10);
+
+			int[] a = new int[n];
+			for (int i = n - 1; i >= 0; i--, currPassword /= 10)
+				a[i] = (int)(currPassword % 10);
+
 			int[] r = new int[n];
 			for (int i = 0; i < n; i++)
 				r[i] = restrictedDigits[i];
 
+			int[] sortA = new int[n];
+			a.CopyTo(sortA, 0);
+			Array.Sort(sortA);
+//			Array.Reverse(sortA);
+			var diff = CheckPermutations(new LinkedList<int>(sortA), a, r, 0, 0);
+			return diff == long.MaxValue ? -1 : oldPassword + diff;
+		}
 
+		private long CheckPermutations(LinkedList<int> nodes, int[] a, int[] r, int level, long outerDiff)
+		{
+			long diff = long.MaxValue;
+			int n = a.Length;
+			var node = nodes.First;
+			while (node != null)
+			{
+				if (node.Value == r[level])
+				{
+					node = node.Next;
+					continue;
+				}
 
-			return 0;
+				long nodeDiff = (node.Value - a[level]) * (long)Math.Pow(10, n - level - 1);
+				long childDiff = 0;
+				if (nodes.Count > 1)
+				{
+					var prevNode = node.Previous;
+					nodes.Remove(node);
+
+					long key = 0;
+					foreach (var nd in nodes)
+						key = key*10 + nd;
+
+					if (!_diffs.TryGetValue(key, out childDiff))
+					{
+						childDiff = CheckPermutations(nodes, a, r, level + 1, outerDiff + nodeDiff);
+						_diffs[key] = childDiff;
+					}
+
+					if (prevNode == null)
+						nodes.AddFirst(node);
+					else
+						nodes.AddAfter(prevNode, node);
+				}
+
+				if (childDiff == long.MaxValue)
+				{
+					node = node.Next;
+					continue;
+				}
+
+				if (diff == long.MaxValue)
+					diff = nodeDiff + childDiff;
+				else if (Math.Abs(outerDiff + nodeDiff + childDiff) < Math.Abs(outerDiff + diff))
+					diff = nodeDiff + childDiff;
+				else if(Math.Abs(outerDiff + nodeDiff + childDiff) == Math.Abs(outerDiff + diff))
+					diff = Math.Min(nodeDiff + childDiff, diff);
+
+				node = node.Next;
+			}
+
+			return diff;
 		}
 	}
 }
