@@ -1,4 +1,4 @@
-﻿namespace Common
+﻿namespace Algorithms.Common
 {
 	public class Stack<TValue> : IStack<TValue>
 	{

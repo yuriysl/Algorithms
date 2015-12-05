@@ -1,12 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Algorithms.Common;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Common.Tests
+namespace Algorithms.AlgorithmsTests.Common
 {
 	class SortingTestCase<T>
 	{
@@ -27,7 +25,7 @@ namespace Common.Tests
 	[TestClass()]
 	public class SortingTests
 	{
-		private TestContext testContextInstance;
+		private TestContext _testContextInstance;
 
 		List<SortingTestCase<int>> _testCases;
 
@@ -35,12 +33,12 @@ namespace Common.Tests
 		{
 			get
 			{
-				return testContextInstance;
+				return _testContextInstance;
 			}
 
 			set
 			{
-				testContextInstance = value;
+				_testContextInstance = value;
 			}
 		}
 
@@ -52,8 +50,8 @@ namespace Common.Tests
 				new SortingTestCase<int>
 				{
 					Name = "test case 1",
-					Input = new List<int> {},
-					Expected = new List<int> {},
+					Input = new List<int>(),
+					Expected = new List<int>(),
 					IsForCounting = true,
 					IsForCountingString = true,
 					IsForRadix = true,
@@ -565,7 +563,6 @@ namespace Common.Tests
 				if (!testCase.IsForCounting)
 					continue;
 				int[] input = testCase.Input.ToArray();
-				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
 				Console.WriteLine("--------------------------------------------------------");
@@ -609,7 +606,7 @@ namespace Common.Tests
 
 				var nodes = new List<BaseNode<string, object>>();
 				for (int i = 0; i < n; i++)
-					nodes.Add(new BaseNode<string, object>(i, input[i], "value_" + input[i].ToString()));
+					nodes.Add(new BaseNode<string, object>(i, input[i], "value_" + input[i]));
 
 				var output = sorting.CountingSort(nodes, null, -15, 15);
 
@@ -671,9 +668,9 @@ namespace Common.Tests
 
 				var nodes = new List<BaseNode<string, object>>();
 				for (int i = 0; i < n; i++)
-					nodes.Add(new BaseNode<string, object>(i, input[i], "value_" + input[i].ToString()));
+					nodes.Add(new BaseNode<string, object>(i, input[i], "value_" + input[i]));
 
-				var output = sorting.RadixSort(nodes, input.Length == 0 ? 0 : input[0].ToString().Length, '0', '9');
+				var output = sorting.RadixSort(nodes, input.Length == 0 ? 0 : input[0].Length, '0', '9');
 
 				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
@@ -742,7 +739,7 @@ namespace Common.Tests
 			for (int i = 0; i < n; i++)
 			{
 				if(i > 0)
-					Assert.IsTrue(output[i].Key >= output[i].Key);
+					Assert.IsTrue(output[i].Key >= output[i-1].Key);
 				else
 					Assert.IsTrue(output[i].Key >= 0);
 			}

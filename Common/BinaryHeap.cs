@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Common
+namespace Algorithms.Common
 {
 	public class BinaryHeapNode<TKey, TValue> : BaseNode<TKey, TValue>
 	{

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace SRM548.KingdomAndTrees
+namespace Algorithms.SRMs.SRM548
 {
 /*
 	Problem Statement for KingdomAndPassword
@@ -80,7 +81,9 @@ Returns: 239676554423331
 	*/
 	public class KingdomAndPassword
 	{
-		readonly Dictionary<long, long> _diffs = new Dictionary<long, long>();
+		private readonly Dictionary<long, long> _diffsMax = new Dictionary<long, long>();
+		private readonly Dictionary<long, long> _diffsMin = new Dictionary<long, long>();
+		private readonly Dictionary<long, long> _diffsAbsMin = new Dictionary<long, long>();
 
 		public long newPassword(long oldPassword, int[] restrictedDigits)
 		{
@@ -95,11 +98,7 @@ Returns: 239676554423331
 			for (int i = 0; i < n; i++)
 				r[i] = restrictedDigits[i];
 
-			int[] sortA = new int[n];
-			a.CopyTo(sortA, 0);
-			Array.Sort(sortA);
-//			Array.Reverse(sortA);
-			var diff = CheckPermutations(new LinkedList<int>(sortA), a, r, 0, 0);
+			var diff = CheckPermutations(new LinkedList<int>(a), a, r, 0, 0);
 			return diff == long.MaxValue ? -1 : oldPassword + diff;
 		}
 
@@ -117,20 +116,39 @@ Returns: 239676554423331
 				}
 
 				long nodeDiff = (node.Value - a[level]) * (long)Math.Pow(10, n - level - 1);
+				if (diff != long.MaxValue && Math.Abs(outerDiff + nodeDiff) - Math.Abs(outerDiff + diff) >= (long)Math.Pow(10, n - level - 1))
+				{
+					node = node.Next;
+					continue;
+				}
+
 				long childDiff = 0;
 				if (nodes.Count > 1)
 				{
 					var prevNode = node.Previous;
 					nodes.Remove(node);
+					long key = nodes.Aggregate(0L, (current, nd) => current * 10 + nd);
 
-					long key = 0;
-					foreach (var nd in nodes)
-						key = key*10 + nd;
-
-					if (!_diffs.TryGetValue(key, out childDiff))
+					if (outerDiff + nodeDiff > 0)
+					{
+						if (!_diffsMin.TryGetValue(key, out childDiff))
+						{
+							childDiff = CheckPermutations(nodes, a, r, level + 1, outerDiff + nodeDiff);
+							_diffsMin[key] = childDiff;
+						}
+					}
+					else if (outerDiff + nodeDiff < 0)
+					{
+						if (!_diffsMax.TryGetValue(key, out childDiff))
+						{
+							childDiff = CheckPermutations(nodes, a, r, level + 1, outerDiff + nodeDiff);
+							_diffsMax[key] = childDiff;
+						}
+					}
+					else if(!_diffsAbsMin.TryGetValue(key, out childDiff))
 					{
 						childDiff = CheckPermutations(nodes, a, r, level + 1, outerDiff + nodeDiff);
-						_diffs[key] = childDiff;
+						_diffsAbsMin[key] = childDiff;
 					}
 
 					if (prevNode == null)
@@ -149,7 +167,7 @@ Returns: 239676554423331
 					diff = nodeDiff + childDiff;
 				else if (Math.Abs(outerDiff + nodeDiff + childDiff) < Math.Abs(outerDiff + diff))
 					diff = nodeDiff + childDiff;
-				else if(Math.Abs(outerDiff + nodeDiff + childDiff) == Math.Abs(outerDiff + diff))
+				else if (Math.Abs(outerDiff + nodeDiff + childDiff) == Math.Abs(outerDiff + diff))
 					diff = Math.Min(nodeDiff + childDiff, diff);
 
 				node = node.Next;

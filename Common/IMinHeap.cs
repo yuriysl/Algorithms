@@ -1,4 +1,4 @@
-﻿namespace Common
+﻿namespace Algorithms.Common
 {
 	public interface IMinHeap<TKey, TValue>
 	{

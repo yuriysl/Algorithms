@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SRM548.KingdomAndTrees
+namespace Algorithms.SRMs.SRM548
 {
 /*
  Problem Statement for KingdomAndTrees
@@ -58,7 +58,7 @@ Returns: 251
 */
 	public class KingdomAndTrees
 	{
-		public int miLnevel(int[] heights)
+		public int minLevel(int[] heights)
 		{
 			int n = heights.Length;
 			long[] h = new long[n];

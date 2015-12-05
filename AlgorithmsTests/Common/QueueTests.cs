@@ -1,12 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Common.Tests
+namespace Algorithms.AlgorithmsTests.Common
 {
 	class QueueTestCaseNode<T>
 	{
@@ -78,12 +74,11 @@ namespace Common.Tests
 				{
 					var node = testCase.Nodes[i];
 					Console.WriteLine("Node{0}:[Direction:{1}]", i, node.Direction == 1 ? "enqueue" : "Dequeue");
-					string actualValue = null;
 					if (node.Direction == 1)
 						queue.Enqueue(node.Value);
 					else
 					{
-						actualValue = queue.Dequeue();
+						var actualValue = queue.Dequeue();
 						Console.WriteLine("Node{0}:[ExpectedValue:{1}], [ActualValue:{2}]", i, node.Value, actualValue);
 						Assert.AreEqual(node.Value, actualValue);
 					}

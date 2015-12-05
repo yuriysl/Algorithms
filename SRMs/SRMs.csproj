@@ -7,8 +7,8 @@
     <ProjectGuid>{1718E64F-0B51-4C4C-82DD-4B50B7981C4B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SRM548.KingdomAndTrees</RootNamespace>
-    <AssemblyName>KingdomAndTrees</AssemblyName>
+    <RootNamespace>Algorithms.SRMs</RootNamespace>
+    <AssemblyName>SRMs</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -45,14 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="KingdomAndDucks.cs" />
-    <Compile Include="KingdomAndPassword.cs" />
-    <Compile Include="KingdomAndTrees.cs" />
+    <Compile Include="SRM548\KingdomAndDucks.cs" />
+    <Compile Include="SRM548\KingdomAndPassword.cs" />
+    <Compile Include="SRM548\KingdomAndTrees.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

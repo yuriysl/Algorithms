@@ -1,5 +1,5 @@
 ﻿
-namespace Common
+namespace Algorithms.Common
 {
 	public class BaseNode<TKey, TValue>
 	{

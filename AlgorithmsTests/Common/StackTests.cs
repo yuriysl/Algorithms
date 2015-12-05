@@ -1,12 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Common.Tests
+namespace Algorithms.AlgorithmsTests.Common
 {
 	class StackTestCaseNode<T>
 	{
@@ -74,7 +70,7 @@ namespace Common.Tests
 		[TestMethod()]
 		public void StackTest()
 		{
-			var stack = new Stack<string>();
+			var stack = new Algorithms.Common.Stack<string>();
 			foreach (var testCase in _testCases)
 			{
 				int n = testCase.Nodes.Count;
@@ -85,7 +81,7 @@ namespace Common.Tests
 				{
 					var node = testCase.Nodes[i];
 					Console.WriteLine("Node{0}:[Direction:{1}]", i, node.Direction == 1 ? "push": (node.Direction == 0 ? "peek" : "pop"));
-					string actualValue = null;
+					string actualValue;
 					if (node.Direction == 1)
 						stack.Push(node.Value);
 					else if (node.Direction == 0)

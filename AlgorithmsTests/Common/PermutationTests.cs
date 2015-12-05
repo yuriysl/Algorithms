@@ -1,12 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Common;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Algorithms.Common;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Common.Tests
+namespace Algorithms.AlgorithmsTests.Common
 {
 	[TestClass()]
 	public class PermutationTests
@@ -15,7 +12,7 @@ namespace Common.Tests
 		public void GetPremutationsTest()
 		{
 			var permutation = new Permutation();
-			var input = new BaseNode<int, object>[6] {
+			var input = new[] {
 				new BaseNode<int, object>(0, 0),
 				new BaseNode<int, object>(0, 1),
 				new BaseNode<int, object>(0, 2),
@@ -23,7 +20,7 @@ namespace Common.Tests
 				new BaseNode<int, object>(0, 4),
 				new BaseNode<int, object>(0, 5)
 			};
-			var permutations = permutation.GetPremutations(input, input.Length);
+			var permutations = permutation.GetPremutations(input, input.Length).ToList();
 			int i = 0;
 			foreach (var item in permutations)
 			{

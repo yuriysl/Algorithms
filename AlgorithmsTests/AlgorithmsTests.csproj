@@ -6,8 +6,8 @@
     <ProjectGuid>{E8F74740-91D7-4685-9A48-35E353B3D9E8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SRMTests</RootNamespace>
-    <AssemblyName>SRMTests</AssemblyName>
+    <RootNamespace>Algorithms.AlgorithmsTests</RootNamespace>
+    <AssemblyName>AlgorithmsTests</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -67,9 +67,9 @@
       <Project>{C3FC0968-7A4E-42C3-8065-0D246C48745D}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SRM548\SRM548.csproj">
+    <ProjectReference Include="..\SRMs\SRMs.csproj">
       <Project>{1718e64f-0b51-4c4c-82dd-4b50b7981c4b}</Project>
-      <Name>SRM548</Name>
+      <Name>SRMs</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

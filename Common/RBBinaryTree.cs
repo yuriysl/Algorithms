@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Common
+namespace Algorithms.Common
 {
 	public enum NodeColor
 	{

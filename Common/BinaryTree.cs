@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Common
+namespace Algorithms.Common
 {
 	public class BinaryTreeNode<TKey, TValue> : BaseNode<TKey, TValue>
 	{

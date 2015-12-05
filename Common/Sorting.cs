@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Common
+namespace Algorithms.Common
 {
 	public class Sorting
 	{

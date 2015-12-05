@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Common
+namespace Algorithms.Common
 {
 	public class Permutation
 	{

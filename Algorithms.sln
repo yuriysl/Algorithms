@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRM548", "SRM548\SRM548.csproj", "{1718E64F-0B51-4C4C-82DD-4B50B7981C4B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMs", "SRMs\SRMs.csproj", "{1718E64F-0B51-4C4C-82DD-4B50B7981C4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SRMTests", "SRMTests\SRMTests.csproj", "{E8F74740-91D7-4685-9A48-35E353B3D9E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgorithmsTests", "AlgorithmsTests\AlgorithmsTests.csproj", "{E8F74740-91D7-4685-9A48-35E353B3D9E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{C3FC0968-7A4E-42C3-8065-0D246C48745D}"
 EndProject

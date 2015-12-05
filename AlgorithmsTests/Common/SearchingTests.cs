@@ -1,12 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Algorithms.Common;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Common.Tests
+namespace Algorithms.AlgorithmsTests.Common
 {
 	class SearchingTestCase<T>
 	{
@@ -37,7 +35,7 @@ namespace Common.Tests
 				new SearchingTestCase<int>
 				{
 					Name = "test case 1",
-					Input = new List<int> {},
+					Input = new List<int>(),
 					Key = 0,
 					Expected = -1,
 					ExpectedMin = -1,
@@ -236,7 +234,6 @@ namespace Common.Tests
 				if (!testCase.IsForMinMax)
 					continue;
 				int[] input = testCase.Input.ToArray();
-				int key = testCase.Key;
 				int expectedMin = testCase.ExpectedMin;
 				int expectedMax = testCase.ExpectedMax;
 				int n = input.Length;
@@ -446,7 +443,7 @@ namespace Common.Tests
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
-					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i].ToString()));
+					nodes.Add(new BaseNode<int, object>(i, input[i], "value_" + input[i]));
 
 				var actualItem = searching.Select(nodes, 0, n - 1, order);
 
@@ -455,7 +452,7 @@ namespace Common.Tests
 				RBNode<int, object> rbNode = null;
 				foreach (var node in rbBinaryTree)
 				{
-					if (actualItem.Key == node.Key)
+					if (actualItem != null && actualItem.Key == node.Key)
 					{
 						rbNode = (RBNode<int, object>)node;
 						break;
@@ -485,8 +482,7 @@ namespace Common.Tests
 			while (i < n)
 			{
 				int end1 = rnd.Next(0, 360);
-				int end2 = rnd.Next(0, 360);
-				end2 = (end1 + 180) % 360;
+				int end2 = (end1 + 180) % 360;
 				if (end1 == end2)
 					continue;
 				var hasSameHords = hords.Any(hord => hord.Item1 == end1 || hord.Item1 == end2 || hord.Item2 == end1 || hord.Item2 == end2);

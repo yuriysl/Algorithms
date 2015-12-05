@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SRM548.KingdomAndTrees
+﻿namespace Algorithms.SRMs.SRM548
 {
 /*
 King Dengklek received a container full of ducks as his birthday gift from his loyal subjects.Each duck is of a 

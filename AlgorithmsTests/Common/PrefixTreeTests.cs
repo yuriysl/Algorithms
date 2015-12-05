@@ -1,12 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Algorithms.Common;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Common.Tests
+namespace Algorithms.AlgorithmsTests.Common
 {
 	class PrefixTreeTestCase<T>
 	{
@@ -16,7 +13,6 @@ namespace Common.Tests
 		public T Key { get; set; }
 		public int Count { get; set; }
 		public bool IsForPrefix;
-		public bool IsForRadix;
 	}
 
 	[TestClass()]
@@ -36,8 +32,7 @@ namespace Common.Tests
 					Key = "abc",
 					Count = 6,
 					Expected = new List<string> {"abc", "abc123d", "abc132d", "abcd", "abcde", "abcdef"},
-					IsForPrefix = true,
-					IsForRadix = true
+					IsForPrefix = true
 				},
 				new PrefixTreeTestCase<string>
 				{
@@ -46,8 +41,7 @@ namespace Common.Tests
 					Key = "",
 					Count = 5,
 					Expected = new List<string> {"0", "011", "10", "100", "1011"},
-					IsForPrefix = true,
-					IsForRadix = true
+					IsForPrefix = true
 				},
 				new PrefixTreeTestCase<string>
 				{
@@ -56,8 +50,7 @@ namespace Common.Tests
 					Key = "rubicon",
 					Count = 2,
 					Expected = new List<string> {"rubicon", "rubiconus"},
-					IsForPrefix = true,
-					IsForRadix = true
+					IsForPrefix = true
 				}
 			};
 		}
@@ -84,7 +77,7 @@ namespace Common.Tests
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				for (int i = 0; i < n; i++)
-					prefixTree.Add(input[i], "value_" + input[i].ToString());
+					prefixTree.Add(input[i], "value_" + input[i]);
 
 				if (prefixTree.Contains(key))
 				{
@@ -133,7 +126,7 @@ namespace Common.Tests
 				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				for (int i = 0; i < n; i++)
-					radixTree.Add(input[i], "value_" + input[i].ToString());
+					radixTree.Add(input[i], "value_" + input[i]);
 
 				if (radixTree.Contains(key))
 				{

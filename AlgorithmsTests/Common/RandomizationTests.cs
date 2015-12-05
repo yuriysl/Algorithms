@@ -1,12 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Algorithms.Common;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Common.Tests
+namespace Algorithms.AlgorithmsTests.Common
 {
 	class RandomizationTestCase<T>
 	{
@@ -29,7 +26,7 @@ namespace Common.Tests
 				new RandomizationTestCase<int>
 				{
 					Name = "test case 1",
-					Input = new List<int> {},
+					Input = new List<int>(),
 					LowerBound = 0,
 					UpperBound = -1
 				},

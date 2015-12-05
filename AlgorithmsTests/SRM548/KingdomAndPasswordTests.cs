@@ -1,12 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SRM548.KingdomAndTrees;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Algorithms.SRMs.SRM548;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace SRMTests.SRM548
+namespace Algorithms.AlgorithmsTests.SRM548
 {
 	[TestClass]
 	public class KingdomAndPasswordTests
