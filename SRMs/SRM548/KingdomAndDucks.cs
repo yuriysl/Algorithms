@@ -59,7 +59,20 @@ Returns: 5
 	{
 		public int minDucks(int[] duckTypes)
 		{
-			return 0;
+			int n = duckTypes.Length;
+			int[] r = new int[50];
+			int max = 0;
+			int types = 0;
+			for (int i = 0; i < n; i++)
+			{
+				int index = duckTypes[i] - 1;
+				if (r[index] == 0)
+					types++;
+				r[index]++;
+				if (r[index] > max)
+					max = r[index];
+			}
+			return max * types;
 		}
 	}
 }

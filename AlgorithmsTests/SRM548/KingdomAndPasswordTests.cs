@@ -53,5 +53,13 @@ namespace Algorithms.AlgorithmsTests.SRM548
 			long res = pass.newPassword(6669982649, new[] { 9, 6, 9, 4, 6, 6, 6, 9, 8, 2 });
 			Assert.AreEqual(6826499669, res);
 		}
+
+		[TestMethod]
+		public void newPasswordTest7()
+		{
+			var pass = new KingdomAndPassword();
+			long res = pass.newPassword(9735633893326, new[] { 3, 1, 8, 5, 1, 7, 3, 6, 8, 5, 9, 9, 3 });
+			Assert.AreEqual(9736235333689, res);
+		}
 	}
 }
