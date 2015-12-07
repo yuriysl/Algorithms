@@ -57,6 +57,7 @@
     <Compile Include="Common\QueueTests.cs" />
     <Compile Include="Common\PrefixTreeTests.cs" />
     <Compile Include="Common\PermutationTests.cs" />
+    <Compile Include="SRM548\KingdomAndDiceTests.cs" />
     <Compile Include="SRM548\KingdomAndDucksTests.cs" />
     <Compile Include="SRM548\KingdomAndPasswordTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

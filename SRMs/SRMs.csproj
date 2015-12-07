@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SRM548\KingdomAndDice.cs" />
     <Compile Include="SRM548\KingdomAndDucks.cs" />
     <Compile Include="SRM548\KingdomAndPassword.cs" />
     <Compile Include="SRM548\KingdomAndTrees.cs" />
