@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Numerics;
 
 namespace Algorithms.SRMs.SRM548
 {
@@ -115,9 +113,96 @@ Returns: 0.49
 	*/
 	public class KingdomAndDice
 	{
+		private Dictionary<BigInteger, int> _diff;
+		private byte[] _bytes;
+
 		public double newFairness(int[] firstDie, int[] secondDie, int X)
 		{
-			return 0;
+			if (firstDie.Length != secondDie.Length)
+				throw new ArgumentException();
+			int n = firstDie.Length;
+			int emptySides = 0;
+			int chances = 0;
+			_diff = new Dictionary<BigInteger, int>();
+			_bytes = new byte[50];
+			for (int i = 1; i < n; i++)
+			{
+				var key = secondDie[i];
+				int j = i - 1;
+				while (j >= 0 && secondDie[j] > key)
+				{
+					secondDie[j + 1] = secondDie[j];
+					j--;
+				}
+				secondDie[j + 1] = key;
+			}
+			for (int i = 0; i < n; i++)
+			{
+				if (firstDie[i] == 0)
+				{
+					emptySides++;
+					continue;
+				}
+				for (int j = 0; j < n; j++)
+				{
+					if (firstDie[i] < secondDie[j])
+					{
+						if (j > 0)
+						{
+							_bytes[j - 1]++;
+							chances += j << 1;
+						}
+						break;
+					}
+					if (firstDie[i] > secondDie[j] && j == n - 1 && firstDie[i] <= X)
+					{
+						_bytes[j - 1]++;
+						chances += (j + 1) << 1;
+					}
+				}
+			}
+			int additionalChances = GetAdditionalChances(emptySides, (n * n) - chances, secondDie, X);
+			return (chances + additionalChances) / 2 / ((double) (n * n));
 		}
-    }
+
+		private int GetAdditionalChances(int emptySides, int chances, int[] secondDie, int x)
+		{
+			int n = secondDie.Length;
+			int diff = 0;
+			if (emptySides == 0 || chances < 0)
+				return 0;
+
+			for (int i = 0; i < n; i++)
+			{
+				int left = secondDie[i];
+				int right = i < n - 1 ? secondDie[i + 1] : x + 1;
+				if (right - left > _bytes[i] + 1)
+				{
+					int probeChance = (i + 1) << 1;
+
+					if (Math.Abs(probeChance - chances) < Math.Abs(diff - chances))
+						diff = probeChance;
+
+					if (probeChance > chances && Math.Abs(diff - chances) <= probeChance - chances)
+						break;
+					_bytes[i]++;
+//					var key = new BigInteger(_bytes);
+
+					int additionalChances;
+//					if (!_diff.TryGetValue(key, out additionalChances))
+//					{
+						additionalChances = GetAdditionalChances(emptySides - 1, chances - probeChance, secondDie, x);
+//						if (emptySides > 6)
+//							_diff[key] = additionalChances;
+//					}
+					if (Math.Abs(probeChance + additionalChances - chances) < Math.Abs(diff - chances))
+						diff = probeChance + additionalChances;
+
+					_bytes[i]--;
+				}
+			}
+
+			return diff;
+		}
+	}
 }

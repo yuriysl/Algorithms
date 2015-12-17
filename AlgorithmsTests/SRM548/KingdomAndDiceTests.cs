@@ -52,5 +52,56 @@ namespace Algorithms.AlgorithmsTests.SRM548
 				10000);
 			Assert.AreEqual(0.49, res);
 		}
+
+		[TestMethod()]
+		public void newFairnessTest6()
+		{
+			var dice = new KingdomAndDice();
+			double res = dice.newFairness(
+				new[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+				new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50 },
+				1000000000);
+			Assert.AreEqual(0.5, res);
+		}
+
+		[TestMethod()]
+		public void newFairnessTest7()
+		{
+			var dice = new KingdomAndDice();
+			double res = dice.newFairness(
+				new[] { 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+				new[] { 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 53, 55, 57, 59, 61, 63, 65, 67, 69, 71, 73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 95, 97, 99 },
+				1000000000);
+			Assert.AreEqual(0.5, res);
+		}
+
+		[TestMethod()]
+		public void newFairnessTest8()
+		{
+			var dice = new KingdomAndDice();
+			double res = dice.newFairness(
+				new[] { 0, 0 }, new[] { 2, 4 }, 5);
+			Assert.AreEqual(0.5, res);
+		}
+
+		[TestMethod()]
+		public void newFairnessTest9()
+		{
+			var dice = new KingdomAndDice();
+			double res = dice.newFairness(
+				new[] { 0, 0, 0, 0 }, new[] { 5, 6, 7, 8 }, 9);
+			Assert.AreEqual(0.25, res);
+		}
+
+		[TestMethod()]
+		public void newFairnessTest10()
+		{
+			var dice = new KingdomAndDice();
+			double res = dice.newFairness(
+				new[] { 583580964, 0, 0, 0, 0, 0, 0, 0, 549353893, 0, 0, 0, 255995577, 0, 0, 161064041, 0 }, 
+				new[] { 96185108, 124390413, 518950998, 108883980, 116516829, 70613296, 455878940, 27406803, 82605278, 583284951, 157082497, 28741378, 119415043, 66963096, 65882888, 361932014, 177433896 },
+				637444863);
+			Assert.AreEqual(0.4982698961937716, res);
+		}
 	}
 }
