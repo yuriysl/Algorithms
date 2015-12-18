@@ -63,6 +63,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SRM548\KingdomAndTreesTests.cs" />
     <Compile Include="Common\StackTests.cs" />
+    <Compile Include="SRM675\LengthUnitCalculatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

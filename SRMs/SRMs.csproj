@@ -51,6 +51,7 @@
     <Compile Include="SRM548\KingdomAndPassword.cs" />
     <Compile Include="SRM548\KingdomAndTrees.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SRM675\LengthUnitCalculator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

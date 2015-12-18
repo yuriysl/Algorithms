@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
 
 namespace Algorithms.SRMs.SRM548
 {
@@ -113,7 +112,8 @@ Returns: 0.49
 	*/
 	public class KingdomAndDice
 	{
-		private Dictionary<BigInteger, int> _diff;
+		private Dictionary<long, int> _data;
+		private int[] _diffs;
 		private byte[] _bytes;
 
 		public double newFairness(int[] firstDie, int[] secondDie, int X)
@@ -123,8 +123,9 @@ Returns: 0.49
 			int n = firstDie.Length;
 			int emptySides = 0;
 			int chances = 0;
-			_diff = new Dictionary<BigInteger, int>();
-			_bytes = new byte[50];
+			_data = new Dictionary<long, int>();
+			_diffs = new int[n];
+			_bytes = new byte[n];
 			for (int i = 1; i < n; i++)
 			{
 				var key = secondDie[i];
@@ -161,45 +162,82 @@ Returns: 0.49
 					}
 				}
 			}
-			int additionalChances = GetAdditionalChances(emptySides, (n * n) - chances, secondDie, X);
-			return (chances + additionalChances) / 2 / ((double) (n * n));
-		}
-
-		private int GetAdditionalChances(int emptySides, int chances, int[] secondDie, int x)
-		{
-			int n = secondDie.Length;
-			int diff = 0;
-			if (emptySides == 0 || chances < 0)
-				return 0;
-
 			for (int i = 0; i < n; i++)
 			{
 				int left = secondDie[i];
-				int right = i < n - 1 ? secondDie[i + 1] : x + 1;
+				int right = i < n - 1 ? secondDie[i + 1] : X + 1;
 				if (right - left > _bytes[i] + 1)
 				{
-					int probeChance = (i + 1) << 1;
-
-					if (Math.Abs(probeChance - chances) < Math.Abs(diff - chances))
-						diff = probeChance;
-
-					if (probeChance > chances && Math.Abs(diff - chances) <= probeChance - chances)
-						break;
-					_bytes[i]++;
-//					var key = new BigInteger(_bytes);
-
-					int additionalChances;
-//					if (!_diff.TryGetValue(key, out additionalChances))
-//					{
-						additionalChances = GetAdditionalChances(emptySides - 1, chances - probeChance, secondDie, x);
-//						if (emptySides > 6)
-//							_diff[key] = additionalChances;
-//					}
-					if (Math.Abs(probeChance + additionalChances - chances) < Math.Abs(diff - chances))
-						diff = probeChance + additionalChances;
-
-					_bytes[i]--;
+					_diffs[i] = Math.Min(right - left - _bytes[i] - 1, emptySides);
 				}
+			}
+			int additionalChances = 0;
+			for (int i = 0; i < n; i++)
+			{
+				if (_diffs[i] > 0)
+				{
+					additionalChances = GetAdditionalChances(i, emptySides, (n*n) - chances, secondDie);
+					break;
+				}
+			}
+			return (chances + additionalChances) / 2 / ((double) (n * n));
+		}
+
+		private int GetAdditionalChances(int sideIndex, int emptySides, int chances, int[] secondDie)
+		{
+			int n = secondDie.Length;
+			int diff = 0;
+			int upper = Math.Min(_diffs[sideIndex], emptySides);
+			if (emptySides == 0 || chances < 0)
+				return 0;
+
+			for (int i = 0; i <= upper; i++)
+			{
+				int probeChance = ((sideIndex + 1) * i) << 1;
+
+				if (Math.Abs(probeChance - chances) < Math.Abs(diff - chances))
+					diff = probeChance;
+
+				if (probeChance > chances && Math.Abs(diff - chances) <= probeChance - chances)
+					break;
+				if(i > 0)
+					_bytes[sideIndex]++;
+
+				int additionalChances = 0;
+				int nextSideIndex = 0;
+				for (int j = sideIndex + 1; j < n; ++j)
+				{
+					if (_diffs[j] > 0)
+					{
+						nextSideIndex = j;
+						break;
+					}
+				}
+				if (nextSideIndex > 0)
+				{
+					long key = (chances - probeChance) * 10000 +(emptySides - i) * 100 + nextSideIndex;
+					if (_data.ContainsKey(key))
+					{
+						var value = _data[key];
+						additionalChances = value;
+					}
+					else
+					{
+						additionalChances = GetAdditionalChances(nextSideIndex, emptySides - i, chances - probeChance, secondDie);
+						_data[key] = additionalChances;
+					}
+				}
+
+				if (Math.Abs(probeChance + additionalChances - chances) < Math.Abs(diff - chances))
+					diff = probeChance + additionalChances;
+				else if (Math.Abs(probeChance + additionalChances - chances) == Math.Abs(diff - chances))
+				{
+					if (probeChance + additionalChances < diff)
+						diff = probeChance + additionalChances;
+				}
+
+				if (i > 0)
+					_bytes[sideIndex]--;
 			}
 
 			return diff;
