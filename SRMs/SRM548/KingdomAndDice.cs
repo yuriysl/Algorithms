@@ -112,7 +112,7 @@ Returns: 0.49
 	*/
 	public class KingdomAndDice
 	{
-		private Dictionary<long, int> _data;
+		private Dictionary<int, int> _data;
 		private int[] _diffs;
 		private byte[] _bytes;
 
@@ -123,7 +123,6 @@ Returns: 0.49
 			int n = firstDie.Length;
 			int emptySides = 0;
 			int chances = 0;
-			_data = new Dictionary<long, int>();
 			_diffs = new int[n];
 			_bytes = new byte[n];
 			for (int i = 1; i < n; i++)
@@ -157,7 +156,7 @@ Returns: 0.49
 					}
 					if (firstDie[i] > secondDie[j] && j == n - 1 && firstDie[i] <= X)
 					{
-						_bytes[j - 1]++;
+						_bytes[j]++;
 						chances += (j + 1) << 1;
 					}
 				}
@@ -171,6 +170,8 @@ Returns: 0.49
 					_diffs[i] = Math.Min(right - left - _bytes[i] - 1, emptySides);
 				}
 			}
+			int capacity = Math.Max(emptySides * emptySides * emptySides * (int)Math.Floor(Math.Sqrt(emptySides)), 256);
+			_data = new Dictionary<int, int>(capacity);
 			int additionalChances = 0;
 			for (int i = 0; i < n; i++)
 			{
@@ -197,6 +198,11 @@ Returns: 0.49
 
 				if (Math.Abs(probeChance - chances) < Math.Abs(diff - chances))
 					diff = probeChance;
+				else if (Math.Abs(probeChance - chances) == Math.Abs(diff - chances))
+				{
+					if (probeChance < diff)
+						diff = probeChance;
+				}
 
 				if (probeChance > chances && Math.Abs(diff - chances) <= probeChance - chances)
 					break;
@@ -207,7 +213,7 @@ Returns: 0.49
 				int nextSideIndex = 0;
 				for (int j = sideIndex + 1; j < n; ++j)
 				{
-					if (_diffs[j] > 0)
+					if (_diffs[j] > 0 && emptySides - i > 0)
 					{
 						nextSideIndex = j;
 						break;
@@ -215,7 +221,7 @@ Returns: 0.49
 				}
 				if (nextSideIndex > 0)
 				{
-					long key = (chances - probeChance) * 10000 +(emptySides - i) * 100 + nextSideIndex;
+					int key = (chances - probeChance) * 10000 +(emptySides - i) * 100 + nextSideIndex;
 					if (_data.ContainsKey(key))
 					{
 						var value = _data[key];
@@ -223,6 +229,24 @@ Returns: 0.49
 					}
 					else
 					{
+						int maxChances = 0;
+						int maxDiffs = emptySides - i;
+						for (int j = n - 1; j >= nextSideIndex; --j)
+						{
+							if (_diffs[j] > 0)
+							{
+								int curMaxChances = Math.Max(Math.Min(_diffs[j], maxDiffs), 0);
+								maxChances += ((j + 1) * curMaxChances) << 1;
+								maxDiffs -= curMaxChances;
+							}
+						}
+						if (diff > 0 && maxChances + probeChance < chances &&
+							Math.Abs(diff - chances) < Math.Abs(maxChances + probeChance - chances))
+						{
+							if (i > 0)
+								_bytes[sideIndex]--;
+							continue;
+						}
 						additionalChances = GetAdditionalChances(nextSideIndex, emptySides - i, chances - probeChance, secondDie);
 						_data[key] = additionalChances;
 					}
