@@ -15,6 +15,7 @@ namespace Algorithms.SRMs.SRM675
 			yd = 2,
 			mi = 3
 		}
+
 		public double calc(int amount, string fromUnit, string toUnit)
 		{
 			var from = (Units) Enum.Parse(typeof (Units), fromUnit.Replace("in", "inch"));
