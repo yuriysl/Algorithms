@@ -14,16 +14,17 @@ namespace Algorithms.Common
 		{
 			int left = p ?? 0;
 			int right = r ?? (a.Count - 1);
-			for (int i = left + 1; i <= right; i++)
+			for (int i = left + 1; i <= right; ++i)
 			{
 				var key = a[i].Key;
 				var value = a[i].Value;
 				var index = a[i].Index;
 				int j = i - 1;
-				while (j >= 0 && a[j].Key.CompareTo(key) > 0)
+				while (j >= left && a[j].Key.CompareTo(key) > 0)
 				{
 					a[j + 1].Key = a[j].Key;
 					a[j + 1].Value = a[j].Value;
+					a[j + 1].Index = a[j].Index;
 					j--;
 				}
 				a[j + 1].Key = key;
@@ -46,7 +47,7 @@ namespace Algorithms.Common
 			where TKey : IComparable<TKey>
 		{
 			int n = a.Count;
-			for (int i = 0; i < n - 1; i++)
+			for (int i = 0; i < n - 1; ++i)
 			{
 				int index = i;
 				for (int j = i + 1; j < n; j++)
@@ -86,7 +87,7 @@ namespace Algorithms.Common
 
 			int i = 0, j = 0;
 
-			for (int k = p; k <= r; k++)
+			for (int k = p; k <= r; ++k)
 			{
 				if (j == n2 || i < n1 && left[i].Key.CompareTo(right[j].Key) <= 0)
 				{
@@ -183,7 +184,7 @@ namespace Algorithms.Common
 			int n = a.Count;
 			for (int i = 0; i < n; i++)
 			{
-				for (int j = n - 1; j > i; j--)
+				for (int j = n - 1; j > i; --j)
 				{
 					if (a[j].Key.CompareTo(a[j - 1].Key) < 0)
 						NodeHelper<TKey, TValue>.SwapWithIndex(a[j], a[j - 1]);
