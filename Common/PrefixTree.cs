@@ -52,18 +52,9 @@ namespace Algorithms.Common
 				_initialized = false;
 			}
 
-			public PrefixTreeNode<TKeyItem, TValue> Current
-			{
-				get { return _iterators.Peek().Current; }
-			}
+			public PrefixTreeNode<TKeyItem, TValue> Current => _iterators.Peek().Current;
 
-			object IEnumerator.Current
-			{
-				get
-				{
-					return Current;
-				}
-			}
+			object IEnumerator.Current => Current;
 
 			public void Dispose()
 			{
@@ -128,15 +119,9 @@ namespace Algorithms.Common
 
 		#region IEnumerable
 
-		public IEnumerator<PrefixTreeNode<TKeyItem, TValue>> GetEnumerator()
-		{
-			return new PreOrderEnumerator(this);
-		}
+		public IEnumerator<PrefixTreeNode<TKeyItem, TValue>> GetEnumerator() => new PreOrderEnumerator(this);
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 		#endregion
 	}
@@ -149,7 +134,7 @@ namespace Algorithms.Common
 
 		PrefixTreeNode<TKeyItem, TValue> _root;
 		int _count;
-		private List<List<TKeyItem>> _subsequentItems;
+		readonly List<List<TKeyItem>> _subsequentItems;
 
 		#endregion
 
@@ -181,15 +166,10 @@ namespace Algorithms.Common
 
 		#region Methods
 
-		public virtual PrefixTreeNode<TKeyItem, TValue> NewNode(TKeyItem keyItem, TValue value, PrefixTreeNode<TKeyItem, TValue> parent, bool wordends)
-		{
-			return new PrefixTreeNode<TKeyItem, TValue>(keyItem, value, parent, wordends);
-		}
+		public virtual PrefixTreeNode<TKeyItem, TValue> NewNode(TKeyItem keyItem, TValue value, PrefixTreeNode<TKeyItem, TValue> parent, bool wordends) => 
+			new PrefixTreeNode<TKeyItem, TValue>(keyItem, value, parent, wordends);
 
-		public virtual PrefixTreeNode<TKeyItem, TValue> Add(TKey key, TValue value)
-		{
-			return Add(_root, key.ToList(), value, 0);
-		}
+		public virtual PrefixTreeNode<TKeyItem, TValue> Add(TKey key, TValue value) => Add(_root, key.ToList(), value, 0);
 
 		private PrefixTreeNode<TKeyItem, TValue> Add(PrefixTreeNode<TKeyItem, TValue> node, List<TKeyItem> keyItems, TValue value, int matchedItems)
 		{
@@ -227,10 +207,7 @@ namespace Algorithms.Common
 			return currentNode;
 		}
 
-		public bool Contains(TKey key)
-		{
-			return Contains(_root, key.ToList());
-		}
+		public bool Contains(TKey key) => Contains(_root, key.ToList());
 
 		public bool Contains(PrefixTreeNode<TKeyItem, TValue> node, List<TKeyItem> keyItems)
 		{
@@ -252,10 +229,7 @@ namespace Algorithms.Common
 			return true;
 		}
 
-		public List<List<TKeyItem>> GetMatches(TKey key)
-		{
-			return GetMatches(key.ToList());
-		}
+		public List<List<TKeyItem>> GetMatches(TKey key) => GetMatches(key.ToList());
 
 		private List<List<TKeyItem>> GetMatches(List<TKeyItem> queryItems)
 		{

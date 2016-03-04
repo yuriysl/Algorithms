@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Linq;
 using Algorithms.Common;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Algorithms.AlgorithmsTests.Common
 {
-	[TestClass()]
 	public class PermutationTests
 	{
-		[TestMethod()]
+		[Fact]
 		public void GetPremutationsTest()
 		{
 			var permutation = new Permutation();

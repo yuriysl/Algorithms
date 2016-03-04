@@ -375,7 +375,7 @@ namespace Algorithms.Common
 			BaseNode<int, TValue>[] res = null;
 			for (int i = 0; i < d; i++)
 				res = CountingSort(res == null ? a : res.ToList(), i);
-			return res == null ? new BaseNode<int, TValue>[0] : res;
+			return res ?? new BaseNode<int, TValue>[0];
 		}
 
 		/// <summary>
@@ -386,7 +386,7 @@ namespace Algorithms.Common
 			BaseNode<string, TValue>[] res = null;
 			for (int i = 0; i < d; i++)
 				res = CountingSort(res == null ? a : res.ToList(), i, left, right);
-			return res == null ? new BaseNode<string, TValue>[0] : res;
+			return res ?? new BaseNode<string, TValue>[0];
 		}
 
 		/// <summary>
@@ -396,7 +396,7 @@ namespace Algorithms.Common
 		{
 			int n = a.Count;
 			var b = new List<BaseNode<int, TValue>>();
-			int interval = (int)Math.Ceiling((right - left + 1) / (double)k);
+			var interval = (int)Math.Ceiling((right - left + 1) / (double)k);
 			var buckets = new List<BaseNode<int, TValue>>[k];
 			for (int i = 0; i < buckets.Length; i++)
 				buckets[i] = new List<BaseNode<int, TValue>>();

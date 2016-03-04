@@ -98,9 +98,9 @@ Returns: 47.0
 		{
 			#region Fields
 
-			private bool _marked;
-			private T _key;
-			private List<Edge<T>> _edges;
+			bool _marked;
+			T _key;
+			readonly List<Edge<T>> _edges;
 
 			#endregion
 

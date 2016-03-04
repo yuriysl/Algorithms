@@ -11,7 +11,7 @@ namespace Algorithms.Common
 
 	public class Searching
 	{
-		private static Sorting Sorting = new Sorting();
+		static readonly Sorting Sorting = new Sorting();
 
 		public BaseNode<TKey, TValue> BinarySearch<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r, TKey key)
 			where TKey : IComparable<TKey>

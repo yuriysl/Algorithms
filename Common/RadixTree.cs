@@ -64,18 +64,9 @@ namespace Algorithms.Common
 				_initialized = false;
 			}
 
-			public RadixTreeNode<TKey, TKeyItem, TValue> Current
-			{
-				get { return _iterators.Peek().Current; }
-			}
+			public RadixTreeNode<TKey, TKeyItem, TValue> Current => _iterators.Peek().Current;
 
-			object IEnumerator.Current
-			{
-				get
-				{
-					return Current;
-				}
-			}
+			object IEnumerator.Current => Current;
 
 			public void Dispose()
 			{
@@ -152,15 +143,9 @@ namespace Algorithms.Common
 
 		#region IEnumerable
 
-		public IEnumerator<RadixTreeNode<TKey, TKeyItem, TValue>> GetEnumerator()
-		{
-			return new PreOrderEnumerator(this);
-		}
+		public IEnumerator<RadixTreeNode<TKey, TKeyItem, TValue>> GetEnumerator() => new PreOrderEnumerator(this);
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 		#endregion
 	}
@@ -205,15 +190,10 @@ namespace Algorithms.Common
 
 		#region Methods
 
-		public virtual RadixTreeNode<TKey, TKeyItem, TValue> NewNode(List<TKeyItem> keyItems, TValue value, RadixTreeNode<TKey, TKeyItem, TValue> parent)
-		{
-			return new RadixTreeNode<TKey, TKeyItem, TValue>(keyItems, value, parent);
-		}
+		public virtual RadixTreeNode<TKey, TKeyItem, TValue> NewNode(List<TKeyItem> keyItems, TValue value, RadixTreeNode<TKey, TKeyItem, TValue> parent) =>
+			new RadixTreeNode<TKey, TKeyItem, TValue>(keyItems, value, parent);
 
-		public virtual RadixTreeNode<TKey, TKeyItem, TValue> Add(TKey key, TValue value)
-		{
-			return Add(_root, key.ToList(), value);
-		}
+		public virtual RadixTreeNode<TKey, TKeyItem, TValue> Add(TKey key, TValue value) => Add(_root, key.ToList(), value);
 
 		private RadixTreeNode<TKey, TKeyItem, TValue> Add(RadixTreeNode<TKey, TKeyItem, TValue> node, List<TKeyItem> addItems, TValue value)
 		{

@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Algorithms.AlgorithmsTests.Common
 {
-	class QueueTestCaseNode<T>
+	public class QueueTestCaseNode<T>
 	{
 		public int Direction { get; set; }
 		public T Value { get; set; }
 		public int Count { get; set; }
 	}
 
-	class QueueTestCase<T>
+	public class QueueTestCase<T>
 	{
 		public string Name;
 		public List<QueueTestCaseNode<T>> Nodes { get; set; }
 	}
 
-	[TestClass()]
-	public class QueueTests
+	public class QueueTestsFixture
 	{
-		List<QueueTestCase<string>> _testCases;
-		[TestInitialize()]
-		public void TestInitialize()
+		readonly List<QueueTestCase<string>> _testCases;
+		public List<QueueTestCase<string>> TestCases => _testCases;
+
+		public QueueTestsFixture()
 		{
 			_testCases = new List<QueueTestCase<string>>
 			{
@@ -59,12 +59,22 @@ namespace Algorithms.AlgorithmsTests.Common
 				}
 			};
 		}
+	}
 
-		[TestMethod()]
+	public class QueueTests : IClassFixture<QueueTestsFixture>
+	{
+		readonly QueueTestsFixture _queueTestsFixture;
+
+		public QueueTests(QueueTestsFixture queueTestsFixture)
+		{
+			_queueTestsFixture = queueTestsFixture;
+		}
+
+		[Fact]
 		public void QueueTest()
 		{
 			var queue = new Queue<string>();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _queueTestsFixture.TestCases)
 			{
 				int n = testCase.Nodes.Count;
 
@@ -80,11 +90,11 @@ namespace Algorithms.AlgorithmsTests.Common
 					{
 						var actualValue = queue.Dequeue();
 						Console.WriteLine("Node{0}:[ExpectedValue:{1}], [ActualValue:{2}]", i, node.Value, actualValue);
-						Assert.AreEqual(node.Value, actualValue);
+						Assert.Equal(node.Value, actualValue);
 					}
 					int actualCount = queue.Count;
 					Console.WriteLine("Node{0}:[ExpectedCount:{1}], [ActualCount:{2}]", i, node.Count, actualCount);
-					Assert.AreEqual(node.Count, actualCount);
+					Assert.Equal(node.Count, actualCount);
 				}
 			}
 		}

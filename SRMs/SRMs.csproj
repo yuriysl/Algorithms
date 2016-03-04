@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Algorithms.SRMs</RootNamespace>
     <AssemblyName>SRMs</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -51,6 +51,8 @@
     <Compile Include="SRM548\KingdomAndPassword.cs" />
     <Compile Include="SRM548\KingdomAndTrees.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SRM580\EelAndRabbitDiv1Level1.cs" />
+    <Compile Include="SRM580\ShoutterDiv2Level1.cs" />
     <Compile Include="SRM675\LengthUnitCalculator.cs" />
   </ItemGroup>
   <ItemGroup>

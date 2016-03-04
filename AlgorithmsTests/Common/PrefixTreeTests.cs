@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Algorithms.Common;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Algorithms.AlgorithmsTests.Common
 {
-	class PrefixTreeTestCase<T>
+	public class PrefixTreeTestCase<T>
 	{
 		public string Name;
 		public List<T> Input { get; set; }
@@ -15,15 +15,14 @@ namespace Algorithms.AlgorithmsTests.Common
 		public bool IsForPrefix;
 	}
 
-	[TestClass()]
-	public class PrefixTreeTests
+	public class PrefixTreeTestsFixture
 	{
-		List<PrefixTreeTestCase<string>> _testCases;
+		readonly List<PrefixTreeTestCase<string>> _testCases;
+		public List<PrefixTreeTestCase<string>> TestCases => _testCases;
 
-		[TestInitialize()]
-		public void TestInitialize()
+		public PrefixTreeTestsFixture()
 		{
-			_testCases = new List<PrefixTreeTestCase<string>>()
+			_testCases = new List<PrefixTreeTestCase<string>>
 			{
 				new PrefixTreeTestCase<string>
 				{
@@ -54,11 +53,21 @@ namespace Algorithms.AlgorithmsTests.Common
 				}
 			};
 		}
+	}
 
-		[TestMethod()]
+	public class PrefixTreeTests : IClassFixture<PrefixTreeTestsFixture>
+	{
+		readonly PrefixTreeTestsFixture _prefixTreeTestsFixture;
+
+		public PrefixTreeTests(PrefixTreeTestsFixture prefixTreeTestsFixture)
+		{
+			_prefixTreeTestsFixture = prefixTreeTestsFixture;
+		}
+
+		[Fact]
 		public void AddPrefixTreeTest()
 		{
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _prefixTreeTestsFixture.TestCases)
 			{
 				if (!testCase.IsForPrefix)
 					continue;
@@ -82,7 +91,7 @@ namespace Algorithms.AlgorithmsTests.Common
 				if (prefixTree.Contains(key))
 				{
 					var matches = prefixTree.GetMatches(key);
-					Assert.AreEqual(count, matches.Count);
+					Assert.Equal(count, matches.Count);
 
 					Console.WriteLine("Autocomplete:");
 
@@ -93,21 +102,21 @@ namespace Algorithms.AlgorithmsTests.Common
 						{
 							var actualKey = string.Join("", m);
 							Console.WriteLine("Output:[ActualKey:{0}]", actualKey);
-							Assert.AreEqual(expected[i++], actualKey);
+							Assert.Equal(expected[i++], actualKey);
 						}
 
 					}
 
 				}
 				else
-					Assert.Fail();
+					Assert.True(false, "error");
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void AddRubexTreeTest()
 		{
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _prefixTreeTestsFixture.TestCases)
 			{
 				if (!testCase.IsForPrefix)
 					continue;
@@ -131,7 +140,7 @@ namespace Algorithms.AlgorithmsTests.Common
 				if (radixTree.Contains(key))
 				{
 					var matches = radixTree.GetMatches(key);
-					Assert.AreEqual(count, matches.Count);
+					Assert.Equal(count, matches.Count);
 
 					Console.WriteLine("Autocomplete:");
 
@@ -142,14 +151,14 @@ namespace Algorithms.AlgorithmsTests.Common
 						{
 							var actualKey = string.Join("", m);
 							Console.WriteLine("Output:[ActualKey:{0}]", actualKey);
-							Assert.AreEqual(expected[i++], actualKey);
+							Assert.Equal(expected[i++], actualKey);
 						}
 
 					}
 
 				}
 				else
-					Assert.Fail();
+					Assert.True(false, "error");
 			}
 		}
 	}

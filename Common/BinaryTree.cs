@@ -167,10 +167,7 @@ namespace Algorithms.Common
 				_initialized = false;
 			}
 
-			public BinaryTreeNode<TKey, TValue> Current
-			{
-				get { return _currentPath.Count == 0 ? null : _currentPath.Peek(); }
-			}
+			public BinaryTreeNode<TKey, TValue> Current => _currentPath.Count == 0 ? null : _currentPath.Peek();
 
 			object IEnumerator.Current => Current;
 
@@ -210,10 +207,8 @@ namespace Algorithms.Common
 
 		#region Methods
 
-		protected virtual BinaryTreeNode<TKey, TValue> NewNode(TKey key, TValue value, BinaryTreeNode<TKey, TValue> parent)
-		{
-			return new BinaryTreeNode<TKey, TValue>(key, value, parent);
-		}
+		protected virtual BinaryTreeNode<TKey, TValue> NewNode(TKey key, TValue value, BinaryTreeNode<TKey, TValue> parent) => 
+			new BinaryTreeNode<TKey, TValue>(key, value, parent);
 
 		public virtual BinaryTreeNode<TKey, TValue> Add(TKey key, TValue value)
 		{
@@ -264,10 +259,7 @@ namespace Algorithms.Common
 			}
 		}
 
-		public bool Contains(TKey key)
-		{
-			return Contains(_root, key);
-		}
+		public bool Contains(TKey key) => Contains(_root, key);
 
 		private bool Contains(BinaryTreeNode<TKey, TValue> node, TKey key)
 		{
@@ -305,7 +297,7 @@ namespace Algorithms.Common
 			return removedNode;
 		}
 
-		protected virtual void DoRemoveNode(BinaryTreeNode<TKey, TValue> newNode)
+		protected virtual void DoRemoveNode(BinaryTreeNode<TKey, TValue> node)
 		{
 		}
 
@@ -379,20 +371,11 @@ namespace Algorithms.Common
 
 		#region IEnumerable
 
-		public IEnumerator<BinaryTreeNode<TKey, TValue>> GetEnumerator()
-		{
-			return new InOrderEnumerator(this);
-		}
+		public IEnumerator<BinaryTreeNode<TKey, TValue>> GetEnumerator() => new InOrderEnumerator(this);
 
-		public IEnumerator<BinaryTreeNode<TKey, TValue>> GetInOrderStackEnumerator()
-		{
-			return new InOrderStackEnumerator(this);
-		}
+		public IEnumerator<BinaryTreeNode<TKey, TValue>> GetInOrderStackEnumerator() => new InOrderStackEnumerator(this);
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 		#endregion
 	}

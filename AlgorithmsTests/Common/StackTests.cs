@@ -1,29 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Algorithms.AlgorithmsTests.Common
 {
-	class StackTestCaseNode<T>
+	public class StackTestCaseNode<T>
 	{
 		public int Direction { get; set; }
 		public T Value { get; set; }
 		public int Count { get; set; }
 	}
 
-	class StackTestCase<T>
+	public class StackTestCase<T>
 	{
 		public string Name;
 		public List<StackTestCaseNode<T>> Nodes { get; set; }
 	}
 
-	[TestClass()]
-	public class StackTests
+	public class StackTestsFixture
 	{
-		List<StackTestCase<string>> _testCases;
+		readonly List<StackTestCase<string>> _testCases;
+		public List<StackTestCase<string>> TestCases => _testCases;
 
-		[TestInitialize()]
-		public void TestInitialize()
+		public StackTestsFixture()
 		{
 			_testCases = new List<StackTestCase<string>>
 			{
@@ -66,12 +65,22 @@ namespace Algorithms.AlgorithmsTests.Common
 				}
 			};
 		}
+	}
 
-		[TestMethod()]
+	public class StackTests : IClassFixture<StackTestsFixture>
+	{
+		readonly StackTestsFixture _stackTestsFixture;
+
+		public StackTests(StackTestsFixture stackTestsFixture)
+		{
+			_stackTestsFixture = stackTestsFixture;
+		}
+
+		[Fact]
 		public void StackTest()
 		{
 			var stack = new Algorithms.Common.Stack<string>();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _stackTestsFixture.TestCases)
 			{
 				int n = testCase.Nodes.Count;
 
@@ -88,17 +97,17 @@ namespace Algorithms.AlgorithmsTests.Common
 					{
 						actualValue = stack.Peek();
 						Console.WriteLine("Node{0}:[ExpectedValue:{1}], [ActualValue:{2}]", i, node.Value, actualValue);
-						Assert.AreEqual(node.Value, actualValue);
+						Assert.Equal(node.Value, actualValue);
 					}
 					else
 					{
 						actualValue = stack.Pop();
 						Console.WriteLine("Node{0}:[ExpectedValue:{1}], [ActualValue:{2}]", i, node.Value, actualValue);
-						Assert.AreEqual(node.Value, actualValue);
+						Assert.Equal(node.Value, actualValue);
 					}
 					int actualCount = stack.Count;
 					Console.WriteLine("Node{0}:[ExpectedCount:{1}], [ActualCount:{2}]", i, node.Count, actualCount);
-					Assert.AreEqual(node.Count, actualCount);
+					Assert.Equal(node.Count, actualCount);
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using Algorithms.SRMs.SRM675;
 using System;
 using System.Collections.Generic;
@@ -8,47 +8,46 @@ using System.Threading.Tasks;
 
 namespace Algorithms.SRMs.SRM675.Tests
 {
-	[TestClass()]
 	public class LengthUnitCalculatorTests
 	{
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest1()
 		{
 			var calc = new LengthUnitCalculator();
 			double res = calc.calc(1, "mi", "ft");
-			Assert.AreEqual(5280.0, res);
+			Assert.Equal(5280.0, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest2()
 		{
 			var calc = new LengthUnitCalculator();
 			double res = calc.calc(1, "ft", "mi");
-			Assert.AreEqual(1.893939393939394E-4, res);
+			Assert.Equal(1.893939393939394E-4, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest3()
 		{
 			var calc = new LengthUnitCalculator();
 			double res = calc.calc(1000, "mi", "in");
-			Assert.AreEqual(6.336E7, res);
+			Assert.Equal(6.336E7, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest4()
 		{
 			var calc = new LengthUnitCalculator();
 			double res = calc.calc(1, "in", "mi");
-			Assert.AreEqual(1.5782828282828283E-5, res);
+			Assert.Equal(1.5782828282828283E-5, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest5()
 		{
 			var calc = new LengthUnitCalculator();
 			double res = calc.calc(47, "mi", "mi");
-			Assert.AreEqual(47.0, res);
+			Assert.Equal(47.0, res);
 		}
 	}
 }

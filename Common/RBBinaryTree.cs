@@ -55,9 +55,7 @@ namespace Algorithms.Common
 		#region Methods
 
 		protected override BinaryTreeNode<TKey, TValue> NewNode(TKey key, TValue value, BinaryTreeNode<TKey, TValue> parent)
-		{
-			return new RBNode<TKey, TValue>(key, value, parent, 0);
-		}
+			=> new RBNode<TKey, TValue>(key, value, parent, 0);
 
 		public void LeftRotate(RBNode<TKey, TValue> node)
 		{

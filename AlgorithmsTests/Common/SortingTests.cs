@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Algorithms.Common;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Algorithms.AlgorithmsTests.Common
 {
-	class SortingTestCase<T>
+	public class SortingTestCase<T>
 	{
 		public string Name;
 		public List<T> Input { get; set; }
@@ -22,30 +22,14 @@ namespace Algorithms.AlgorithmsTests.Common
 		public bool IsForRadix;
 	}
 
-	[TestClass()]
-	public class SortingTests
+	public class SortingTestsFixture
 	{
-		private TestContext _testContextInstance;
+		readonly List<SortingTestCase<int>> _testCases;
+		public List<SortingTestCase<int>> TestCases => _testCases;
 
-		List<SortingTestCase<int>> _testCases;
-
-		public TestContext TestContext
+		public SortingTestsFixture()
 		{
-			get
-			{
-				return _testContextInstance;
-			}
-
-			set
-			{
-				_testContextInstance = value;
-			}
-		}
-
-		[TestInitialize()]
-		public void TestInitialize()
-		{
-			_testCases = new List<SortingTestCase<int>>()
+			_testCases = new List<SortingTestCase<int>>
 			{
 				new SortingTestCase<int>
 				{
@@ -162,12 +146,22 @@ namespace Algorithms.AlgorithmsTests.Common
 				}
 			};
 		}
+	}
 
-		[TestMethod()]
+	public class SortingTests : IClassFixture<SortingTestsFixture>
+	{
+		SortingTestsFixture _sortingTestFixture;
+
+		public SortingTests(SortingTestsFixture sortingTestFixture)
+		{
+			_sortingTestFixture = sortingTestFixture;
+		}
+
+		[Fact]
 		public void InsertionSortTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
@@ -187,15 +181,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-					Assert.AreEqual(expected[i], nodes[i].Key);
+					Assert.Equal(expected[i], nodes[i].Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void SelectionSortTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
@@ -215,15 +209,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-					Assert.AreEqual(expected[i], nodes[i].Key);
+					Assert.Equal(expected[i], nodes[i].Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void MergeSortTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
@@ -243,15 +237,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-					Assert.AreEqual(expected[i], nodes[i].Key);
+					Assert.Equal(expected[i], nodes[i].Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void QuickSortTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
@@ -271,15 +265,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-					Assert.AreEqual(expected[i], nodes[i].Key);
+					Assert.Equal(expected[i], nodes[i].Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void QuickSortTailTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
@@ -299,15 +293,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-					Assert.AreEqual(expected[i], nodes[i].Key);
+					Assert.Equal(expected[i], nodes[i].Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void BubbleSortTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
@@ -327,15 +321,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-					Assert.AreEqual(expected[i], nodes[i].Key);
+					Assert.Equal(expected[i], nodes[i].Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void HeapSortMaxTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
@@ -355,15 +349,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-					Assert.AreEqual(expected[i], nodes[i].Key);
+					Assert.Equal(expected[i], nodes[i].Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void HeapSortMaxTailTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
@@ -383,15 +377,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-					Assert.AreEqual(expected[i], nodes[i].Key);
+					Assert.Equal(expected[i], nodes[i].Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void HeapSortMinTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
@@ -411,15 +405,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-					Assert.AreEqual(expected[n - i - 1], nodes[i].Key);
+					Assert.Equal(expected[n - i - 1], nodes[i].Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void HeapSortMinTailTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
@@ -439,14 +433,14 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-					Assert.AreEqual(expected[n - i - 1], nodes[i].Key);
+					Assert.Equal(expected[n - i - 1], nodes[i].Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void BinaryTreeSortMaxTest()
 		{
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				var binaryTree = new BinaryTree<int, object>();
 				int[] input = testCase.Input.ToArray();
@@ -465,14 +459,14 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				int j = 0;
 				foreach (var node in binaryTree)
-					Assert.AreEqual(expected[j++], node.Key);
+					Assert.Equal(expected[j++], node.Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void BinaryTreeStackSortMaxTest()
 		{
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				var binaryTree = new BinaryTree<int, object>();
 				int[] input = testCase.Input.ToArray();
@@ -493,15 +487,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				while (inOrderStackEnumerator.MoveNext())
 				{
 					Console.WriteLine("Output:[{0}]", inOrderStackEnumerator.Current.Key);
-					Assert.AreEqual(expected[j++], inOrderStackEnumerator.Current.Key);
+					Assert.Equal(expected[j++], inOrderStackEnumerator.Current.Key);
 				}
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void RBBinaryTreeSortMaxTest()
 		{
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				var rbBinaryTree = new RBBinaryTree<int, object>();
 				int[] input = testCase.Input.ToArray();
@@ -520,15 +514,15 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				int j = 0;
 				foreach (var node in rbBinaryTree)
-					Assert.AreEqual(expected[j++], node.Key);
+					Assert.Equal(expected[j++], node.Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void CountingSortTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				if (!testCase.IsForCounting)
 					continue;
@@ -550,15 +544,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-					Assert.AreEqual(expected[i], output[i].Key);
+					Assert.Equal(expected[i], output[i].Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void GetCountInIntervalTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				if (!testCase.IsForCounting)
 					continue;
@@ -581,15 +575,15 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				Console.WriteLine("Output:[{0}], [Count:{1}]", string.Join(", ", output), count);
 
-				Assert.AreEqual(testCase.Count, count);
+				Assert.Equal(testCase.Count, count);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void CountingStringSortTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				if (!testCase.IsForCountingString)
 					continue;
@@ -613,15 +607,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-					Assert.AreEqual(expected[i].ToString(), output[i].Key);
+					Assert.Equal(expected[i].ToString(), output[i].Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void RadixSortTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				if (!testCase.IsForRadix)
 					continue;
@@ -643,15 +637,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-					Assert.AreEqual(expected[i], output[i].Key);
+					Assert.Equal(expected[i], output[i].Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void RadixSortStringTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				if (!testCase.IsForRadix)
 					continue;
@@ -675,15 +669,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
-					Assert.AreEqual(expected[i].ToString(), output[i].Key);
+					Assert.Equal(expected[i].ToString(), output[i].Key);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void BucketSortTest()
 		{
 			var sorting = new Sorting();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
@@ -707,12 +701,12 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				for (int i = 0; i < n; i++)
 				{
-					Assert.AreEqual(expected[i], output[i].Key);
+					Assert.Equal(expected[i], output[i].Key);
 				}
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void BucketSortRandomTest()
 		{
 			var rnd = new Random();
@@ -739,9 +733,9 @@ namespace Algorithms.AlgorithmsTests.Common
 			for (int i = 0; i < n; i++)
 			{
 				if(i > 0)
-					Assert.IsTrue(output[i].Key >= output[i-1].Key);
+					Assert.True(output[i].Key >= output[i-1].Key);
 				else
-					Assert.IsTrue(output[i].Key >= 0);
+					Assert.True(output[i].Key >= 0);
 			}
 		}
 	}

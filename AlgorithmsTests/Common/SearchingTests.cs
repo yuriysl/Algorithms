@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Algorithms.Common;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Algorithms.AlgorithmsTests.Common
 {
-	class SearchingTestCase<T>
+	public class SearchingTestCase<T>
 	{
 		public string Name;
 		public List<T> Input { get; set; }
@@ -22,15 +22,14 @@ namespace Algorithms.AlgorithmsTests.Common
 		public bool IsForSelection { get; set; }
 	}
 
-	[TestClass()]
-	public class SearchingTests
+	public class SearchingTestsFixture
 	{
-		List<SearchingTestCase<int>> _testCases;
+		readonly List<SearchingTestCase<int>> _testCases;
+		public List<SearchingTestCase<int>> TestCases => _testCases;
 
-		[TestInitialize()]
-		public void TestInitialize()
+		public SearchingTestsFixture()
 		{
-			_testCases = new List<SearchingTestCase<int>>()
+			_testCases = new List<SearchingTestCase<int>>
 			{
 				new SearchingTestCase<int>
 				{
@@ -150,12 +149,22 @@ namespace Algorithms.AlgorithmsTests.Common
 				}
 			};
 		}
+	}
 
-		[TestMethod()]
+	public class SearchingTests : IClassFixture<SearchingTestsFixture>
+	{
+		SearchingTestsFixture _searchingTestsFixture;
+
+		public SearchingTests(SearchingTestsFixture searchingTestsFixture)
+		{
+			_searchingTestsFixture = searchingTestsFixture;
+		}
+
+		[Fact]
 		public void BinarySearchTest()
 		{
 			var searching = new Searching();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _searchingTestsFixture.TestCases)
 			{
 				if (!testCase.IsBinarySearch)
 					continue;
@@ -179,20 +188,20 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Actual:[{0}]", actual == null ? "null" : actual.Key.ToString());
 
 				if (expected == -1)
-					Assert.IsNull(actual);
+					Assert.Null(actual);
 				else
 				{
-					Assert.IsNotNull(actual);
-					Assert.AreEqual(expected, actual.Key);
+					Assert.NotNull(actual);
+					Assert.Equal(expected, actual.Key);
 				}
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void BinarySearchTailTest()
 		{
 			var searching = new Searching();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _searchingTestsFixture.TestCases)
 			{
 				if (!testCase.IsBinarySearch)
 					continue;
@@ -216,20 +225,20 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Actual:[{0}]", actual == null ? "null" : actual.Key.ToString());
 
 				if (expected == -1)
-					Assert.IsNull(actual);
+					Assert.Null(actual);
 				else
 				{
-					Assert.IsNotNull(actual);
-					Assert.AreEqual(expected, actual.Key);
+					Assert.NotNull(actual);
+					Assert.Equal(expected, actual.Key);
 				}
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void SelectMinMaxTest()
 		{
 			var searching = new Searching();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _searchingTestsFixture.TestCases)
 			{
 				if (!testCase.IsForMinMax)
 					continue;
@@ -254,27 +263,27 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Actual:[Max:{0}]", minMax == null ? "null" : minMax.Item2.ToString());
 
 				if (expectedMin == -1)
-					Assert.IsNull(minMax);
+					Assert.Null(minMax);
 				else
 				{
-					Assert.IsNotNull(minMax);
-					Assert.AreEqual(expectedMin, minMax.Item1.Key);
+					Assert.NotNull(minMax);
+					Assert.Equal(expectedMin, minMax.Item1.Key);
 				}
 				if (expectedMax == -1)
-					Assert.IsNull(minMax);
+					Assert.Null(minMax);
 				else
 				{
-					Assert.IsNotNull(minMax);
-					Assert.AreEqual(expectedMax, minMax.Item2.Key);
+					Assert.NotNull(minMax);
+					Assert.Equal(expectedMax, minMax.Item2.Key);
 				}
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void RandomizedSelectTest()
 		{
 			var searching = new Searching();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _searchingTestsFixture.TestCases)
 			{
 				if (!testCase.IsForSelection)
 					continue;
@@ -298,20 +307,20 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
 
 				if (expectedItem == -1)
-					Assert.IsNull(actualItem);
+					Assert.Null(actualItem);
 				else
 				{
-					Assert.IsNotNull(actualItem);
-					Assert.AreEqual(expectedItem, actualItem.Key);
+					Assert.NotNull(actualItem);
+					Assert.Equal(expectedItem, actualItem.Key);
 				}
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void SelectTest()
 		{
 			var searching = new Searching();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _searchingTestsFixture.TestCases)
 			{
 				if (!testCase.IsForSelection)
 					continue;
@@ -335,19 +344,19 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
 
 				if (expectedItem == -1)
-					Assert.IsNull(actualItem);
+					Assert.Null(actualItem);
 				else
 				{
-					Assert.IsNotNull(actualItem);
-					Assert.AreEqual(expectedItem, actualItem.Key);
+					Assert.NotNull(actualItem);
+					Assert.Equal(expectedItem, actualItem.Key);
 				}
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void OSSelectTest()
 		{
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _searchingTestsFixture.TestCases)
 			{
 				if (!testCase.IsForSelection)
 					continue;
@@ -372,19 +381,19 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
 
 				if (expectedItem == -1)
-					Assert.IsNull(actualItem);
+					Assert.Null(actualItem);
 				else
 				{
-					Assert.IsNotNull(actualItem);
-					Assert.AreEqual(expectedItem, actualItem.Key);
+					Assert.NotNull(actualItem);
+					Assert.Equal(expectedItem, actualItem.Key);
 				}
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void OSSelectTailTest()
 		{
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _searchingTestsFixture.TestCases)
 			{
 				if (!testCase.IsForSelection)
 					continue;
@@ -409,20 +418,20 @@ namespace Algorithms.AlgorithmsTests.Common
 				Console.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
 
 				if (expectedItem == -1)
-					Assert.IsNull(actualItem);
+					Assert.Null(actualItem);
 				else
 				{
-					Assert.IsNotNull(actualItem);
-					Assert.AreEqual(expectedItem, actualItem.Key);
+					Assert.NotNull(actualItem);
+					Assert.Equal(expectedItem, actualItem.Key);
 				}
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void OSRankTest()
 		{
 			var searching = new Searching();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _searchingTestsFixture.TestCases)
 			{
 				if (!testCase.IsForSelection)
 					continue;
@@ -459,19 +468,19 @@ namespace Algorithms.AlgorithmsTests.Common
 					}
 				}
 
-				Assert.IsNotNull(rbNode);
+				Assert.NotNull(rbNode);
 				var actualRank = rbBinaryTree.Rank(rbNode);
 
 				Console.WriteLine("Actual:[Rank:{0}]", actualRank.ToString());
 
 				if (expectedRank == -1)
-					Assert.IsTrue(actualRank == 0);
+					Assert.True(actualRank == 0);
 				else
-					Assert.AreEqual(expectedRank, actualRank);
+					Assert.Equal(expectedRank, actualRank);
 			}
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void OSHordsTest()
 		{
 			var rnd = new Random();
@@ -519,7 +528,7 @@ namespace Algorithms.AlgorithmsTests.Common
 			}
 
 			Console.WriteLine("Output:[Intersects:{0}]", intersects);
-			Assert.AreEqual(n * (n - 1) / 2, intersects);
+			Assert.Equal(n * (n - 1) / 2, intersects);
 		}
 	}
 }

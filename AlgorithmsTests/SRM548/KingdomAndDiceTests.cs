@@ -1,48 +1,47 @@
 ﻿using Algorithms.SRMs.SRM548;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Algorithms.AlgorithmsTests.SRM548
 {
-	[TestClass()]
 	public class KingdomAndDiceTests
 	{
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest1()
 		{
 			var dice = new KingdomAndDice();
 			double res = dice.newFairness(
 				new[] { 0, 2, 7, 0}, new[] { 6, 3, 8, 10 }, 12);
-			Assert.AreEqual(0.4375, res);
+			Assert.Equal(0.4375, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest2()
 		{
 			var dice = new KingdomAndDice();
 			double res = dice.newFairness(
 				new[] { 0, 2, 7, 0 }, new[] { 6, 3, 8, 10 }, 10);
-			Assert.AreEqual(0.375, res);
+			Assert.Equal(0.375, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest3()
 		{
 			var dice = new KingdomAndDice();
 			double res = dice.newFairness(
 				new[] { 0, 0 }, new[] { 5, 8 }, 47);
-			Assert.AreEqual(0.5, res);
+			Assert.Equal(0.5, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest4()
 		{
 			var dice = new KingdomAndDice();
 			double res = dice.newFairness(
 				new[] { 19, 50, 4 }, new[] { 26, 100, 37 }, 1000);
-			Assert.AreEqual(0.2222222222222222, res);
+			Assert.Equal(0.2222222222222222, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest5()
 		{
 			var dice = new KingdomAndDice();
@@ -50,10 +49,10 @@ namespace Algorithms.AlgorithmsTests.SRM548
 				new[] { 6371, 0, 6256, 1852, 0, 0, 6317, 3004, 5218, 9012 }, 
 				new[] { 1557, 6318, 1560, 4519, 2012, 6316, 6315, 1559, 8215, 1561},
 				10000);
-			Assert.AreEqual(0.49, res);
+			Assert.Equal(0.49, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest6()
 		{
 			var dice = new KingdomAndDice();
@@ -61,10 +60,10 @@ namespace Algorithms.AlgorithmsTests.SRM548
 				new[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 				new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50 },
 				1000000000);
-			Assert.AreEqual(0.5, res);
+			Assert.Equal(0.5, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest7()
 		{
 			var dice = new KingdomAndDice();
@@ -72,28 +71,28 @@ namespace Algorithms.AlgorithmsTests.SRM548
 				new[] { 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
 				new[] { 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49, 51, 53, 55, 57, 59, 61, 63, 65, 67, 69, 71, 73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 95, 97, 99 },
 				1000000000);
-			Assert.AreEqual(0.5, res);
+			Assert.Equal(0.5, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest8()
 		{
 			var dice = new KingdomAndDice();
 			double res = dice.newFairness(
 				new[] { 0, 0 }, new[] { 2, 4 }, 5);
-			Assert.AreEqual(0.5, res);
+			Assert.Equal(0.5, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest9()
 		{
 			var dice = new KingdomAndDice();
 			double res = dice.newFairness(
 				new[] { 0, 0, 0, 0 }, new[] { 5, 6, 7, 8 }, 9);
-			Assert.AreEqual(0.25, res);
+			Assert.Equal(0.25, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest10()
 		{
 			var dice = new KingdomAndDice();
@@ -101,10 +100,10 @@ namespace Algorithms.AlgorithmsTests.SRM548
 				new[] { 583580964, 0, 0, 0, 0, 0, 0, 0, 549353893, 0, 0, 0, 255995577, 0, 0, 161064041, 0 }, 
 				new[] { 96185108, 124390413, 518950998, 108883980, 116516829, 70613296, 455878940, 27406803, 82605278, 583284951, 157082497, 28741378, 119415043, 66963096, 65882888, 361932014, 177433896 },
 				637444863);
-			Assert.AreEqual(0.4982698961937716, res);
+			Assert.Equal(0.4982698961937716, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest11()
 		{
 			var dice = new KingdomAndDice();
@@ -112,10 +111,10 @@ namespace Algorithms.AlgorithmsTests.SRM548
 				new[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 				new[] { 1001, 3003, 5005, 7007, 9009, 110011, 130013, 150015, 170017, 190019, 210021, 230023, 250025, 270027, 290029, 310031, 330033, 350035, 370037, 390039, 410041, 430043, 450045, 470047, 490049, 510051, 530053, 550055, 570057, 590059, 610061, 630063, 650065, 670067, 690069, 710071, 730073, 750075, 770077, 790079, 810081, 830083, 850085, 870087, 890089, 910091, 930093, 950095, 970097, 990099 },
 				1000000000);
-			Assert.AreEqual(0.5, res);
+			Assert.Equal(0.5, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest12()
 		{
 			var dice = new KingdomAndDice();
@@ -123,10 +122,10 @@ namespace Algorithms.AlgorithmsTests.SRM548
 				new[] { 145178052, 161901973, 0, 0, 0, 0, 288567440, 54231080, 222834418, 156430427, 0, 543006658, 0, 0, 583021208, 0, 0, 0, 0, 0, 0, 0, 525551962, 0, 536307429, 0, 0, 0, 0, 675224032, 0, 167006606, 0, 0, 0, 0, 0, 0, 0, 227928516, 0, 0, 915865789, 112423041, 0, 0, 941150194, 0, 0, 959647693 }, 
 				new[] { 562581057, 714799137, 409754231, 649344250, 391854598, 744451666, 639192016, 407714697, 152668442, 2902450, 580005222, 440801847, 9495491, 297133833, 124847261, 720499754, 373915842, 391913883, 255311816, 912492430, 309611100, 347550668, 873768965, 725209331, 488251861, 410723182, 517044447, 671446938, 89957313, 845186991, 481779554, 501391863, 410671051, 891533784, 152567541, 802525648, 486670372, 791759557, 60925267, 639338813, 643515500, 640930488, 81972089, 501864484, 938064320, 55672843, 73049161, 162665084, 447586725, 328360976 }, 
 				998168571 );
-			Assert.AreEqual(0.5, res);
+			Assert.Equal(0.5, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest13()
 		{
 			var dice = new KingdomAndDice();
@@ -134,10 +133,10 @@ namespace Algorithms.AlgorithmsTests.SRM548
 				new[] { 2008566, 0, 0, 0, 0, 0, 0, 0, 6722285, 64815398, 0, 0, 0, 0, 8453367, 0, 0, 0, 16457963, 80358931, 14923697, 0, 0, 14404974, 0, 11768058, 0, 17294411, 0, 0, 0, 36780774, 0, 0, 0, 50237482, 0, 46033881, 0, 0, 0, 0, 0, 0, 0, 0, 61722499, 0, 44999317 }, 
 				new[] { 2869819, 1020553, 3369147, 30844016, 7419899, 2776614, 10678463, 27774202, 80187785, 36564173, 19872355, 15683121, 21421829, 32729186, 65920602, 33737021, 43144319, 18882934, 44210279, 18790055, 465938, 71141498, 21220980, 51512809, 47629131, 27680536, 26360331, 27175145, 62945786, 4717762, 61279397, 65815604, 77019734, 64648543, 3588072, 2263148, 67425156, 3371470, 19142285, 54541392, 39935642, 28119575, 70224512, 50462406, 49953696, 53968629, 73304363, 10921531, 61956498 },
 				82176484 );
-			Assert.AreEqual(0.4997917534360683, res);
+			Assert.Equal(0.4997917534360683, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest14()
 		{
 			var dice = new KingdomAndDice();
@@ -145,10 +144,10 @@ namespace Algorithms.AlgorithmsTests.SRM548
 				new[] { 0, 8017082, 0, 999586343, 1, 18583281, 999951916, 664829142, 471, 15604647, 0, 260, 999641866, 752009, 15282277, 999959769, 529717, 0, 0, 4042783, 999961837, 999961849, 0, 3, 2574, 573134, 22, 157390278, 3967, 999961696, 149, 999961077 },
 				new[] { 430234315, 999961822, 440, 1213, 15935483, 999961801, 999961728, 999733493, 100663, 999961739, 999703594, 33171761, 999960422, 2012, 999961834, 8, 999961847, 956392483, 999197097, 15443, 999961732, 999961785, 1182, 992523503, 996155601, 919898, 998206207, 5519, 465325, 999961846, 999933499, 49985 },
 				999961849);
-			Assert.AreEqual(0.48828125, res);
+			Assert.Equal(0.48828125, res);
 		}
 
-		[TestMethod()]
+		[Fact]
 		public void newFairnessTest15()
 		{
 			var dice = new KingdomAndDice();
@@ -156,7 +155,7 @@ namespace Algorithms.AlgorithmsTests.SRM548
 				new[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
 				new[] { 1000000, 2000000, 3000000, 4000000, 5000000, 6000000, 7000000, 8000000, 9000000, 10000000, 11000000, 12000000, 13000000, 14000000, 15000000, 16000000, 17000000, 18000000, 19000000, 20000000, 21000000, 22000000, 23000000, 24000000, 25000000, 26000000, 27000000, 28000000, 29000000, 30000000, 31000000, 32000000, 33000000, 34000000, 35000000, 36000000, 37000000, 38000000, 39000000, 40000000, 41000000, 42000000, 43000000, 44000000, 45000000, 46000000, 47000000, 48000000, 49000000, 50000000 }, 
 				1000000000);
-			Assert.AreEqual(0.5, res);
+			Assert.Equal(0.5, res);
 		}
 	}
 }

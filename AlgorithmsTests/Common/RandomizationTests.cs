@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Algorithms.Common;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Algorithms.AlgorithmsTests.Common
 {
-	class RandomizationTestCase<T>
+	public class RandomizationTestCase<T>
 	{
 		public string Name;
 		public List<T> Input { get; set; }
@@ -13,15 +13,14 @@ namespace Algorithms.AlgorithmsTests.Common
 		public int UpperBound { get; set; }
 	}
 
-	[TestClass()]
-	public class RandomizationTests
+	public class RandomizationTestsFixture
 	{
-		List<RandomizationTestCase<int>> _testCases;
+		readonly List<RandomizationTestCase<int>> _testCases;
+		public List<RandomizationTestCase<int>> TestCases => _testCases;
 
-		[TestInitialize()]
-		public void TestInitialize()
+		public RandomizationTestsFixture()
 		{
-			_testCases = new List<RandomizationTestCase<int>>()
+			_testCases = new List<RandomizationTestCase<int>>
 			{
 				new RandomizationTestCase<int>
 				{
@@ -81,12 +80,22 @@ namespace Algorithms.AlgorithmsTests.Common
 				}
 			};
 		}
+	}
 
-		[TestMethod()]
+	public class RandomizationTests : IClassFixture<RandomizationTestsFixture>
+	{
+		readonly RandomizationTestsFixture _randomizationTestsFixture;
+
+		public RandomizationTests(RandomizationTestsFixture randomizationTestsFixture)
+		{
+			_randomizationTestsFixture = randomizationTestsFixture;
+		}
+
+		[Fact]
 		public void RandomizationInPlaceTest()
 		{
 			var randomization = new Randomization();
-			foreach (var testCase in _testCases)
+			foreach (var testCase in _randomizationTestsFixture.TestCases)
 			{
 				int[] input = testCase.Input.ToArray();
 				int lowerBound = testCase.LowerBound;
@@ -109,19 +118,19 @@ namespace Algorithms.AlgorithmsTests.Common
 				{
 					for (int i = 0; i < lowerBound; i++)
 					{
-						Assert.AreEqual(expected[i], input[i]);
+						Assert.Equal(expected[i], input[i]);
 					}
 
 					for (int i = upperBound + 1; i < n; i++)
 					{
-						Assert.AreEqual(expected[i], input[i]);
+						Assert.Equal(expected[i], input[i]);
 					}
 				}
 				else
 				{
 					for (int i = 0; i < n; i++)
 					{
-						Assert.AreEqual(expected[i], input[i]);
+						Assert.Equal(expected[i], input[i]);
 					}
 				}
 
@@ -137,7 +146,7 @@ namespace Algorithms.AlgorithmsTests.Common
 							break;
 						}
 					}
-					Assert.IsTrue(isExists);
+					Assert.True(isExists);
 				}
 			}
 		}
