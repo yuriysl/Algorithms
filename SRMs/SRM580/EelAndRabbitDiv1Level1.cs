@@ -107,10 +107,51 @@ namespace Algorithms.SRMs.SRM580
 		{
 			int res = 0;
 			var n = l.Length;
+			int[] overlappings = new int[n];
 
+			for (int i = 0; i < n; i++)
+			{
+				for (int k = 0; k < n; k++)
+					overlappings[k] = 0;
 
+				overlappings[i] = 1;
+				int firstCount = SetOverlappings(l, t, overlappings, i, 1);
+				if (firstCount > res)
+					res = firstCount;
+				for (int j = i + 1; j < n; j++)
+				{
+					if (overlappings[j] == 1)
+						continue;
+
+					for (int k = 0; k < n; k++)
+						if(overlappings[k] == 2)
+							overlappings[k] = 0;
+
+					overlappings[j] = 2;
+					int secondCount = SetOverlappings(l, t, overlappings, j, 2);
+					if (firstCount + secondCount > res)
+						res = firstCount + secondCount;
+				}
+			}
 
 			return res;
+		}
+
+		private int SetOverlappings(int[] l, int[] t, int[] overlappings, int m, int step)
+		{
+			int count = 0;
+			var n = l.Length;
+			for (int k = 0; k < n; k++)
+			{
+				if (k == m || overlappings[k] == 1)
+					continue;
+				if (!(-(t[k]) < (-t[m]) || ((-t[k]) - l[k]) > (-t[m])))
+				{
+					overlappings[k] = step;
+					count++;
+				}
+			}
+			return count + 1;
 		}
 	}
 }
