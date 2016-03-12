@@ -40,6 +40,20 @@ namespace Algorithms.Common
 			return a;
 		}
 
+		public int[] Add(int[] a, int[] b)
+		{
+			int n = a.Length;
+			var c = new int[n + 1];
+			int carry = 0;
+			for (int i = 0; i < n; i++)
+			{
+				c[i] = (carry + a[i] + b[i]) % 2; ;
+				carry = (carry + a[i] + b[i]) / 2;
+			}
+			c[n] = carry;
+			return c;
+		}
+
 		/// <summary>
 		/// O(n^2)
 		/// </summary>

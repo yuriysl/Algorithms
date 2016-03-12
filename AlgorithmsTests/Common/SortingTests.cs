@@ -10,6 +10,7 @@ namespace Algorithms.AlgorithmsTests.Common
 	{
 		public string Name;
 		public List<T> Input { get; set; }
+		public List<T> InputB { get; set; }
 		public T Left { get; set; }
 		public T Right { get; set; }
 		public List<T> Expected { get; set; }
@@ -20,6 +21,7 @@ namespace Algorithms.AlgorithmsTests.Common
 		public bool IsForCounting;
 		public bool IsForCountingString;
 		public bool IsForRadix;
+		public bool IsForAdding;
 	}
 
 	public class SortingTestsFixture
@@ -143,6 +145,30 @@ namespace Algorithms.AlgorithmsTests.Common
 					BucketLeft = 300,
 					BucketRight = 900,
 					BucketCount = 3
+				},
+				new SortingTestCase<int>
+				{
+					Name = "test case 1",
+					Input = new List<int> {1, 1},
+					InputB = new List<int> {1, 1},
+					Expected = new List<int> {0, 1, 1},
+					IsForAdding = true
+				},
+				new SortingTestCase<int>
+				{
+					Name = "test case 2",
+					Input = new List<int> {1, 0},
+					InputB = new List<int> {0, 1},
+					Expected = new List<int> {1, 1, 0},
+					IsForAdding = true
+				},
+				new SortingTestCase<int>
+				{
+					Name = "test case 3",
+					Input = new List<int> {1, 0},
+					InputB = new List<int> {1, 1},
+					Expected = new List<int> {0, 0, 1},
+					IsForAdding = true
 				}
 			};
 		}
@@ -163,6 +189,8 @@ namespace Algorithms.AlgorithmsTests.Common
 			var sorting = new Sorting();
 			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
+				if (testCase.IsForAdding)
+					continue;
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
@@ -186,11 +214,41 @@ namespace Algorithms.AlgorithmsTests.Common
 		}
 
 		[Fact]
+		public void AddTest()
+		{
+			var sorting = new Sorting();
+			foreach (var testCase in _sortingTestFixture.TestCases)
+			{
+				if (!testCase.IsForAdding)
+					continue;
+				int[] inputA = testCase.Input.ToArray();
+				int[] inputB = testCase.InputB.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = inputA.Length;
+
+				Console.WriteLine("--------------------------------------------------------");
+				Console.WriteLine("Name:[{0}]", testCase.Name);
+				Console.WriteLine("InputA:[{0}]", string.Join(", ", inputA));
+				Console.WriteLine("InputB:[{0}]", string.Join(", ", inputB));
+				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				var outputC = sorting.Add(inputA, inputB);
+
+				Console.WriteLine("Output:[{0}]", string.Join(", ", outputC));
+
+				for (int i = 0; i <= n; i++)
+					Assert.Equal(expected[i], outputC[i]);
+			}
+		}
+
+		[Fact]
 		public void SelectionSortTest()
 		{
 			var sorting = new Sorting();
 			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
+				if (testCase.IsForAdding)
+					continue;
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
@@ -219,6 +277,8 @@ namespace Algorithms.AlgorithmsTests.Common
 			var sorting = new Sorting();
 			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
+				if (testCase.IsForAdding)
+					continue;
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
@@ -247,6 +307,8 @@ namespace Algorithms.AlgorithmsTests.Common
 			var sorting = new Sorting();
 			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
+				if (testCase.IsForAdding)
+					continue;
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
@@ -275,6 +337,8 @@ namespace Algorithms.AlgorithmsTests.Common
 			var sorting = new Sorting();
 			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
+				if (testCase.IsForAdding)
+					continue;
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
@@ -303,6 +367,8 @@ namespace Algorithms.AlgorithmsTests.Common
 			var sorting = new Sorting();
 			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
+				if (testCase.IsForAdding)
+					continue;
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
@@ -331,6 +397,8 @@ namespace Algorithms.AlgorithmsTests.Common
 			var sorting = new Sorting();
 			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
+				if (testCase.IsForAdding)
+					continue;
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
@@ -359,6 +427,8 @@ namespace Algorithms.AlgorithmsTests.Common
 			var sorting = new Sorting();
 			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
+				if (testCase.IsForAdding)
+					continue;
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
@@ -387,6 +457,8 @@ namespace Algorithms.AlgorithmsTests.Common
 			var sorting = new Sorting();
 			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
+				if (testCase.IsForAdding)
+					continue;
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
@@ -415,6 +487,8 @@ namespace Algorithms.AlgorithmsTests.Common
 			var sorting = new Sorting();
 			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
+				if (testCase.IsForAdding)
+					continue;
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
@@ -442,6 +516,8 @@ namespace Algorithms.AlgorithmsTests.Common
 		{
 			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
+				if (testCase.IsForAdding)
+					continue;
 				var binaryTree = new BinaryTree<int, object>();
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
@@ -468,6 +544,8 @@ namespace Algorithms.AlgorithmsTests.Common
 		{
 			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
+				if (testCase.IsForAdding)
+					continue;
 				var binaryTree = new BinaryTree<int, object>();
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
@@ -497,6 +575,8 @@ namespace Algorithms.AlgorithmsTests.Common
 		{
 			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
+				if (testCase.IsForAdding)
+					continue;
 				var rbBinaryTree = new RBBinaryTree<int, object>();
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
@@ -679,6 +759,8 @@ namespace Algorithms.AlgorithmsTests.Common
 			var sorting = new Sorting();
 			foreach (var testCase in _sortingTestFixture.TestCases)
 			{
+				if (testCase.IsForAdding)
+					continue;
 				int[] input = testCase.Input.ToArray();
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
