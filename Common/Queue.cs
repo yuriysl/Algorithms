@@ -12,7 +12,7 @@ namespace Algorithms.Common
 			_binaryHeap = new BinaryHeap<int, TValue>();
 		}
 
-		public TValue Dequeue() => ((IMaxHeap<int, TValue>)_binaryHeap).ExtractMax().Value;
+		public TValue Dequeue() => ((IMinHeap<int, TValue>)_binaryHeap).ExtractMin().Value;
 
 		public void Enqueue(TValue value)
 		{

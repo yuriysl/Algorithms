@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Algorithms.Common;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Algorithms.AlgorithmsTests.Common
 {
@@ -154,10 +155,12 @@ namespace Algorithms.AlgorithmsTests.Common
 	public class SearchingTests : IClassFixture<SearchingTestsFixture>
 	{
 		SearchingTestsFixture _searchingTestsFixture;
+		private readonly ITestOutputHelper _testOutputHelper;
 
-		public SearchingTests(SearchingTestsFixture searchingTestsFixture)
+		public SearchingTests(SearchingTestsFixture searchingTestsFixture, ITestOutputHelper testOutputHelper)
 		{
 			_searchingTestsFixture = searchingTestsFixture;
+			_testOutputHelper = testOutputHelper;
 		}
 
 		[Fact]
@@ -173,11 +176,11 @@ namespace Algorithms.AlgorithmsTests.Common
 				int expected = testCase.Expected;
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Key:[{0}]", key);
-				Console.WriteLine("Expected:[{0}]", expected == -1 ? "null" : expected.ToString());
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Key:[{0}]", key);
+				_testOutputHelper.WriteLine("Expected:[{0}]", expected == -1 ? "null" : expected.ToString());
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -185,7 +188,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				var actual = searching.BinarySearch(nodes, 0, n - 1, key);
 
-				Console.WriteLine("Actual:[{0}]", actual == null ? "null" : actual.Key.ToString());
+				_testOutputHelper.WriteLine("Actual:[{0}]", actual == null ? "null" : actual.Key.ToString());
 
 				if (expected == -1)
 					Assert.Null(actual);
@@ -210,11 +213,11 @@ namespace Algorithms.AlgorithmsTests.Common
 				int expected = testCase.Expected;
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Key:[{0}]", key);
-				Console.WriteLine("Expected:[{0}]", expected == -1 ? "null" : expected.ToString());
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Key:[{0}]", key);
+				_testOutputHelper.WriteLine("Expected:[{0}]", expected == -1 ? "null" : expected.ToString());
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -222,7 +225,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				var actual = searching.BinarySearchTail(nodes, 0, n - 1, key);
 
-				Console.WriteLine("Actual:[{0}]", actual == null ? "null" : actual.Key.ToString());
+				_testOutputHelper.WriteLine("Actual:[{0}]", actual == null ? "null" : actual.Key.ToString());
 
 				if (expected == -1)
 					Assert.Null(actual);
@@ -247,11 +250,11 @@ namespace Algorithms.AlgorithmsTests.Common
 				int expectedMax = testCase.ExpectedMax;
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[Min:{0}]", expectedMin == -1 ? "null" : expectedMin.ToString());
-				Console.WriteLine("Expected:[Max:{0}]", expectedMax == -1 ? "null" : expectedMax.ToString());
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[Min:{0}]", expectedMin == -1 ? "null" : expectedMin.ToString());
+				_testOutputHelper.WriteLine("Expected:[Max:{0}]", expectedMax == -1 ? "null" : expectedMax.ToString());
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -259,8 +262,8 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				var minMax = searching.SelectMinMax(nodes, 0, n - 1);
 
-				Console.WriteLine("Actual:[Min:{0}]", minMax == null ? "null" : minMax.Item1.ToString());
-				Console.WriteLine("Actual:[Max:{0}]", minMax == null ? "null" : minMax.Item2.ToString());
+				_testOutputHelper.WriteLine("Actual:[Min:{0}]", minMax == null ? "null" : minMax.Item1.ToString());
+				_testOutputHelper.WriteLine("Actual:[Max:{0}]", minMax == null ? "null" : minMax.Item2.ToString());
 
 				if (expectedMin == -1)
 					Assert.Null(minMax);
@@ -292,11 +295,11 @@ namespace Algorithms.AlgorithmsTests.Common
 				int expectedItem = testCase.ExpectedItem;
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Order:[{0}]", order);
-				Console.WriteLine("Expected:[Item:{0}]", expectedItem == -1 ? "null" : expectedItem.ToString());
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Order:[{0}]", order);
+				_testOutputHelper.WriteLine("Expected:[Item:{0}]", expectedItem == -1 ? "null" : expectedItem.ToString());
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -304,7 +307,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				var actualItem = searching.RandomizedSelect(nodes, 0, n - 1, order);
 
-				Console.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
+				_testOutputHelper.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
 
 				if (expectedItem == -1)
 					Assert.Null(actualItem);
@@ -329,11 +332,11 @@ namespace Algorithms.AlgorithmsTests.Common
 				int expectedItem = testCase.ExpectedItem;
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Order:[{0}]", order);
-				Console.WriteLine("Expected:[Item:{0}]", expectedItem == -1 ? "null" : expectedItem.ToString());
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Order:[{0}]", order);
+				_testOutputHelper.WriteLine("Expected:[Item:{0}]", expectedItem == -1 ? "null" : expectedItem.ToString());
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -341,7 +344,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				var actualItem = searching.Select(nodes, 0, n - 1, order);
 
-				Console.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
+				_testOutputHelper.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
 
 				if (expectedItem == -1)
 					Assert.Null(actualItem);
@@ -366,11 +369,11 @@ namespace Algorithms.AlgorithmsTests.Common
 				int expectedItem = testCase.ExpectedItem;
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Order:[{0}]", order);
-				Console.WriteLine("Expected:[Item:{0}]", expectedItem == -1 ? "null" : expectedItem.ToString());
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Order:[{0}]", order);
+				_testOutputHelper.WriteLine("Expected:[Item:{0}]", expectedItem == -1 ? "null" : expectedItem.ToString());
 
 				for (int i = 0; i < n; i++)
 					rbBinaryTree.Add(input[i], "value_" + input[i].ToString());
@@ -378,7 +381,7 @@ namespace Algorithms.AlgorithmsTests.Common
 				var rbNode = (RBNode<int, object>)rbBinaryTree.Root;
 				var actualItem = rbBinaryTree.Select(rbNode, order);
 
-				Console.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
+				_testOutputHelper.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
 
 				if (expectedItem == -1)
 					Assert.Null(actualItem);
@@ -403,11 +406,11 @@ namespace Algorithms.AlgorithmsTests.Common
 				int expectedItem = testCase.ExpectedItem;
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Order:[{0}]", order);
-				Console.WriteLine("Expected:[Item:{0}]", expectedItem == -1 ? "null" : expectedItem.ToString());
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Order:[{0}]", order);
+				_testOutputHelper.WriteLine("Expected:[Item:{0}]", expectedItem == -1 ? "null" : expectedItem.ToString());
 
 				for (int i = 0; i < n; i++)
 					rbBinaryTree.Add(input[i], "value_" + input[i].ToString());
@@ -415,7 +418,7 @@ namespace Algorithms.AlgorithmsTests.Common
 				var rbNode = (RBNode<int, object>)rbBinaryTree.Root;
 				var actualItem = rbBinaryTree.SelectTail(rbNode, order);
 
-				Console.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
+				_testOutputHelper.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
 
 				if (expectedItem == -1)
 					Assert.Null(actualItem);
@@ -441,11 +444,11 @@ namespace Algorithms.AlgorithmsTests.Common
 				int expectedRank = testCase.ExpectedRank;
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Order:[{0}]", order);
-				Console.WriteLine("Expected:[Rank:{0}]", expectedRank == -1 ? "0" : expectedRank.ToString());
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Order:[{0}]", order);
+				_testOutputHelper.WriteLine("Expected:[Rank:{0}]", expectedRank == -1 ? "0" : expectedRank.ToString());
 
 				for (int i = 0; i < n; i++)
 					rbBinaryTree.Add(input[i], "value_" + input[i].ToString());
@@ -456,7 +459,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				var actualItem = searching.Select(nodes, 0, n - 1, order);
 
-				Console.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
+				_testOutputHelper.WriteLine("Actual:[Item:{0}]", actualItem == null ? "null" : actualItem.Key.ToString());
 
 				RBNode<int, object> rbNode = null;
 				foreach (var node in rbBinaryTree)
@@ -471,7 +474,7 @@ namespace Algorithms.AlgorithmsTests.Common
 				Assert.NotNull(rbNode);
 				var actualRank = rbBinaryTree.Rank(rbNode);
 
-				Console.WriteLine("Actual:[Rank:{0}]", actualRank.ToString());
+				_testOutputHelper.WriteLine("Actual:[Rank:{0}]", actualRank.ToString());
 
 				if (expectedRank == -1)
 					Assert.True(actualRank == 0);
@@ -527,7 +530,7 @@ namespace Algorithms.AlgorithmsTests.Common
 				}
 			}
 
-			Console.WriteLine("Output:[Intersects:{0}]", intersects);
+			_testOutputHelper.WriteLine("Output:[Intersects:{0}]", intersects);
 			Assert.Equal(n * (n - 1) / 2, intersects);
 		}
 	}

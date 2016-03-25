@@ -1,10 +1,18 @@
 ﻿using Algorithms.SRMs.SRM548;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Algorithms.AlgorithmsTests.SRM548
 {
 	public class KingdomAndDiceTests
 	{
+		private readonly ITestOutputHelper _testOutputHelper;
+
+		public KingdomAndDiceTests(ITestOutputHelper testOutputHelper)
+		{
+			_testOutputHelper = testOutputHelper;
+		}
+
 		[Fact]
 		public void newFairnessTest1()
 		{

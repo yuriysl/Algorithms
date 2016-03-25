@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Algorithms.Common;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Algorithms.AlgorithmsTests.Common
 {
@@ -151,10 +152,12 @@ namespace Algorithms.AlgorithmsTests.Common
 	public class SortingTests : IClassFixture<SortingTestsFixture>
 	{
 		SortingTestsFixture _sortingTestFixture;
+		private readonly ITestOutputHelper _testOutputHelper;
 
-		public SortingTests(SortingTestsFixture sortingTestFixture)
+		public SortingTests(SortingTestsFixture sortingTestFixture, ITestOutputHelper testOutputHelper)
 		{
 			_sortingTestFixture = sortingTestFixture;
+			_testOutputHelper = testOutputHelper;
 		}
 
 		[Fact]
@@ -167,10 +170,10 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -178,7 +181,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				sorting.InsertionSort(nodes);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 					Assert.Equal(expected[i], nodes[i].Key);
@@ -195,10 +198,10 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -206,7 +209,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				sorting.SelectionSort(nodes);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 					Assert.Equal(expected[i], nodes[i].Key);
@@ -223,10 +226,10 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -234,7 +237,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				sorting.MergeSort(nodes, 0, n - 1);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 					Assert.Equal(expected[i], nodes[i].Key);
@@ -251,10 +254,10 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -262,7 +265,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				sorting.QuickSort(nodes, 0, n - 1);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 					Assert.Equal(expected[i], nodes[i].Key);
@@ -279,10 +282,10 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -290,7 +293,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				sorting.QuickSortTail(nodes, 0, n - 1);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 					Assert.Equal(expected[i], nodes[i].Key);
@@ -307,10 +310,10 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -318,7 +321,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				sorting.BubbleSort(nodes);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 					Assert.Equal(expected[i], nodes[i].Key);
@@ -335,10 +338,10 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BinaryHeapNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -346,7 +349,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				sorting.HeapSortMax(nodes);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 					Assert.Equal(expected[i], nodes[i].Key);
@@ -363,10 +366,10 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BinaryHeapNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -374,7 +377,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				sorting.HeapSortMaxTail(nodes);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 					Assert.Equal(expected[i], nodes[i].Key);
@@ -391,10 +394,10 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BinaryHeapNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -402,7 +405,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				sorting.HeapSortMin(nodes);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 					Assert.Equal(expected[n - i - 1], nodes[i].Key);
@@ -419,10 +422,10 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BinaryHeapNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -430,7 +433,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				sorting.HeapSortMinTail(nodes);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", nodes.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 					Assert.Equal(expected[n - i - 1], nodes[i].Key);
@@ -447,15 +450,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				for (int i = 0; i < n; i++)
 					binaryTree.Add(input[i], "value_" + input[i].ToString());
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", binaryTree.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", binaryTree.Select(node => node.Key)));
 
 				int j = 0;
 				foreach (var node in binaryTree)
@@ -473,20 +476,19 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				for (int i = 0; i < n; i++)
 					binaryTree.Add(input[i], "value_" + input[i].ToString());
-
 
 				int j = 0;
 				var inOrderStackEnumerator = binaryTree.GetInOrderStackEnumerator();
 				while (inOrderStackEnumerator.MoveNext())
 				{
-					Console.WriteLine("Output:[{0}]", inOrderStackEnumerator.Current.Key);
+					_testOutputHelper.WriteLine("Output:[{0}]", inOrderStackEnumerator.Current.Key);
 					Assert.Equal(expected[j++], inOrderStackEnumerator.Current.Key);
 				}
 			}
@@ -502,15 +504,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				for (int i = 0; i < n; i++)
 					rbBinaryTree.Add(input[i], "value_" + input[i].ToString());
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", rbBinaryTree.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", rbBinaryTree.Select(node => node.Key)));
 
 				int j = 0;
 				foreach (var node in rbBinaryTree)
@@ -530,10 +532,10 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -541,7 +543,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				var output = sorting.CountingSort(nodes, null, -15, 15);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 					Assert.Equal(expected[i], output[i].Key);
@@ -559,12 +561,12 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] input = testCase.Input.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Input:[Left:{0}]", testCase.Left);
-				Console.WriteLine("Input:[Right:{0}]", testCase.Right);
-				Console.WriteLine("Expected:[Count:{0}]", testCase.Count);
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Input:[Left:{0}]", testCase.Left);
+				_testOutputHelper.WriteLine("Input:[Right:{0}]", testCase.Right);
+				_testOutputHelper.WriteLine("Expected:[Count:{0}]", testCase.Count);
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -573,7 +575,7 @@ namespace Algorithms.AlgorithmsTests.Common
 				var output = sorting.CountingSortForIntervalChecking(nodes, null, -15, 15);
 				int count = sorting.GetCountInInterval(output, testCase.Left, testCase.Right, -15, 15);
 
-				Console.WriteLine("Output:[{0}], [Count:{1}]", string.Join(", ", output), count);
+				_testOutputHelper.WriteLine("Output:[{0}], [Count:{1}]", string.Join(", ", output), count);
 
 				Assert.Equal(testCase.Count, count);
 			}
@@ -593,10 +595,10 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BaseNode<string, object>>();
 				for (int i = 0; i < n; i++)
@@ -604,7 +606,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				var output = sorting.CountingSort(nodes, null, -15, 15);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 					Assert.Equal(expected[i].ToString(), output[i].Key);
@@ -623,10 +625,10 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -634,7 +636,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				var output = sorting.RadixSort(nodes, input.Length == 0 ? 0 : input[0].ToString().Length);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 					Assert.Equal(expected[i], output[i].Key);
@@ -655,10 +657,10 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BaseNode<string, object>>();
 				for (int i = 0; i < n; i++)
@@ -666,7 +668,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				var output = sorting.RadixSort(nodes, input.Length == 0 ? 0 : input[0].Length, '0', '9');
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 					Assert.Equal(expected[i].ToString(), output[i].Key);
@@ -683,13 +685,13 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Input:[BucketLeft:{0}]", testCase.BucketLeft);
-				Console.WriteLine("Input:[BucketRight:{0}]", testCase.BucketRight);
-				Console.WriteLine("Input:[BucketCount:{0}]", testCase.BucketCount);
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Input:[BucketLeft:{0}]", testCase.BucketLeft);
+				_testOutputHelper.WriteLine("Input:[BucketRight:{0}]", testCase.BucketRight);
+				_testOutputHelper.WriteLine("Input:[BucketCount:{0}]", testCase.BucketCount);
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				var nodes = new List<BaseNode<int, object>>();
 				for (int i = 0; i < n; i++)
@@ -697,7 +699,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 				var output = sorting.BucketSort(nodes, testCase.BucketCount, testCase.BucketLeft, testCase.BucketRight);
 
-				Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 				for (int i = 0; i < n; i++)
 				{
@@ -716,11 +718,11 @@ namespace Algorithms.AlgorithmsTests.Common
 			for (int i = 0; i < n; i++)
 				input[i] = (int)Math.Floor(rnd.NextDouble() * 1000);
 
-			Console.WriteLine("--------------------------------------------------------");
-			Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-			Console.WriteLine("Input:[BucketLeft:{0}]", 0);
-			Console.WriteLine("Input:[BucketRight:{0}]", 1000);
-			Console.WriteLine("Input:[BucketCount:{0}]", 16);
+			_testOutputHelper.WriteLine("--------------------------------------------------------");
+			_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+			_testOutputHelper.WriteLine("Input:[BucketLeft:{0}]", 0);
+			_testOutputHelper.WriteLine("Input:[BucketRight:{0}]", 1000);
+			_testOutputHelper.WriteLine("Input:[BucketCount:{0}]", 16);
 
 			var nodes = new List<BaseNode<int, object>>();
 			for (int i = 0; i < n; i++)
@@ -728,7 +730,7 @@ namespace Algorithms.AlgorithmsTests.Common
 
 			var output = sorting.BucketSort(nodes, 16, 0, 1000);
 
-			Console.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
+			_testOutputHelper.WriteLine("Output:[{0}]", string.Join(", ", output.Select(node => node.Key)));
 
 			for (int i = 0; i < n; i++)
 			{

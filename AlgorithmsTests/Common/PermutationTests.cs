@@ -2,11 +2,19 @@
 using System.Linq;
 using Algorithms.Common;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Algorithms.AlgorithmsTests.Common
 {
 	public class PermutationTests
 	{
+		private readonly ITestOutputHelper _testOutputHelper;
+
+		public PermutationTests(ITestOutputHelper testOutputHelper)
+		{
+			_testOutputHelper = testOutputHelper;
+		}
+
 		[Fact]
 		public void GetPremutationsTest()
 		{
@@ -23,14 +31,14 @@ namespace Algorithms.AlgorithmsTests.Common
 			int i = 0;
 			foreach (var item in permutations)
 			{
-				Console.WriteLine("[Permutation:{0}], [{1}]", i, string.Join(",", item.Select(node => node.Key)));
+				_testOutputHelper.WriteLine("[Permutation:{0}], [{1}]", i, string.Join(",", item.Select(node => node.Key)));
 				i++;
 			}
 			var groups = permutations.GroupBy(item => string.Join(",", item.Select(node => node.Key)), item => item);
 			i = 0;
 			foreach (var group in groups)
 			{
-				Console.WriteLine("[Permutation Group:{0}], [Key:{1}], [Count:{2}]", i, group.Key, group.Count());
+				_testOutputHelper.WriteLine("[Permutation Group:{0}], [Key:{1}], [Count:{2}]", i, group.Key, group.Count());
 				i++;
 			}
 		}

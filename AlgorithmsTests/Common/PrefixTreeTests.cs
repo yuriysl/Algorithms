@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Algorithms.Common;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Algorithms.AlgorithmsTests.Common
 {
@@ -58,10 +59,12 @@ namespace Algorithms.AlgorithmsTests.Common
 	public class PrefixTreeTests : IClassFixture<PrefixTreeTestsFixture>
 	{
 		readonly PrefixTreeTestsFixture _prefixTreeTestsFixture;
+		private readonly ITestOutputHelper _testOutputHelper;
 
-		public PrefixTreeTests(PrefixTreeTestsFixture prefixTreeTestsFixture)
+		public PrefixTreeTests(PrefixTreeTestsFixture prefixTreeTestsFixture, ITestOutputHelper testOutputHelper)
 		{
 			_prefixTreeTestsFixture = prefixTreeTestsFixture;
+			_testOutputHelper = testOutputHelper;
 		}
 
 		[Fact]
@@ -78,12 +81,12 @@ namespace Algorithms.AlgorithmsTests.Common
 				string[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Input:[Key:{0}]", key);
-				Console.WriteLine("Input:[Count:{0}]", count);
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Input:[Key:{0}]", key);
+				_testOutputHelper.WriteLine("Input:[Count:{0}]", count);
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				for (int i = 0; i < n; i++)
 					prefixTree.Add(input[i], "value_" + input[i]);
@@ -93,7 +96,7 @@ namespace Algorithms.AlgorithmsTests.Common
 					var matches = prefixTree.GetMatches(key);
 					Assert.Equal(count, matches.Count);
 
-					Console.WriteLine("Autocomplete:");
+					_testOutputHelper.WriteLine("Autocomplete:");
 
 					if (matches.Count > 0)
 					{
@@ -101,7 +104,7 @@ namespace Algorithms.AlgorithmsTests.Common
 						foreach (var m in matches)
 						{
 							var actualKey = string.Join("", m);
-							Console.WriteLine("Output:[ActualKey:{0}]", actualKey);
+							_testOutputHelper.WriteLine("Output:[ActualKey:{0}]", actualKey);
 							Assert.Equal(expected[i++], actualKey);
 						}
 
@@ -114,7 +117,7 @@ namespace Algorithms.AlgorithmsTests.Common
 		}
 
 		[Fact]
-		public void AddRubexTreeTest()
+		public void AddRadixTreeTest()
 		{
 			foreach (var testCase in _prefixTreeTestsFixture.TestCases)
 			{
@@ -127,12 +130,12 @@ namespace Algorithms.AlgorithmsTests.Common
 				string[] expected = testCase.Expected.ToArray();
 				int n = input.Length;
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("Input:[Key:{0}]", key);
-				Console.WriteLine("Input:[Count:{0}]", count);
-				Console.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Input:[Key:{0}]", key);
+				_testOutputHelper.WriteLine("Input:[Count:{0}]", count);
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
 
 				for (int i = 0; i < n; i++)
 					radixTree.Add(input[i], "value_" + input[i]);
@@ -142,7 +145,7 @@ namespace Algorithms.AlgorithmsTests.Common
 					var matches = radixTree.GetMatches(key);
 					Assert.Equal(count, matches.Count);
 
-					Console.WriteLine("Autocomplete:");
+					_testOutputHelper.WriteLine("Autocomplete:");
 
 					if (matches.Count > 0)
 					{
@@ -150,7 +153,7 @@ namespace Algorithms.AlgorithmsTests.Common
 						foreach (var m in matches)
 						{
 							var actualKey = string.Join("", m);
-							Console.WriteLine("Output:[ActualKey:{0}]", actualKey);
+							_testOutputHelper.WriteLine("Output:[ActualKey:{0}]", actualKey);
 							Assert.Equal(expected[i++], actualKey);
 						}
 

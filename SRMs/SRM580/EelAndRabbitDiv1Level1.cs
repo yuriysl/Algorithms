@@ -6,7 +6,7 @@ COMPETE
 LEARN
  
 COMMUNITY
- 	
+	
 		   Problem Statement  	
 
 
@@ -15,7 +15,7 @@ COMMUNITY
 
 
 Problem Statement
-    	Rabbit went to a river to catch eels. All eels are currently swimming down the stream at the same speed. Rabbit is standing by the river, downstream from all the eels. 
+		Rabbit went to a river to catch eels. All eels are currently swimming down the stream at the same speed. Rabbit is standing by the river, downstream from all the eels. 
 
 
 
@@ -34,14 +34,14 @@ Rabbit may only catch an eel when some part of the eel (between head and tail, i
 Return the maximal total number of eels Rabbit can catch.
  
 Definition
-    	
+		
 Class:	EelAndRabbit
 Method:	getmax
 Parameters:	int[], int[]
 Returns:	int
 Method signature:	int getmax(int[] l, int[] t)
 (be sure your method is public)
-    
+	
  
 Constraints
 -	l will contain between 1 and 50 elements, inclusive.
@@ -51,7 +51,7 @@ Constraints
  
 Examples
 0)	
-    	
+		
 {2, 4, 3, 2, 2, 1, 10}
 {2, 6, 3, 7, 0, 2, 0}
 Returns: 6
@@ -59,18 +59,18 @@ Rabbit can catch 6 eels in the following way:
 At time 2, catch Eel 0, Eel 4, Eel 5, and Eel 6.
 At time 8, catch Eel 1 and Eel 3.
 1)	
-    	
+		
 {1, 1, 1}
 {2, 0, 4}
 Returns: 2
 No two eels are in front of Rabbit at the same time, so Rabbit can catch at most two eels.
 2)	
-    	
+		
 {1}
 {1}
 Returns: 1
 3)	
-    	
+		
 {8, 2, 1, 10, 8, 6, 3, 1, 2, 5}
 {17, 27, 26, 11, 1, 27, 23, 12, 11, 13}
 Returns: 7
@@ -80,8 +80,8 @@ This problem statement is the exclusive and proprietary property of TopCoder, In
 
 
 This problem was used for: 
-       Single Round Match 580 Round 1 - Division I, Level One 
-       Single Round Match 580 Round 1 - Division II, Level Two
+	   Single Round Match 580 Round 1 - Division I, Level One 
+	   Single Round Match 580 Round 1 - Division II, Level Two
 
 
 
@@ -137,7 +137,7 @@ namespace Algorithms.SRMs.SRM580
 			return res;
 		}
 
-		private int SetOverlappings(int[] l, int[] t, int[] overlappings, int m, int step)
+		int SetOverlappings(int[] l, int[] t, int[] overlappings, int m, int step)
 		{
 			int count = 0;
 			var n = l.Length;

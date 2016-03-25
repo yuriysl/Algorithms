@@ -1,10 +1,18 @@
 ﻿using Algorithms.SRMs.SRM548;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Algorithms.AlgorithmsTests.SRM548
 {
 	public class KingdomAndTreesTests
 	{
+		private readonly ITestOutputHelper _testOutputHelper;
+
+		public KingdomAndTreesTests(ITestOutputHelper testOutputHelper)
+		{
+			_testOutputHelper = testOutputHelper;
+		}
+
 		[Fact]
 		public void minLevel1()
 		{

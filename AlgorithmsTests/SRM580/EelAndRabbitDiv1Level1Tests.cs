@@ -4,11 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Algorithms.SRMs.SRM580;
+using Xunit.Abstractions;
 
 namespace Algorithms.AlgorithmsTests.SRM580
 {
 	public class EelAndRabbitDiv1Level1Tests
 	{
+		private readonly ITestOutputHelper _testOutputHelper;
+
+		public EelAndRabbitDiv1Level1Tests(ITestOutputHelper testOutputHelper)
+		{
+			_testOutputHelper = testOutputHelper;
+		}
+
 		[Fact]
 		public void getmaxTest0()
 		{

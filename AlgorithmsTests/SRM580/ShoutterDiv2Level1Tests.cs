@@ -1,10 +1,18 @@
 ﻿using Algorithms.SRMs.SRM580;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Algorithms.AlgorithmsTests.SRM580
 {
 	public class ShoutterDiv2Level1Tests
 	{
+		private readonly ITestOutputHelper _testOutputHelper;
+
+		public ShoutterDiv2Level1Tests(ITestOutputHelper testOutputHelper)
+		{
+			_testOutputHelper = testOutputHelper;
+		}
+
 		[Fact]
 		public void Count0Test()
 		{

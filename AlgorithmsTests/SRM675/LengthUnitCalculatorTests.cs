@@ -5,11 +5,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit.Abstractions;
 
 namespace Algorithms.SRMs.SRM675.Tests
 {
 	public class LengthUnitCalculatorTests
 	{
+		private readonly ITestOutputHelper _testOutputHelper;
+
+		public LengthUnitCalculatorTests(ITestOutputHelper testOutputHelper)
+		{
+			_testOutputHelper = testOutputHelper;
+		}
+
 		[Fact]
 		public void newFairnessTest1()
 		{

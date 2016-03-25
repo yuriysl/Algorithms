@@ -1,10 +1,18 @@
 ﻿using Algorithms.SRMs.SRM548;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Algorithms.AlgorithmsTests.SRM548
 {
 	public class KingdomAndPasswordTests
 	{
+		private readonly ITestOutputHelper _testOutputHelper;
+
+		public KingdomAndPasswordTests(ITestOutputHelper testOutputHelper)
+		{
+			_testOutputHelper = testOutputHelper;
+		}
+
 		[Fact]
 		public void newPasswordTest1()
 		{

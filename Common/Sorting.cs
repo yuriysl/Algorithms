@@ -201,7 +201,7 @@ namespace Algorithms.Common
 			int n = a.Count;
 			var binaryHeap = new BinaryHeap<TKey, TValue>(a);
 			(((IMaxHeap<TKey, TValue>)binaryHeap)).BuildMax();
-			for (int i = n - 1; i >= 0; i--)
+			for (int i = n - 1; i > 0; i--)
 			{
 				NodeHelper<TKey, TValue>.Swap(a[i], a[0]);
 				binaryHeap.HeapSize--;
@@ -218,7 +218,7 @@ namespace Algorithms.Common
 			int n = a.Count;
 			var binaryHeap = new BinaryHeap<TKey, TValue>(a);
 			(((IMaxHeap<TKey, TValue>)binaryHeap)).BuildMaxTail();
-			for (int i = n - 1; i >= 0; i--)
+			for (int i = n - 1; i > 0; i--)
 			{
 				NodeHelper<TKey, TValue>.Swap(a[i], a[0]);
 				binaryHeap.HeapSize--;

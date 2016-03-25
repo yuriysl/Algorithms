@@ -324,6 +324,7 @@ namespace Algorithms.Common
 				if (node.Left != null && node.Right != null)
 				{
 					var successor = GetMinNode(node.Right);
+					node.Key = successor.Key;
 					node.Value = successor.Value;
 					Remove(successor, successor.Key, out removedNode, out replacedNode);
 				}

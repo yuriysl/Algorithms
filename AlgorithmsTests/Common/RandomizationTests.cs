@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Algorithms.Common;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Algorithms.AlgorithmsTests.Common
 {
@@ -85,10 +86,12 @@ namespace Algorithms.AlgorithmsTests.Common
 	public class RandomizationTests : IClassFixture<RandomizationTestsFixture>
 	{
 		readonly RandomizationTestsFixture _randomizationTestsFixture;
+		private readonly ITestOutputHelper _testOutputHelper;
 
-		public RandomizationTests(RandomizationTestsFixture randomizationTestsFixture)
+		public RandomizationTests(RandomizationTestsFixture randomizationTestsFixture, ITestOutputHelper testOutputHelper)
 		{
 			_randomizationTestsFixture = randomizationTestsFixture;
+			_testOutputHelper = testOutputHelper;
 		}
 
 		[Fact]
@@ -104,15 +107,15 @@ namespace Algorithms.AlgorithmsTests.Common
 				int[] expected = new int[n];
 				for (int i = 0; i < n; i++) expected[i] = input[i];
 
-				Console.WriteLine("--------------------------------------------------------");
-				Console.WriteLine("Name:[{0}]", testCase.Name);
-				Console.WriteLine("Input:[{0}]", string.Join(", ", input));
-				Console.WriteLine("LowerBound:[{0}]", lowerBound);
-				Console.WriteLine("UpperBound:[{0}]", upperBound);
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("LowerBound:[{0}]", lowerBound);
+				_testOutputHelper.WriteLine("UpperBound:[{0}]", upperBound);
 
 				randomization.RandomizationInPlace(input, lowerBound, upperBound);
 
-				Console.WriteLine("Actual:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Actual:[{0}]", string.Join(", ", input));
 
 				if (upperBound >= lowerBound)
 				{
@@ -149,6 +152,22 @@ namespace Algorithms.AlgorithmsTests.Common
 					Assert.True(isExists);
 				}
 			}
+		}
+
+		[Fact]
+		public void GetUniformDistributionTest()
+		{
+			var randomization = new Randomization();
+			int zeroCount = 0;
+			int n = 1000000;
+			for (int i = 0; i < n; i++)
+			{
+				var newVal = randomization.GetUniformDistribution();
+				if (newVal == 0)
+					zeroCount++;
+			}
+			_testOutputHelper.WriteLine("Expected:[{0}+/-0.5%], Actual:[{1}]", 0.5 * n, zeroCount);
+			Assert.True(Math.Abs(2 * zeroCount - n) <= 2 * 0.005 * n);
 		}
 	}
 }
