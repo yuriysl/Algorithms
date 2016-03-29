@@ -10,7 +10,15 @@ namespace Algorithms.SRMs.DynamicProgramming
 	{
 		public double GetMinTour(double[] x, double[] y)
 		{
-			return 0;
+			return GetMin(x, y);
+		}
+
+		private double GetMin(double[] x, double[] y)
+		{
+			double res = 0;
+			int n = x.Length;
+
+			return res;
 		}
 	}
 }
