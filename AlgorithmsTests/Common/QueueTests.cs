@@ -84,7 +84,7 @@ namespace Algorithms.AlgorithmsTests.Common
 		[Fact]
 		public void QueueTest()
 		{
-			var queue = new Queue<string>();
+			var queue = new Algorithms.Common.Queue<string>();
 			foreach (var testCase in _queueTestsFixture.TestCases)
 			{
 				int n = testCase.Nodes.Count;
