@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="DynamicProgramming\ActivitiesSelector.cs" />
     <Compile Include="DynamicProgramming\BitonicTour.cs" />
+    <Compile Include="DynamicProgramming\KnapSackcs.cs" />
     <Compile Include="SRM548\KingdomAndDice.cs" />
     <Compile Include="SRM548\KingdomAndDucks.cs" />
     <Compile Include="SRM548\KingdomAndPassword.cs" />

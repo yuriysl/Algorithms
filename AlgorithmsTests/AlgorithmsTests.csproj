@@ -74,6 +74,7 @@
     <Compile Include="Common\PermutationTests.cs" />
     <Compile Include="DynamicProgramming\ActivitiesSelectorTests.cs" />
     <Compile Include="DynamicProgramming\BitonicTourTests.cs" />
+    <Compile Include="DynamicProgramming\KnapSackTests.cs" />
     <Compile Include="SRM548\KingdomAndDiceTests.cs" />
     <Compile Include="SRM548\KingdomAndDucksTests.cs" />
     <Compile Include="SRM548\KingdomAndPasswordTests.cs" />
