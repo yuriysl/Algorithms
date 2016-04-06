@@ -68,6 +68,7 @@ namespace Algorithms.Common
 		List<PrefixTreeNode<TKeyItem, TValue>> _subTrees;
 		PrefixTreeNode<TKeyItem, TValue> _parent;
 		public bool AWordEndsHere;
+		int _frequency;
 
 		#endregion
 
@@ -88,6 +89,12 @@ namespace Algorithms.Common
 				return _subTrees;
 			}
 			set { _subTrees = value; }
+		}
+
+		public int Frequency
+		{
+			get { return _frequency; }
+			set { _frequency = value; }
 		}
 
 		#endregion
@@ -134,7 +141,7 @@ namespace Algorithms.Common
 
 		PrefixTreeNode<TKeyItem, TValue> _root;
 		int _count;
-		readonly List<List<TKeyItem>> _subsequentItems;
+		readonly List<List<PrefixTreeNode<TKeyItem, TValue>>> _subsequentItems;
 
 		#endregion
 
@@ -159,7 +166,7 @@ namespace Algorithms.Common
 		public PrefixTree()
 		{
 			_root = new PrefixTreeNode<TKeyItem, TValue>(default(TKeyItem), default(TValue), null, false);
-			_subsequentItems = new List<List<TKeyItem>>();
+			_subsequentItems = new List<List<PrefixTreeNode<TKeyItem, TValue>>>();
 		}
 
 		#endregion
@@ -207,7 +214,10 @@ namespace Algorithms.Common
 			return currentNode;
 		}
 
-		public bool Contains(TKey key) => Contains(_root, key.ToList());
+		public bool Contains(TKey key)
+		{
+			return Contains(_root, key.ToList());
+		}
 
 		public bool Contains(PrefixTreeNode<TKeyItem, TValue> node, List<TKeyItem> keyItems)
 		{
@@ -229,16 +239,19 @@ namespace Algorithms.Common
 			return true;
 		}
 
-		public List<List<TKeyItem>> GetMatches(TKey key) => GetMatches(key.ToList());
-
-		private List<List<TKeyItem>> GetMatches(List<TKeyItem> queryItems)
+		public List<List<PrefixTreeNode<TKeyItem, TValue>>> GetMatches(TKey key)
 		{
-			var previous = new List<TKeyItem>();
+			return GetMatches(key.ToList());
+		}
+
+		private List<List<PrefixTreeNode<TKeyItem, TValue>>> GetMatches(List<TKeyItem> queryItems)
+		{
+			var previous = new List<PrefixTreeNode<TKeyItem, TValue>>();
 			PrefixTreeNode<TKeyItem, TValue> currentNode = _root;
 			for (int counter = 0; counter < queryItems.Count; counter++)
 			{
-				if (counter < queryItems.Count - 1)
-					previous.Add(queryItems[counter]);
+				if (counter < queryItems.Count && currentNode != _root)
+					previous.Add(currentNode);
 
 				var child = currentNode.GetSubTree(queryItems[counter]);
 				if (child == null)
@@ -253,20 +266,20 @@ namespace Algorithms.Common
 			return _subsequentItems;
 		}
 
-		private void GenerateSubsequentItems(PrefixTreeNode<TKeyItem, TValue> node, List<TKeyItem> subsequentItems)
+		private void GenerateSubsequentItems(PrefixTreeNode<TKeyItem, TValue> node, List<PrefixTreeNode<TKeyItem, TValue>> subsequentItems)
 		{
 			if (node == null)
 				return;
 
 			if (node != _root)
-				subsequentItems.Add(node.Key);
+				subsequentItems.Add(node);
 
 			if (node.AWordEndsHere)
 				_subsequentItems.Add(subsequentItems);
 
 			foreach (var subnode in node.SubTrees)
 			{
-				var cloneSubsequentItems = new List<TKeyItem>();
+				var cloneSubsequentItems = new List<PrefixTreeNode<TKeyItem, TValue>>();
 				foreach (var item in subsequentItems)
 					cloneSubsequentItems.Add(item);
 				GenerateSubsequentItems(subnode, cloneSubsequentItems);
@@ -274,5 +287,30 @@ namespace Algorithms.Common
 		}
 
 		#endregion
+
+		public static PrefixTree<string, char, char> BuildHuffmanCode(char[] chars, int[] inputFreq)
+		{
+			int n = chars.Length;
+			var binaryHeap = new BinaryHeap<int, PrefixTreeNode<char, char>>();
+			for (int i = 0; i < n; i++)
+			{
+				((IMinHeap<int, PrefixTreeNode<char, char>>)binaryHeap).MinInsert(inputFreq[i], new PrefixTreeNode<char, char>(default(char), chars[i], null, true) { Frequency = inputFreq[i] });
+			}
+			var prefixTree = new PrefixTree<string, char, char>();
+			for (int i = 0; i < n - 1; i++)
+			{
+				var x = ((IMinHeap<int, PrefixTreeNode<char, char>>)binaryHeap).ExtractMin().Value;
+				x.Key = '0';
+				var y = ((IMinHeap<int, PrefixTreeNode<char, char>>)binaryHeap).ExtractMin().Value;
+				y.Key = '1';
+				var z = new PrefixTreeNode<char, char>(default(char), default(char), null, false) { Frequency = x.Frequency + y.Frequency };
+				z.SubTrees.Add(x);
+				z.SubTrees.Add(y);
+				((IMinHeap<int, PrefixTreeNode<char, char>>)binaryHeap).MinInsert(z.Frequency, z);
+			}
+			var root = ((IMinHeap<int, PrefixTreeNode<char, char>>)binaryHeap).ExtractMin().Value;
+			prefixTree.Root = root;
+			return prefixTree;
+		}
 	}
 }

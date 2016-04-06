@@ -158,7 +158,7 @@ namespace Algorithms.Common
 
 		RadixTreeNode<TKey, TKeyItem, TValue> _root;
 		int _count;
-		private List<List<TKeyItem>> _subsequentItems;
+		private List<List<RadixTreeNode<TKey, TKeyItem, TValue>>> _subsequentItems;
 
 		#endregion
 
@@ -183,7 +183,7 @@ namespace Algorithms.Common
 		public RadixTree()
 		{
 			_root = new RadixTreeNode<TKey, TKeyItem, TValue>(null, default(TValue), null);
-			_subsequentItems = new List<List<TKeyItem>>();
+			_subsequentItems = new List<List<RadixTreeNode<TKey, TKeyItem, TValue>>>();
 		}
 
 		#endregion
@@ -304,20 +304,20 @@ namespace Algorithms.Common
 			return new RadixSearchResult(p.CompareTo(r), matchedItems);
 		}
 
-		public List<List<TKeyItem>> GetMatches(TKey key) => GetMatches(key.ToList());
-
-		private List<List<TKeyItem>> GetMatches(List<TKeyItem> queryItems)
+		public List<List<RadixTreeNode<TKey, TKeyItem, TValue>>> GetMatches(TKey key)
 		{
-			var previous = new List<TKeyItem>();
+			return GetMatches(key.ToList());
+		}
+
+		private List<List<RadixTreeNode<TKey, TKeyItem, TValue>>> GetMatches(List<TKeyItem> queryItems)
+		{
+			var previous = new List<RadixTreeNode<TKey, TKeyItem, TValue>>();
 			RadixTreeNode<TKey, TKeyItem, TValue> currentNode = _root;
 			int matchedItems = 0;
 			for (int counter = 0; counter < queryItems.Count; counter += matchedItems)
 			{
-				if (counter <= queryItems.Count - 1)
-				{
-					for (int i = counter - matchedItems; i < counter; i++)
-						previous.Add(queryItems[i]);
-				}
+				if (counter < queryItems.Count && currentNode != _root)
+					previous.Add(currentNode);
 
 				var child = currentNode.GetSubTree(queryItems[counter]);
 				if (child == null)
@@ -342,19 +342,19 @@ namespace Algorithms.Common
 			return _subsequentItems;
 		}
 
-		private void GenerateSubsequentItems(RadixTreeNode<TKey, TKeyItem, TValue> node, List<TKeyItem> subsequentItems)
+		private void GenerateSubsequentItems(RadixTreeNode<TKey, TKeyItem, TValue> node, List<RadixTreeNode<TKey, TKeyItem, TValue>> subsequentItems)
 		{
 			if (node == null)
 				return;
 
-			subsequentItems.AddRange(node.KeyItems);
+			subsequentItems.Add(node);
 
 			if (node.AWordEndsHere)
 				_subsequentItems.Add(subsequentItems);
 
 			foreach (var subnode in node.SubTrees)
 			{
-				var cloneSubsequentItems = new List<TKeyItem>();
+				var cloneSubsequentItems = new List<RadixTreeNode<TKey, TKeyItem, TValue>>();
 				foreach (var item in subsequentItems)
 					cloneSubsequentItems.Add(item);
 				GenerateSubsequentItems(subnode, cloneSubsequentItems);
