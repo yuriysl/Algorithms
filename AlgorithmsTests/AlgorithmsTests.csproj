@@ -66,6 +66,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Common\GrafTests.cs" />
     <Compile Include="Common\SortingTests.cs" />
     <Compile Include="Common\SearchingTests.cs" />
     <Compile Include="Common\RandomizationTests.cs" />

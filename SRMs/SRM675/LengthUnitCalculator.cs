@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Algorithms.Common;
 
 namespace Algorithms.SRMs.SRM675
 {
@@ -94,193 +95,6 @@ Returns: 47.0
 	*/
 	public class LengthUnitCalculator
 	{
-		class Node<T>
-		{
-			#region Fields
-
-			bool _marked;
-			T _key;
-			readonly List<Edge<T>> _edges;
-
-			#endregion
-
-			#region Properties
-
-			public bool Marked
-			{
-				get { return _marked; }
-				set { _marked = value; }
-			}
-
-			public T Key
-			{
-				get { return _key; }
-			}
-
-			public List<Edge<T>> Edges
-			{
-				get { return _edges; }
-			}
-
-			#endregion
-
-			#region Constructors
-
-			public Node(T key)
-			{
-				_key = key;
-				_edges = new List<Edge<T>>();
-			}
-
-			#endregion
-
-			#region Methods
-
-			public void AddEdge(double weigth, bool isRevers, Node<T> target)
-			{
-				_edges.Add(new Edge<T>(weigth, isRevers, this, target));
-			}
-
-			#endregion
-		}
-
-		class Edge<T>
-		{
-			#region Fields
-
-			private double _weigth;
-			private bool _isRevers;
-			private Node<T> _source;
-			private Node<T> _target;
-
-			#endregion
-
-			#region Properties
-
-			public double Weigth
-			{
-				get { return _weigth; }
-			}
-
-			public bool IsRevers
-			{
-				get { return _isRevers; }
-			}
-
-			public Node<T> Source
-			{
-				get { return _source; }
-			}
-
-			public Node<T> Target
-			{
-				get { return _target; }
-			}
-
-			#endregion
-
-			#region Constructors
-
-			public Edge(double weigth, bool isRevers, Node<T> source, Node<T> target)
-			{
-				_weigth = weigth;
-				_isRevers = isRevers;
-				_source = source;
-				_target = target;
-			}
-
-			#endregion
-		}
-
-		class DGraf<T>
-		{
-			#region Fields
-
-			private List<Node<T>> _nodes;
-			private Queue<Edge<T>> _edgePath;
-
-			#endregion
-
-			#region Properties
-
-			public List<Node<T>> Nodes
-			{
-				get { return _nodes; }
-			}
-
-			#endregion
-
-			#region Constructors
-
-			public DGraf()
-			{
-				_nodes = new List<Node<T>>();
-				_edgePath = new Queue<Edge<T>>();
-			}
-
-			#endregion
-
-			#region Methods
-
-			public void AddNode(Node<T> node)
-			{
-				_nodes.Add(node);
-			}
-
-			public IEnumerable<Node<T>> GetPath(Node<T> source, Node<T> target)
-			{
-				var edgePath = GetEdgePath(source, target).ToList();
-				var nodePath = new List<Node<T>>();
-				if (edgePath.Any())
-				{
-					nodePath.Add(source);
-					nodePath.AddRange(edgePath.Select(edge => edge.Target));
-				}
-				return nodePath;
-			}
-
-			public IEnumerable<Edge<T>> GetEdgePath(Node<T> source, Node<T> target)
-			{
-				if(source == null || target == null)
-					throw new ArgumentNullException();
-
-				_edgePath.Clear();
-				foreach (var node in _nodes)
-					node.Marked = false;
-
-				DeepFirstSearch(source);
-
-				var edgePath = new Stack<Edge<T>>();
-				if(!target.Marked)
-					return edgePath;
-
-				var currentEdge = _edgePath.FirstOrDefault(edge => edge.Target == target);
-				while (currentEdge != null && currentEdge.Source != source)
-				{
-					edgePath.Push(currentEdge);
-					currentEdge = _edgePath.FirstOrDefault(edge => edge.Target == currentEdge.Source);
-				}
-				if(currentEdge != null)
-					edgePath.Push(currentEdge);
-
-				return edgePath;
-			}
-
-			private void DeepFirstSearch(Node<T> source)
-			{
-				source.Marked = true;
-				foreach (var edge in source.Edges)
-				{
-					if(edge.Target.Marked)
-						continue;
-					_edgePath.Enqueue(edge);
-					DeepFirstSearch(edge.Target);
-				}
-			}
-
-			#endregion
-		}
-
 		enum Units
 		{
 			inch = 0,
@@ -295,48 +109,54 @@ Returns: 47.0
 			var from = (Units) Enum.Parse(typeof (Units), fromUnit.Replace("in", "inch"));
 			var to = (Units) Enum.Parse(typeof (Units), toUnit.Replace("in", "inch"));
 
-			var dgraf = new DGraf<Units>();
+			var dgraf = new Graf<Units>();
 
-			var ftNode = new Node<Units>(Units.ft);
-			var inNode = new Node<Units>(Units.inch);
-			var ydNode = new Node<Units>(Units.yd);
-			var miNode = new Node<Units>(Units.mi);
+			var ftVertex = new Vertex<Units>(Units.ft);
+			var inVertex = new Vertex<Units>(Units.inch);
+			var ydVertex = new Vertex<Units>(Units.yd);
+			var miVertex = new Vertex<Units>(Units.mi);
 
-			ftNode.AddEdge(12, false, inNode);
-			inNode.AddEdge(12, true, ftNode);
+			ftVertex.AddDirectedEdge(12, inVertex);
+			inVertex.AddDirectedEdge(1D / 12, ftVertex);
 
-			ydNode.AddEdge(3, false, ftNode);
-			ftNode.AddEdge(3, true, ydNode);
+			ydVertex.AddDirectedEdge(3, ftVertex);
+			ftVertex.AddDirectedEdge(1D / 3, ydVertex);
 
-			miNode.AddEdge(1760, false, ydNode);
-			ydNode.AddEdge(1760, true, miNode);
+			miVertex.AddDirectedEdge(1760, ydVertex);
+			ydVertex.AddDirectedEdge(1D / 1760, miVertex);
 
-			dgraf.AddNode(ftNode);
-			dgraf.AddNode(inNode);
-			dgraf.AddNode(ydNode);
-			dgraf.AddNode(miNode);
+			dgraf.AddVertex(ftVertex);
+			dgraf.AddVertex(inVertex);
+			dgraf.AddVertex(ydVertex);
+			dgraf.AddVertex(miVertex);
 
-			var source = dgraf.Nodes.FirstOrDefault(node => node.Key == from);
-			var target = dgraf.Nodes.FirstOrDefault(node => node.Key == to);
+			var source = dgraf.Vertexes.FirstOrDefault(vertex => vertex.Key == from);
+			var target = dgraf.Vertexes.FirstOrDefault(vertex => vertex.Key == to);
 
-			var edgePath = dgraf.GetEdgePath(source, target).ToList();
+			var vertexPath = dgraf.GetBreadthPath(source, target).ToList();
 
-			if(source == target)
+			var edgePath = new System.Collections.Generic.Stack<Edge<Units>>();
+			if (target.Color != Vertex<Units>.VertexColor.Black)
+				return 0;
+
+			var currentVertex = target;
+			while (currentVertex != null && currentVertex != source && currentVertex.Parent != null)
+			{
+				var currentEdge = currentVertex.Parent.Edges.FirstOrDefault(edge => edge.Target == currentVertex);
+				edgePath.Push(currentEdge);
+				currentVertex = currentVertex.Parent;
+			}
+
+			if (source == target)
 				return amount;
 			if (!edgePath.Any())
 				return 0;
 
 			double res = amount;
-			double directWeigth = 1;
-			double reversWeigth = 1;
+			double weigth = 1;
 			foreach (var pathEdge in edgePath)
-			{
-				if(!pathEdge.IsRevers)
-					directWeigth *= pathEdge.Weigth;
-				else
-					reversWeigth *= pathEdge.Weigth;
-			}
-			return res * directWeigth * 1 / reversWeigth;
+					weigth *= pathEdge.Weigth;
+			return res * weigth;
 		}
 	}
 }

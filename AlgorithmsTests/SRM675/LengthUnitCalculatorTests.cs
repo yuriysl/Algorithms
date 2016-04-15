@@ -23,7 +23,7 @@ namespace Algorithms.SRMs.SRM675.Tests
 		{
 			var calc = new LengthUnitCalculator();
 			double res = calc.calc(1, "mi", "ft");
-			Assert.Equal(5280.0, res);
+			Assert.Equal(5280.0, res, 15);
 		}
 
 		[Fact]
@@ -31,7 +31,7 @@ namespace Algorithms.SRMs.SRM675.Tests
 		{
 			var calc = new LengthUnitCalculator();
 			double res = calc.calc(1, "ft", "mi");
-			Assert.Equal(1.893939393939394E-4, res);
+			Assert.Equal(1.893939393939394E-4, res, 15);
 		}
 
 		[Fact]
@@ -39,7 +39,7 @@ namespace Algorithms.SRMs.SRM675.Tests
 		{
 			var calc = new LengthUnitCalculator();
 			double res = calc.calc(1000, "mi", "in");
-			Assert.Equal(6.336E7, res);
+			Assert.Equal(6.336E7, res, 15);
 		}
 
 		[Fact]
@@ -47,7 +47,7 @@ namespace Algorithms.SRMs.SRM675.Tests
 		{
 			var calc = new LengthUnitCalculator();
 			double res = calc.calc(1, "in", "mi");
-			Assert.Equal(1.5782828282828283E-5, res);
+			Assert.Equal(1.5782828282828283E-5, res, 15);
 		}
 
 		[Fact]
@@ -55,7 +55,7 @@ namespace Algorithms.SRMs.SRM675.Tests
 		{
 			var calc = new LengthUnitCalculator();
 			double res = calc.calc(47, "mi", "mi");
-			Assert.Equal(47.0, res);
+			Assert.Equal(47.0, res, 15);
 		}
 	}
 }
