@@ -27,6 +27,7 @@ namespace Algorithms.Common
 		#region Fields
 
 		readonly List<BinaryHeapNode<TKey, TValue>> _nodes;
+		Action<BinaryHeapNode<TKey, TValue>> _nodeUpdatedAction;
 		int _heapSize;
 
 		#endregion
@@ -38,9 +39,10 @@ namespace Algorithms.Common
 			_nodes = new List<BinaryHeapNode<TKey, TValue>>();
 		}
 
-		public BinaryHeap(List<BinaryHeapNode<TKey, TValue>> nodes)
+		public BinaryHeap(List<BinaryHeapNode<TKey, TValue>> nodes, Action<BinaryHeapNode<TKey, TValue>> nodeUpdatedAction = null)
 		{
 			_nodes = nodes;
+			_nodeUpdatedAction = nodeUpdatedAction;
 		}
 
 		#endregion
@@ -99,6 +101,11 @@ namespace Algorithms.Common
 			if (largest != node.Index)
 			{
 				NodeHelper<TKey, TValue>.Swap(node, _nodes[largest]);
+				if(_nodeUpdatedAction != null)
+				{
+					_nodeUpdatedAction(node);
+					_nodeUpdatedAction(_nodes[largest]);
+				}
 				((IMaxHeap<TKey, TValue>)this).MaxHeapify(_nodes[largest]);
 			}
 		}
@@ -124,7 +131,11 @@ namespace Algorithms.Common
 				if (largest != currentNode.Index)
 				{
 					NodeHelper<TKey, TValue>.Swap(currentNode, _nodes[largest]);
-					Console.WriteLine(ToStringTree());
+					if (_nodeUpdatedAction != null)
+					{
+						_nodeUpdatedAction(currentNode);
+						_nodeUpdatedAction(_nodes[largest]);
+					}
 				}
 
 				left = _nodes[largest].Left;
@@ -176,6 +187,11 @@ namespace Algorithms.Common
 			while (currentNode.Index > 0 && _nodes[currentNode.Parent].Key.CompareTo(currentNode.Key) < 0)
 			{
 				NodeHelper<TKey, TValue>.Swap(_nodes[currentNode.Parent], currentNode);
+				if (_nodeUpdatedAction != null)
+				{
+					_nodeUpdatedAction(_nodes[currentNode.Parent]);
+					_nodeUpdatedAction(currentNode);
+				}
 				currentNode = _nodes[currentNode.Parent];
 			}
 		}
@@ -238,6 +254,11 @@ namespace Algorithms.Common
 			if (lowest != node.Index)
 			{
 				NodeHelper<TKey, TValue>.Swap(node, _nodes[lowest]);
+				if (_nodeUpdatedAction != null)
+				{
+					_nodeUpdatedAction(node);
+					_nodeUpdatedAction(_nodes[lowest]);
+				}
 				((IMinHeap<TKey, TValue>)this).MinHeapify(_nodes[lowest]);
 			}
 		}
@@ -260,7 +281,14 @@ namespace Algorithms.Common
 					lowest = right;
 
 				if (lowest != currentNode.Index)
+				{
 					NodeHelper<TKey, TValue>.Swap(currentNode, _nodes[lowest]);
+					if (_nodeUpdatedAction != null)
+					{
+						_nodeUpdatedAction(currentNode);
+						_nodeUpdatedAction(_nodes[lowest]);
+					}
+				}
 
 				left = _nodes[lowest].Left;
 				right = _nodes[lowest].Right;
@@ -311,6 +339,11 @@ namespace Algorithms.Common
 			while (currentNode.Index > 0 && _nodes[currentNode.Parent].Key.CompareTo(currentNode.Key) > 0)
 			{
 				NodeHelper<TKey, TValue>.Swap(_nodes[currentNode.Parent], currentNode);
+				if (_nodeUpdatedAction != null)
+				{
+					_nodeUpdatedAction(_nodes[currentNode.Parent]);
+					_nodeUpdatedAction(currentNode);
+				}
 				currentNode = _nodes[currentNode.Parent];
 			}
 		}

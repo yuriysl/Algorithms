@@ -103,7 +103,7 @@ namespace Algorithms.Common
 			other.Edges.Add(newEdge);
 		}
 
-		public void AddDirectedEdge(Edge<T> newEdge)
+		public void AddEdge(Edge<T> newEdge)
 		{
 			_edges.Add(newEdge);
 		}
@@ -359,7 +359,7 @@ namespace Algorithms.Common
 						vertexes.Add(targetVertex.Key, targetVertex);
 					}
 					var newEdge = new Edge<T>(_vertexes[i].Edges[j].Weigth, targetVertex, sourceVertex);
-					targetVertex.AddDirectedEdge(newEdge);
+					targetVertex.AddEdge(newEdge);
 				}
 			}
 
@@ -406,8 +406,43 @@ namespace Algorithms.Common
 			return components;
 		}
 
+		public Dictionary<T, Set<Vertex<T>>> GetStronglyConnectedComponentsWithUnions()
+		{
+			var components = new Dictionary<T, Set<Vertex<T>>>();
+
+			for (int i = 0; i < _vertexes.Count; i++)
+			{
+				var newSet = new Set<Vertex<T>>(_vertexes[i]);
+				_vertexes[i].MstNode = newSet.Head;
+				components[_vertexes[i].Key] = newSet;
+			}
+			for (int i = 0; i < _vertexes.Count; i++)
+			{
+				for (int j = 0; j < _vertexes[i].Edges.Count; j++)
+				{
+					var adjacentVertex = _vertexes[i].Edges[j].Other(_vertexes[i]);
+					var vertexHead = ((SetNode<Vertex<T>>)(_vertexes[i].MstNode)).Head;
+					var adjacentVertexHead = ((SetNode<Vertex<T>>)(adjacentVertex.MstNode)).Head;
+					if (vertexHead != adjacentVertexHead)
+					{
+						var vertexSet = components[vertexHead.Value.Key];
+						var adjacentVertexSet = components[adjacentVertexHead.Value.Key];
+
+						components.Remove(vertexHead.Value.Key);
+						components.Remove(adjacentVertexHead.Value.Key);
+
+						var unionSet = vertexSet.Union(adjacentVertexSet);
+						components[unionSet.Head.Value.Key] = unionSet;
+					}
+				}
+			}
+
+			return components;
+		}
+
 		public Graf<T> GetMSTGrafPrim(Vertex<T> root)
 		{
+			var vertexes = new Dictionary<T, Vertex<T>>();
 			var mstGraf = new Graf<T>();
 
 			var nodes = new List<BinaryHeapNode<double, Tuple<Edge<T>, Vertex<T>>>>();
@@ -419,7 +454,7 @@ namespace Algorithms.Common
 				_vertexes[i].MstNode = node;
 				nodes.Add(node);
 			}
-			var binaryHeap = new BinaryHeap<double, Tuple<Edge<T>, Vertex<T>>>(nodes);
+			var binaryHeap = new BinaryHeap<double, Tuple<Edge<T>, Vertex<T>>>(nodes, node => node.Value.Item2.MstNode = node);
 			(((IMinHeap<double, Tuple<Edge<T>, Vertex<T>>>)binaryHeap)).BuildMin();
 
 			while(binaryHeap.HeapSize > 0)
@@ -430,26 +465,74 @@ namespace Algorithms.Common
 				vertex.Marked = true;
 
 				var nextVertex = new Vertex<T>(vertex.Key);
-				if(edge != null)
-					nextVertex.AddUnDirectedEdge(edge.Weigth, edge.Other(vertex));
+				if (edge != null)
+				{
+					Vertex<T> sourceVertex = vertexes[edge.Other(vertex).Key];
+					var newEdge = new Edge<T>(edge.Weigth, sourceVertex, nextVertex);
+					nextVertex.AddEdge(newEdge);
+					sourceVertex.AddEdge(newEdge);
+				}
 				mstGraf.Vertexes.Add(nextVertex);
-				
+				vertexes.Add(nextVertex.Key, nextVertex);
 
 				for (int i = 0; i < vertex.Edges.Count; i++)
 				{
 					var adjacentVertex = vertex.Edges[i].Other(vertex);
-					if (!adjacentVertex.Marked && vertex.Edges[i].Weigth < ((adjacentVertex.MstNode)))
+					var adjacentNode = (BinaryHeapNode<double, Tuple<Edge<T>, Vertex<T>>>)(adjacentVertex.MstNode);
+					if (!adjacentVertex.Marked && vertex.Edges[i].Weigth < adjacentNode.Key)
 					{
 						adjacentVertex.Parent = vertex;
-						(((IMinHeap<double, Vertex<T>>)binaryHeap)).DecreaseKey(node, vertex.Edges[i].Weigth);
+						adjacentNode.Value = new Tuple<Edge<T>, Vertex<T>>(vertex.Edges[i], adjacentNode.Value.Item2);
+						(((IMinHeap<double, Tuple<Edge<T>, Vertex<T>>>)binaryHeap)).DecreaseKey(adjacentNode, vertex.Edges[i].Weigth);
 					}
 				}
 			}
+			return mstGraf;
+		}
 
+		public Graf<T> GetMSTGrafKruskal(Vertex<T> root)
+		{
+			var edges = new List<BaseNode<double, Edge<T>>>();
+			var mstGraf = new Graf<T>();
+
+			var components = new Dictionary<T, Set<Vertex<T>>>();
+
+			for (int i = 0; i < _vertexes.Count; i++)
+			{
+				var newSet = new Set<Vertex<T>>(_vertexes[i]);
+				_vertexes[i].MstNode = newSet.Head;
+				components[_vertexes[i].Key] = newSet;
+				for (int j = 0; j < _vertexes[i].Edges.Count; j++)
+				{
+					edges.Add(new BaseNode<double, Edge<T>>(0, _vertexes[i].Edges[j].Weigth, _vertexes[i].Edges[j]));
+				}
+			}
+
+			var sorting = new Sorting();
+			sorting.InsertionSort(edges);
+
+			for (int j = 0; j < edges.Count; j++)
+			{
+				var vertex = edges[j].Value.Source;
+				var adjacentVertex = edges[j].Value.Target;
+				var vertexHead = ((SetNode<Vertex<T>>)(vertex.MstNode)).Head;
+				var adjacentVertexHead = ((SetNode<Vertex<T>>)(adjacentVertex.MstNode)).Head;
+				if (vertexHead != adjacentVertexHead)
+				{
+					var vertexSet = components[vertexHead.Value.Key];
+					var adjacentVertexSet = components[adjacentVertexHead.Value.Key];
+
+					components.Remove(vertexHead.Value.Key);
+					components.Remove(adjacentVertexHead.Value.Key);
+
+					var unionSet = vertexSet.Union(adjacentVertexSet);
+					components[unionSet.Head.Value.Key] = unionSet;
+				}
+			}
 
 			return mstGraf;
 		}
 
-			#endregion
+		#endregion
 		}
 }

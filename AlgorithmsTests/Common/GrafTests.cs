@@ -325,6 +325,58 @@ namespace Algorithms.AlgorithmsTests.Common
 		}
 
 		[Fact]
+		public void TopologicalTest4()
+		{
+			var graf = new Graf<char>();
+
+			var bVertex = new Vertex<char>('b');
+			var cVertex = new Vertex<char>('c');
+			var dVertex = new Vertex<char>('d');
+
+			var aVertex = new Vertex<char>('a');
+			var iVertex = new Vertex<char>('i');
+			var eVertex = new Vertex<char>('e');
+
+			var hVertex = new Vertex<char>('h');
+			var gVertex = new Vertex<char>('g');
+			var fVertex = new Vertex<char>('f');
+
+			aVertex.AddUnDirectedEdge(4, bVertex);
+			bVertex.AddUnDirectedEdge(8, cVertex);
+			cVertex.AddUnDirectedEdge(7, dVertex);
+
+			dVertex.AddUnDirectedEdge(9, eVertex);
+			dVertex.AddUnDirectedEdge(14, fVertex);
+			eVertex.AddUnDirectedEdge(10, fVertex);
+
+			aVertex.AddUnDirectedEdge(8, hVertex);
+			bVertex.AddUnDirectedEdge(11, hVertex);
+
+			cVertex.AddUnDirectedEdge(2, iVertex);
+			cVertex.AddUnDirectedEdge(4, fVertex);
+			iVertex.AddUnDirectedEdge(7, hVertex);
+
+			iVertex.AddUnDirectedEdge(6, gVertex);
+
+			hVertex.AddUnDirectedEdge(1, gVertex);
+			gVertex.AddUnDirectedEdge(2, fVertex);
+
+			graf.AddVertex(aVertex);
+			graf.AddVertex(bVertex);
+			graf.AddVertex(cVertex);
+			graf.AddVertex(dVertex);
+			graf.AddVertex(iVertex);
+			graf.AddVertex(eVertex);
+			graf.AddVertex(hVertex);
+			graf.AddVertex(gVertex);
+			graf.AddVertex(fVertex);
+
+			var components = graf.GetStronglyConnectedComponentsWithUnions();
+
+			Assert.Equal(1, components.Count);
+		}
+
+		[Fact]
 		public void MSTTest0()
 		{
 			var graf = new Graf<char>();
@@ -383,9 +435,80 @@ namespace Algorithms.AlgorithmsTests.Common
 				for (int j = 0; j < mstGraf.Vertexes[i].Edges.Count; j++)
 				{
 					var adjacentVertex = mstGraf.Vertexes[i].Edges[j].Other(mstGraf.Vertexes[i]);
-					if (!adjacentVertex.Marked)
+					if (!mstGraf.Vertexes[i].Marked || !adjacentVertex.Marked)
 					{
 						weigth += mstGraf.Vertexes[i].Edges[j].Weigth;
+						mstGraf.Vertexes[i].Marked = true;
+						adjacentVertex.Marked = true;
+					}
+				}
+			}
+			Assert.Equal(37, weigth);
+		}
+
+		[Fact]
+		public void MSTTest1()
+		{
+			var graf = new Graf<char>();
+
+			var bVertex = new Vertex<char>('b');
+			var cVertex = new Vertex<char>('c');
+			var dVertex = new Vertex<char>('d');
+
+			var aVertex = new Vertex<char>('a');
+			var iVertex = new Vertex<char>('i');
+			var eVertex = new Vertex<char>('e');
+
+			var hVertex = new Vertex<char>('h');
+			var gVertex = new Vertex<char>('g');
+			var fVertex = new Vertex<char>('f');
+
+			aVertex.AddUnDirectedEdge(4, bVertex);
+			bVertex.AddUnDirectedEdge(8, cVertex);
+			cVertex.AddUnDirectedEdge(7, dVertex);
+
+			dVertex.AddUnDirectedEdge(9, eVertex);
+			dVertex.AddUnDirectedEdge(14, fVertex);
+			eVertex.AddUnDirectedEdge(10, fVertex);
+
+			aVertex.AddUnDirectedEdge(8, hVertex);
+			bVertex.AddUnDirectedEdge(11, hVertex);
+
+			cVertex.AddUnDirectedEdge(2, iVertex);
+			cVertex.AddUnDirectedEdge(4, fVertex);
+			iVertex.AddUnDirectedEdge(7, hVertex);
+
+			iVertex.AddUnDirectedEdge(6, gVertex);
+
+			hVertex.AddUnDirectedEdge(1, gVertex);
+			gVertex.AddUnDirectedEdge(2, fVertex);
+
+			graf.AddVertex(aVertex);
+			graf.AddVertex(bVertex);
+			graf.AddVertex(cVertex);
+			graf.AddVertex(dVertex);
+			graf.AddVertex(iVertex);
+			graf.AddVertex(eVertex);
+			graf.AddVertex(hVertex);
+			graf.AddVertex(gVertex);
+			graf.AddVertex(fVertex);
+
+			var mstGraf = graf.GetMSTGrafKruskal(aVertex);
+
+			double weigth = 0;
+			for (int i = 0; i < mstGraf.Vertexes.Count; i++)
+			{
+				mstGraf.Vertexes[i].Marked = false;
+			}
+			for (int i = 0; i < mstGraf.Vertexes.Count; i++)
+			{
+				for (int j = 0; j < mstGraf.Vertexes[i].Edges.Count; j++)
+				{
+					var adjacentVertex = mstGraf.Vertexes[i].Edges[j].Other(mstGraf.Vertexes[i]);
+					if (!mstGraf.Vertexes[i].Marked || !adjacentVertex.Marked)
+					{
+						weigth += mstGraf.Vertexes[i].Edges[j].Weigth;
+						mstGraf.Vertexes[i].Marked = true;
 						adjacentVertex.Marked = true;
 					}
 				}

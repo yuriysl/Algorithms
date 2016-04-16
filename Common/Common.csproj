@@ -60,6 +60,7 @@
     <Compile Include="Randomization.cs" />
     <Compile Include="RBBinaryTree.cs" />
     <Compile Include="Searching.cs" />
+    <Compile Include="Set.cs" />
     <Compile Include="Sorting.cs" />
     <Compile Include="Stack.cs" />
   </ItemGroup>
