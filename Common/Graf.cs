@@ -127,10 +127,23 @@ namespace Algorithms.Common
 		private Vertex<T> _source;
 		private Vertex<T> _target;
 		private EdgeType _type;
+		private Guid _id;
+		private bool _marked;
 
 		#endregion
 
 		#region Properties
+
+		public Guid ID
+		{
+			get { return _id; }
+		}
+
+		public bool Marked
+		{
+			get { return _marked; }
+			set { _marked = value; }
+		}
 
 		public double Weigth
 		{
@@ -162,6 +175,7 @@ namespace Algorithms.Common
 			_weigth = weigth;
 			_source = source;
 			_target = target;
+			_id = Guid.NewGuid();
 		}
 
 		#endregion
@@ -490,9 +504,10 @@ namespace Algorithms.Common
 			return mstGraf;
 		}
 
-		public Graf<T> GetMSTGrafKruskal(Vertex<T> root)
+		public Graf<T> GetMSTGrafKruskal()
 		{
-			var edges = new List<BaseNode<double, Edge<T>>>();
+			var vertexes = new Dictionary<T, Vertex<T>>();
+			var edges = new Dictionary<Guid, BaseNode<double, Edge<T>>>();
 			var mstGraf = new Graf<T>();
 
 			var components = new Dictionary<T, Set<Vertex<T>>>();
@@ -504,17 +519,19 @@ namespace Algorithms.Common
 				components[_vertexes[i].Key] = newSet;
 				for (int j = 0; j < _vertexes[i].Edges.Count; j++)
 				{
-					edges.Add(new BaseNode<double, Edge<T>>(0, _vertexes[i].Edges[j].Weigth, _vertexes[i].Edges[j]));
+					if(!edges.ContainsKey(_vertexes[i].Edges[j].ID))
+						edges.Add(_vertexes[i].Edges[j].ID, new BaseNode<double, Edge<T>>(0, _vertexes[i].Edges[j].Weigth, _vertexes[i].Edges[j]));
 				}
 			}
 
 			var sorting = new Sorting();
-			sorting.InsertionSort(edges);
+			var edgesList = edges.Values.ToList();
+			sorting.InsertionSort(edgesList);
 
-			for (int j = 0; j < edges.Count; j++)
+			for (int j = 0; j < edgesList.Count; j++)
 			{
-				var vertex = edges[j].Value.Source;
-				var adjacentVertex = edges[j].Value.Target;
+				var vertex = edgesList[j].Value.Source;
+				var adjacentVertex = edgesList[j].Value.Target;
 				var vertexHead = ((SetNode<Vertex<T>>)(vertex.MstNode)).Head;
 				var adjacentVertexHead = ((SetNode<Vertex<T>>)(adjacentVertex.MstNode)).Head;
 				if (vertexHead != adjacentVertexHead)
@@ -527,9 +544,26 @@ namespace Algorithms.Common
 
 					var unionSet = vertexSet.Union(adjacentVertexSet);
 					components[unionSet.Head.Value.Key] = unionSet;
+
+					Vertex<T> mstVertex;
+					if (!vertexes.TryGetValue(vertex.Key, out mstVertex))
+					{
+						mstVertex = new Vertex<T>(vertex.Key);
+						vertexes.Add(mstVertex.Key, mstVertex);
+						mstGraf.AddVertex(mstVertex);
+					}
+					Vertex<T> mstAdjacentVertex;
+					if (!vertexes.TryGetValue(adjacentVertex.Key, out mstAdjacentVertex))
+					{
+						mstAdjacentVertex = new Vertex<T>(adjacentVertex.Key);
+						vertexes.Add(mstAdjacentVertex.Key, mstAdjacentVertex);
+						mstGraf.AddVertex(mstAdjacentVertex);
+					}
+					var newEdge = new Edge<T>(edgesList[j].Value.Weigth, mstVertex, mstAdjacentVertex);
+					mstVertex.AddEdge(newEdge);
+					mstAdjacentVertex.AddEdge(newEdge);
 				}
 			}
-
 			return mstGraf;
 		}
 

@@ -428,18 +428,20 @@ namespace Algorithms.AlgorithmsTests.Common
 			double weigth = 0;
 			for (int i = 0; i < mstGraf.Vertexes.Count; i++)
 			{
-				mstGraf.Vertexes[i].Marked = false;
+				for (int j = 0; j < mstGraf.Vertexes[i].Edges.Count; j++)
+				{
+					mstGraf.Vertexes[i].Edges[j].Marked = false;
+				}
 			}
 			for (int i = 0; i < mstGraf.Vertexes.Count; i++)
 			{
 				for (int j = 0; j < mstGraf.Vertexes[i].Edges.Count; j++)
 				{
 					var adjacentVertex = mstGraf.Vertexes[i].Edges[j].Other(mstGraf.Vertexes[i]);
-					if (!mstGraf.Vertexes[i].Marked || !adjacentVertex.Marked)
+					if (!mstGraf.Vertexes[i].Edges[j].Marked)
 					{
 						weigth += mstGraf.Vertexes[i].Edges[j].Weigth;
-						mstGraf.Vertexes[i].Marked = true;
-						adjacentVertex.Marked = true;
+						mstGraf.Vertexes[i].Edges[j].Marked = true;
 					}
 				}
 			}
@@ -493,23 +495,25 @@ namespace Algorithms.AlgorithmsTests.Common
 			graf.AddVertex(gVertex);
 			graf.AddVertex(fVertex);
 
-			var mstGraf = graf.GetMSTGrafKruskal(aVertex);
+			var mstGraf = graf.GetMSTGrafKruskal();
 
 			double weigth = 0;
 			for (int i = 0; i < mstGraf.Vertexes.Count; i++)
 			{
-				mstGraf.Vertexes[i].Marked = false;
+				for (int j = 0; j < mstGraf.Vertexes[i].Edges.Count; j++)
+				{
+					mstGraf.Vertexes[i].Edges[j].Marked = false;
+				}
 			}
 			for (int i = 0; i < mstGraf.Vertexes.Count; i++)
 			{
 				for (int j = 0; j < mstGraf.Vertexes[i].Edges.Count; j++)
 				{
 					var adjacentVertex = mstGraf.Vertexes[i].Edges[j].Other(mstGraf.Vertexes[i]);
-					if (!mstGraf.Vertexes[i].Marked || !adjacentVertex.Marked)
+					if (!mstGraf.Vertexes[i].Edges[j].Marked)
 					{
 						weigth += mstGraf.Vertexes[i].Edges[j].Weigth;
-						mstGraf.Vertexes[i].Marked = true;
-						adjacentVertex.Marked = true;
+						mstGraf.Vertexes[i].Edges[j].Marked = true;
 					}
 				}
 			}
