@@ -519,5 +519,220 @@ namespace Algorithms.AlgorithmsTests.Common
 			}
 			Assert.Equal(37, weigth);
 		}
+
+		[Fact]
+		public void SingleSourceTest0()
+		{
+			var graf = new Graf<char>();
+
+			var sVertex = new Vertex<char>('s');
+			var tVertex = new Vertex<char>('t');
+			var xVertex = new Vertex<char>('x');
+			var yVertex = new Vertex<char>('y');
+
+			var zVertex = new Vertex<char>('z');
+
+			sVertex.AddDirectedEdge(6, tVertex);
+			sVertex.AddDirectedEdge(7, yVertex);
+			tVertex.AddDirectedEdge(5, xVertex);
+
+			xVertex.AddDirectedEdge(-2, tVertex);
+			tVertex.AddDirectedEdge(8, yVertex);
+			zVertex.AddDirectedEdge(7, xVertex);
+
+			zVertex.AddDirectedEdge(2, sVertex);
+			tVertex.AddDirectedEdge(-4, zVertex);
+
+			yVertex.AddDirectedEdge(-3, xVertex);
+			yVertex.AddDirectedEdge(9, zVertex);
+
+			graf.AddVertex(sVertex);
+			graf.AddVertex(tVertex);
+			graf.AddVertex(xVertex);
+			graf.AddVertex(yVertex);
+			graf.AddVertex(zVertex);
+
+			bool res = graf.BellmanFordShortestPaths(sVertex);
+
+			Assert.Equal(true, res);
+			Assert.Equal(0, sVertex.DiscoveryTime);
+			Assert.Equal(2, tVertex.DiscoveryTime);
+			Assert.Equal(4, xVertex.DiscoveryTime);
+			Assert.Equal(7, yVertex.DiscoveryTime);
+			Assert.Equal(-2, zVertex.DiscoveryTime);
+		}
+
+		[Fact]
+		public void SingleSourceTest1()
+		{
+			var graf = new Graf<char>();
+
+			var sVertex = new Vertex<char>('s');
+			var tVertex = new Vertex<char>('t');
+			var xVertex = new Vertex<char>('x');
+			var yVertex = new Vertex<char>('y');
+
+			var zVertex = new Vertex<char>('z');
+
+			sVertex.AddDirectedEdge(6, tVertex);
+			sVertex.AddDirectedEdge(7, yVertex);
+			tVertex.AddDirectedEdge(-5, xVertex);
+
+			xVertex.AddDirectedEdge(2, tVertex);
+			tVertex.AddDirectedEdge(8, yVertex);
+			zVertex.AddDirectedEdge(7, xVertex);
+
+			zVertex.AddDirectedEdge(2, sVertex);
+			tVertex.AddDirectedEdge(-4, zVertex);
+
+			yVertex.AddDirectedEdge(-3, xVertex);
+			yVertex.AddDirectedEdge(9, zVertex);
+
+			graf.AddVertex(sVertex);
+			graf.AddVertex(tVertex);
+			graf.AddVertex(xVertex);
+			graf.AddVertex(yVertex);
+			graf.AddVertex(zVertex);
+
+			bool res = graf.BellmanFordShortestPaths(sVertex);
+
+			Assert.Equal(false, res);
+		}
+
+		[Fact]
+		public void SingleSourceTest2()
+		{
+			var graf = new Graf<char>();
+
+			var rVertex = new Vertex<char>('r');
+			var sVertex = new Vertex<char>('s');
+			var tVertex = new Vertex<char>('t');
+			var xVertex = new Vertex<char>('x');
+			var yVertex = new Vertex<char>('y');
+
+			var zVertex = new Vertex<char>('z');
+
+			rVertex.AddDirectedEdge(5, sVertex);
+			rVertex.AddDirectedEdge(3, tVertex);
+			sVertex.AddDirectedEdge(2, tVertex);
+			sVertex.AddDirectedEdge(6, xVertex);
+			tVertex.AddDirectedEdge(7, xVertex);
+
+			tVertex.AddDirectedEdge(4, yVertex);
+			tVertex.AddDirectedEdge(2, zVertex);
+			xVertex.AddDirectedEdge(-1, yVertex);
+
+			xVertex.AddDirectedEdge(-2, zVertex);
+			yVertex.AddDirectedEdge(-2, zVertex);
+
+			graf.AddVertex(rVertex);
+			graf.AddVertex(sVertex);
+			graf.AddVertex(tVertex);
+			graf.AddVertex(xVertex);
+			graf.AddVertex(yVertex);
+			graf.AddVertex(zVertex);
+
+			graf.TopologicalShortestPaths(sVertex);
+			var topologicalSort = graf.GetTopologicalSort().ToList();
+
+			Assert.NotNull(topologicalSort);
+			Assert.Equal(double.PositiveInfinity, rVertex.DiscoveryTime);
+			Assert.Equal(0, sVertex.DiscoveryTime);
+			Assert.Equal(2, tVertex.DiscoveryTime);
+			Assert.Equal(6, xVertex.DiscoveryTime);
+			Assert.Equal(5, yVertex.DiscoveryTime);
+			Assert.Equal(3, zVertex.DiscoveryTime);
+		}
+
+		[Fact]
+		public void SingleSourceTest3()
+		{
+			var graf = new Graf<char>();
+
+			var sVertex = new Vertex<char>('s');
+			var tVertex = new Vertex<char>('t');
+			var xVertex = new Vertex<char>('x');
+			var yVertex = new Vertex<char>('y');
+
+			var zVertex = new Vertex<char>('z');
+
+			sVertex.AddDirectedEdge(10, tVertex);
+			sVertex.AddDirectedEdge(5, yVertex);
+			tVertex.AddDirectedEdge(1, xVertex);
+
+			tVertex.AddDirectedEdge(2, yVertex);
+			xVertex.AddDirectedEdge(4, zVertex);
+			zVertex.AddDirectedEdge(6, xVertex);
+
+			zVertex.AddDirectedEdge(7, sVertex);
+			yVertex.AddDirectedEdge(3, tVertex);
+
+			yVertex.AddDirectedEdge(9, xVertex);
+			yVertex.AddDirectedEdge(2, zVertex);
+
+			graf.AddVertex(sVertex);
+			graf.AddVertex(tVertex);
+			graf.AddVertex(xVertex);
+			graf.AddVertex(yVertex);
+			graf.AddVertex(zVertex);
+
+			graf.DejkstraShortestPaths(sVertex);
+
+			Assert.Equal(0, sVertex.DiscoveryTime);
+			Assert.Equal(8, tVertex.DiscoveryTime);
+			Assert.Equal(9, xVertex.DiscoveryTime);
+			Assert.Equal(5, yVertex.DiscoveryTime);
+			Assert.Equal(7, zVertex.DiscoveryTime);
+		}
+
+		[Fact]
+		public void DifferenceTest0()
+		{
+			var graf = new Graf<char>();
+
+			var v0Vertex = new Vertex<char>('0');
+			var v1Vertex = new Vertex<char>('1');
+			var v2Vertex = new Vertex<char>('2');
+			var v3Vertex = new Vertex<char>('3');
+
+			var v4Vertex = new Vertex<char>('4');
+			var v5Vertex = new Vertex<char>('5');
+
+			v0Vertex.AddDirectedEdge(0, v1Vertex);
+			v0Vertex.AddDirectedEdge(0, v2Vertex);
+			v0Vertex.AddDirectedEdge(0, v3Vertex);
+			v0Vertex.AddDirectedEdge(0, v4Vertex);
+			v0Vertex.AddDirectedEdge(0, v5Vertex);
+
+			v1Vertex.AddDirectedEdge(5, v3Vertex);
+			v1Vertex.AddDirectedEdge(4, v4Vertex);
+
+			v2Vertex.AddDirectedEdge(0, v1Vertex);
+
+			v3Vertex.AddDirectedEdge(-1, v4Vertex);
+			v3Vertex.AddDirectedEdge(-3, v5Vertex);
+
+			v4Vertex.AddDirectedEdge(-3, v5Vertex);
+
+			v5Vertex.AddDirectedEdge(-1, v1Vertex);
+			v5Vertex.AddDirectedEdge(1, v2Vertex);
+
+			graf.AddVertex(v0Vertex);
+			graf.AddVertex(v1Vertex);
+			graf.AddVertex(v2Vertex);
+			graf.AddVertex(v3Vertex);
+			graf.AddVertex(v4Vertex);
+			graf.AddVertex(v5Vertex);
+
+			bool res = graf.BellmanFordShortestPaths(v0Vertex);
+
+			Assert.Equal(true, res);
+			Assert.Equal(0, v0Vertex.DiscoveryTime);
+			Assert.Equal(-5, v1Vertex.DiscoveryTime);
+			Assert.Equal(-3, v2Vertex.DiscoveryTime);
+			Assert.Equal(0, v3Vertex.DiscoveryTime);
+			Assert.Equal(-1, v4Vertex.DiscoveryTime);
+			Assert.Equal(-4, v5Vertex.DiscoveryTime);
+		}
 	}
 }

@@ -20,8 +20,8 @@ namespace Algorithms.Common
 		bool _marked;
 		Vertex<T> _parent;
 		VertexColor _color;
-		long? _discoveryTime;
-		long? _finishingTime;
+		double _discoveryTime;
+		double _finishingTime;
 		T _key;
 		object _mstNode;
 		readonly List<Edge<T>> _edges;
@@ -59,13 +59,13 @@ namespace Algorithms.Common
 			set { _color = value; }
 		}
 
-		public long? DiscoveryTime
+		public double DiscoveryTime
 		{
 			get { return _discoveryTime; }
 			set { _discoveryTime = value; }
 		}
 
-		public long? FinishingTime
+		public double FinishingTime
 		{
 			get { return _finishingTime; }
 			set { _finishingTime = value; }
@@ -200,7 +200,7 @@ namespace Algorithms.Common
 
 		private List<Vertex<T>> _vertexes;
 		private System.Collections.Generic.Stack<Vertex<T>> _topologicalSort;
-		long _time;
+		double _time;
 
 		#endregion
 
@@ -261,8 +261,8 @@ namespace Algorithms.Common
 			{
 				_vertexes[i].Color = Vertex<T>.VertexColor.White;
 				_vertexes[i].Parent = null;
-				_vertexes[i].DiscoveryTime = null;
-				_vertexes[i].FinishingTime = null;
+				_vertexes[i].DiscoveryTime = double.PositiveInfinity;
+				_vertexes[i].FinishingTime = double.PositiveInfinity;
 			}
 			source.Color = Vertex<T>.VertexColor.Gray;
 			source.DiscoveryTime = 0;
@@ -292,8 +292,8 @@ namespace Algorithms.Common
 			{
 				_vertexes[i].Color = Vertex<T>.VertexColor.White;
 				_vertexes[i].Parent = null;
-				_vertexes[i].DiscoveryTime = null;
-				_vertexes[i].FinishingTime = null;
+				_vertexes[i].DiscoveryTime = double.PositiveInfinity;
+				_vertexes[i].FinishingTime = double.PositiveInfinity;
 			}
 
 			_time = 0;
@@ -389,8 +389,8 @@ namespace Algorithms.Common
 			{
 				_vertexes[i].Color = Vertex<T>.VertexColor.White;
 				_vertexes[i].Parent = null;
-				_vertexes[i].DiscoveryTime = null;
-				_vertexes[i].FinishingTime = null;
+				_vertexes[i].DiscoveryTime = double.PositiveInfinity;
+				_vertexes[i].FinishingTime = double.PositiveInfinity;
 			}
 
 			_time = 0;
@@ -567,6 +567,121 @@ namespace Algorithms.Common
 			return mstGraf;
 		}
 
-		#endregion
+		public bool BellmanFordShortestPaths(Vertex<T> s)
+		{
+			InitializeSingleSource(s);
+
+			for (int i = 0; i < _vertexes.Count - 1; i++)
+			{
+				for (int j = 0; j < _vertexes.Count; j++)
+				{
+					var u = _vertexes[j];
+					for (int k = 0; k < u.Edges.Count; k++)
+					{
+						var w = u.Edges[k];
+						var v = w.Other(u);
+						Relax(u, v, w);
+					}
+				}
+			}
+			for (int j = 0; j < _vertexes.Count; j++)
+			{
+				var u = _vertexes[j];
+				for (int k = 0; k < u.Edges.Count; k++)
+				{
+					var w = u.Edges[k];
+					var v = w.Other(u);
+					if (v.DiscoveryTime > u.DiscoveryTime + w.Weigth)
+						return false;
+				}
+			}
+			return true;
 		}
+
+		public void TopologicalShortestPaths(Vertex<T> s)
+		{
+			DFS();
+			InitializeSingleSource(s);
+
+			var topologicalSortList = _topologicalSort.ToList();
+			for (int j = 0; j < topologicalSortList.Count; j++)
+			{
+				var u = topologicalSortList[j];
+				for (int k = 0; k < u.Edges.Count; k++)
+				{
+					var w = u.Edges[k];
+					var v = w.Other(u);
+					Relax(u, v, w);
+				}
+			}
+		}
+
+		public void DejkstraShortestPaths(Vertex<T> s)
+		{
+			InitializeSingleSource(s);
+
+			var vertexes = new Dictionary<T, Vertex<T>>();
+
+			var nodes = new List<BinaryHeapNode<double, Tuple<Edge<T>, Vertex<T>>>>();
+			for (int i = 0; i < _vertexes.Count; i++)
+			{
+				_vertexes[i].Marked = false;
+				_vertexes[i].Parent = null;
+				var node = new BinaryHeapNode<double, Tuple<Edge<T>, Vertex<T>>>(i, _vertexes[i].DiscoveryTime, new Tuple<Edge<T>, Vertex<T>>(null, _vertexes[i]));
+				_vertexes[i].MstNode = node;
+				nodes.Add(node);
+			}
+			var binaryHeap = new BinaryHeap<double, Tuple<Edge<T>, Vertex<T>>>(nodes, node => node.Value.Item2.MstNode = node);
+			(((IMinHeap<double, Tuple<Edge<T>, Vertex<T>>>)binaryHeap)).BuildMin();
+
+			while (binaryHeap.HeapSize > 0)
+			{
+				var node = (((IMinHeap<double, Tuple<Edge<T>, Vertex<T>>>)binaryHeap)).ExtractMin();
+				var edge = node.Value.Item1;
+				var u = node.Value.Item2;
+				u.Marked = true;
+
+				vertexes.Add(u.Key, u);
+
+				for (int i = 0; i < u.Edges.Count; i++)
+				{
+					var w = u.Edges[i];
+					var v = w.Other(u);
+					if (v.Marked)
+						continue;
+					var adjacentNode = (BinaryHeapNode<double, Tuple<Edge<T>, Vertex<T>>>)(v.MstNode);
+					var oldDiscoveryTime = v.DiscoveryTime;
+					Relax(u, v, w);
+					if (oldDiscoveryTime != v.DiscoveryTime)
+					{
+						adjacentNode.Value = new Tuple<Edge<T>, Vertex<T>>(u.Edges[i], adjacentNode.Value.Item2);
+						(((IMinHeap<double, Tuple<Edge<T>, Vertex<T>>>)binaryHeap)).DecreaseKey(adjacentNode, v.DiscoveryTime);
+					}
+				}
+			}
+		}
+
+		private void InitializeSingleSource(Vertex<T> root)
+		{
+			for (int i = 0; i < _vertexes.Count; i++)
+			{
+				_vertexes[i].Marked = false;
+				_vertexes[i].Parent = null;
+				_vertexes[i].DiscoveryTime = double.PositiveInfinity;
+				_vertexes[i].FinishingTime = double.PositiveInfinity;
+			}
+			root.DiscoveryTime = 0;
+		}
+
+		private void Relax(Vertex<T> u, Vertex<T> v, Edge<T> w)
+		{
+			if(v.DiscoveryTime > u.DiscoveryTime + w.Weigth)
+			{
+				v.DiscoveryTime = u.DiscoveryTime + w.Weigth;
+				v.Parent = u;
+			}
+		}
+
+		#endregion
+	}
 }
