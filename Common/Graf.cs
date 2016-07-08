@@ -17,6 +17,8 @@ namespace Algorithms.Common
 
 		#region Fields
 
+		int _index;
+		double _hWeightChange;
 		bool _marked;
 		Vertex<T> _parent;
 		VertexColor _color;
@@ -33,6 +35,18 @@ namespace Algorithms.Common
 		public T Key
 		{
 			get { return _key; }
+		}
+
+		public int Index
+		{
+			get { return _index; }
+			set { _index = value; }
+		}
+
+		public double HWeightChange
+		{
+			get { return _hWeightChange; }
+			set { _hWeightChange = value; }
 		}
 
 		public bool Marked
@@ -148,6 +162,7 @@ namespace Algorithms.Common
 		public double Weigth
 		{
 			get { return _weigth; }
+			set { _weigth = value; }
 		}
 
 		public Vertex<T> Source
@@ -680,6 +695,155 @@ namespace Algorithms.Common
 				v.DiscoveryTime = u.DiscoveryTime + w.Weigth;
 				v.Parent = u;
 			}
+		}
+
+		public double[,] GetAllPairsShortestsPaths(double[,] w)
+		{
+			int n = w.GetLength(0);
+			var lPrime = w;
+			for (int m = 2; m <= n - 1; m++)
+			{
+				lPrime = ExtendsShortestsPaths(lPrime, w);
+			}
+			return lPrime;
+		}
+
+		public Tuple<double[,], int?[,]> GetAllPairsShortestsPathsFloydWarshall(double[,] w)
+		{
+			int n = w.GetLength(0);
+			var d = new double[n + 1][,];
+			var p = new int?[n + 1][,];
+			d[0] = w;
+			p[0] = new int?[n, n];
+			for (int i = 0; i < n; i++)
+			{
+				for (int j = 0; j < n; j++)
+				{
+					if (i == j)
+						p[0][i, j] = null;
+					else
+						p[0][i, j] = i;
+				}
+			}
+
+			for (int k = 0; k < n; k++)
+			{
+				d[k + 1] = new double[n, n];
+				p[k + 1] = new int?[n, n];
+				for (int i = 0; i < n; i++)
+				{
+					for (int j = 0; j < n; j++)
+					{
+						d[k + 1][i, j] = Math.Min(d[k][i, j], d[k][i, k] + d[k][k, j]);
+						if (d[k][i, j] <= d[k][i, k] + d[k][k, j])
+							p[k + 1][i, j] = p[k][i, j];
+						else
+							p[k + 1][i, j] = p[k][k, j];
+					}
+				}
+			}
+			return new Tuple<double[,], int?[,]>(d.Last(), p.Last());
+		}
+
+		public double[,] GetAllPairsShortestsPathsJohnson()
+		{
+			var sVertex = new Vertex<T>(default(T));
+			sVertex.Index = -1;
+			var grafPrime = GetGrafPrime(sVertex);
+
+			if (!grafPrime.BellmanFordShortestPaths(sVertex))
+				return null;
+
+			UpdateWeights(grafPrime);
+
+			int n = _vertexes.Count;
+			var d = new double[n, n];
+			for (int i = 0; i < n; i++)
+			{
+				_vertexes[i].Index = i;
+			}
+			for (int i = 0; i < n; i++)
+			{
+				var vertex = _vertexes[i];
+				DejkstraShortestPaths(vertex);
+				for (int j = 0; j < n; j++)
+				{
+					d[i, j] = _vertexes[j].DiscoveryTime + _vertexes[j].HWeightChange - _vertexes[i].HWeightChange;
+				}
+			}
+			return d;
+		}
+
+		private Graf<T> GetGrafPrime(Vertex<T> sVertex)
+		{
+			var grafPrime = new Graf<T>();
+			
+			grafPrime.AddVertex(sVertex);
+
+			for (int i = 0; i < _vertexes.Count; i++)
+			{
+				sVertex.AddDirectedEdge(0, _vertexes[i]);
+				grafPrime.AddVertex(_vertexes[i]);
+			}
+			return grafPrime;
+		}
+
+		private void UpdateWeights(Graf<T> grafPrime)
+		{
+			int n = grafPrime.Vertexes.Count;
+			for (int i = 0; i < n; i++)
+				grafPrime.Vertexes[i].HWeightChange = grafPrime.Vertexes[i].DiscoveryTime;
+
+			for (int i = 0; i < n; i++)
+			{
+				var vertex = grafPrime.Vertexes[i];
+				for (int j = 0; j < vertex.Edges.Count; j++)
+				{
+					var adjacentVertex = vertex.Edges[j].Other(vertex);
+					vertex.Edges[j].Weigth = vertex.Edges[j].Weigth + vertex.HWeightChange - adjacentVertex.HWeightChange;
+				}
+			}
+		}
+
+		public double[,] GetWeights()
+		{
+			int n = _vertexes.Count;
+			var weights = new double[n, n];
+			for (int i = 0; i < n; i++)
+			{
+				_vertexes[i].Index = i;
+			}
+			for (int i = 0; i < n; i++)
+			{
+				var vertex = _vertexes[i];
+				for (int j = 0; j < n; j++)
+					weights[vertex.Index, j] = i == j ? 0 : double.PositiveInfinity;
+
+				for (int j = 0; j < vertex.Edges.Count; j++)
+				{
+					var adjacentVertex = vertex.Edges[j].Other(vertex);
+					weights[vertex.Index, adjacentVertex.Index] = vertex.Edges[j].Weigth;
+				}
+			}
+			return weights;
+		}
+
+		private double[,] ExtendsShortestsPaths(double[,] l, double[,] w)
+		{
+			int n = w.GetLength(0);
+			var lPrime = new double[n, n];
+			for (int i = 0; i < n; i++)
+			{
+				for (int j = 0; j < n; j++)
+				{
+					lPrime[i, j] = double.PositiveInfinity;
+					for (int k = 0; k < n; k++)
+					{
+						lPrime[i, j] = Math.Min(lPrime[i, j], l[i, k] + l[k, j]);
+					}
+				}
+			}
+			return lPrime;
 		}
 
 		#endregion

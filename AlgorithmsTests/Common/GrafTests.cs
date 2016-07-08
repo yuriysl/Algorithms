@@ -734,5 +734,224 @@ namespace Algorithms.AlgorithmsTests.Common
 			Assert.Equal(-1, v4Vertex.DiscoveryTime);
 			Assert.Equal(-4, v5Vertex.DiscoveryTime);
 		}
+
+		[Fact]
+		public void ShortestsPathsTest0()
+		{
+			var graf = new Graf<char>();
+
+			var v1Vertex = new Vertex<char>('1');
+			var v2Vertex = new Vertex<char>('2');
+			var v3Vertex = new Vertex<char>('3');
+			var v4Vertex = new Vertex<char>('4');
+			var v5Vertex = new Vertex<char>('5');
+
+			v1Vertex.AddDirectedEdge(3, v2Vertex);
+			v1Vertex.AddDirectedEdge(-4, v5Vertex);
+
+			v2Vertex.AddDirectedEdge(1, v4Vertex);
+			v2Vertex.AddDirectedEdge(7, v5Vertex);
+
+			v3Vertex.AddDirectedEdge(4, v2Vertex);
+
+			v4Vertex.AddDirectedEdge(2, v1Vertex);
+			v4Vertex.AddDirectedEdge(-5, v3Vertex);
+
+			v5Vertex.AddDirectedEdge(6, v4Vertex);
+
+			graf.AddVertex(v1Vertex);
+			graf.AddVertex(v2Vertex);
+			graf.AddVertex(v3Vertex);
+			graf.AddVertex(v4Vertex);
+			graf.AddVertex(v5Vertex);
+
+			var res = graf.GetAllPairsShortestsPaths(graf.GetWeights());
+
+			Assert.Equal(0, res[0, 0]);
+			Assert.Equal(3, res[1, 0]);
+			Assert.Equal(7, res[2, 0]);
+			Assert.Equal(2, res[3, 0]);
+			Assert.Equal(8, res[4, 0]);
+
+			Assert.Equal(1, res[0, 1]);
+			Assert.Equal(0, res[1, 1]);
+			Assert.Equal(4, res[2, 1]);
+			Assert.Equal(-1, res[3, 1]);
+			Assert.Equal(5, res[4, 1]);
+
+			Assert.Equal(-3, res[0, 2]);
+			Assert.Equal(-4, res[1, 2]);
+			Assert.Equal(0, res[2, 2]);
+			Assert.Equal(-5, res[3, 2]);
+			Assert.Equal(1, res[4, 2]);
+
+			Assert.Equal(2, res[0, 3]);
+			Assert.Equal(1, res[1, 3]);
+			Assert.Equal(5, res[2, 3]);
+			Assert.Equal(0, res[3, 3]);
+			Assert.Equal(6, res[4, 3]);
+
+			Assert.Equal(-4, res[0, 4]);
+			Assert.Equal(-1, res[1, 4]);
+			Assert.Equal(3, res[2, 4]);
+			Assert.Equal(-2, res[3, 4]);
+			Assert.Equal(0, res[4, 4]);
+		}
+
+		[Fact]
+		public void ShortestsPathsTest1()
+		{
+			var graf = new Graf<char>();
+
+			var v1Vertex = new Vertex<char>('1');
+			var v2Vertex = new Vertex<char>('2');
+			var v3Vertex = new Vertex<char>('3');
+			var v4Vertex = new Vertex<char>('4');
+			var v5Vertex = new Vertex<char>('5');
+
+			v1Vertex.AddDirectedEdge(3, v2Vertex);
+			v1Vertex.AddDirectedEdge(-4, v5Vertex);
+
+			v2Vertex.AddDirectedEdge(1, v4Vertex);
+			v2Vertex.AddDirectedEdge(7, v5Vertex);
+
+			v3Vertex.AddDirectedEdge(4, v2Vertex);
+
+			v4Vertex.AddDirectedEdge(2, v1Vertex);
+			v4Vertex.AddDirectedEdge(-5, v3Vertex);
+
+			v5Vertex.AddDirectedEdge(6, v4Vertex);
+
+			graf.AddVertex(v1Vertex);
+			graf.AddVertex(v2Vertex);
+			graf.AddVertex(v3Vertex);
+			graf.AddVertex(v4Vertex);
+			graf.AddVertex(v5Vertex);
+
+			var res = graf.GetAllPairsShortestsPathsFloydWarshall(graf.GetWeights());
+
+			Assert.Equal(0, res.Item1[0, 0]);
+			Assert.Equal(3, res.Item1[1, 0]);
+			Assert.Equal(7, res.Item1[2, 0]);
+			Assert.Equal(2, res.Item1[3, 0]);
+			Assert.Equal(8, res.Item1[4, 0]);
+
+			Assert.Equal(1, res.Item1[0, 1]);
+			Assert.Equal(0, res.Item1[1, 1]);
+			Assert.Equal(4, res.Item1[2, 1]);
+			Assert.Equal(-1, res.Item1[3, 1]);
+			Assert.Equal(5, res.Item1[4, 1]);
+
+			Assert.Equal(-3, res.Item1[0, 2]);
+			Assert.Equal(-4, res.Item1[1, 2]);
+			Assert.Equal(0, res.Item1[2, 2]);
+			Assert.Equal(-5, res.Item1[3, 2]);
+			Assert.Equal(1, res.Item1[4, 2]);
+
+			Assert.Equal(2, res.Item1[0, 3]);
+			Assert.Equal(1, res.Item1[1, 3]);
+			Assert.Equal(5, res.Item1[2, 3]);
+			Assert.Equal(0, res.Item1[3, 3]);
+			Assert.Equal(6, res.Item1[4, 3]);
+
+			Assert.Equal(-4, res.Item1[0, 4]);
+			Assert.Equal(-1, res.Item1[1, 4]);
+			Assert.Equal(3, res.Item1[2, 4]);
+			Assert.Equal(-2, res.Item1[3, 4]);
+			Assert.Equal(0, res.Item1[4, 4]);
+
+			Assert.Null(res.Item2[0, 0]);
+			Assert.Equal(3, res.Item2[1, 0].Value);
+			Assert.Equal(3, res.Item2[2, 0].Value);
+			Assert.Equal(3, res.Item2[3, 0].Value);
+			Assert.Equal(3, res.Item2[4, 0].Value);
+
+			Assert.Equal(2, res.Item2[0, 1].Value);
+			Assert.Null(res.Item2[1, 1]);
+			Assert.Equal(2, res.Item2[2, 1].Value);
+			Assert.Equal(2, res.Item2[3, 1].Value);
+			Assert.Equal(2, res.Item2[4, 1].Value);
+
+			Assert.Equal(3, res.Item2[0, 2].Value);
+			Assert.Equal(3, res.Item2[1, 2].Value);
+			Assert.Null(res.Item2[2, 2]);
+			Assert.Equal(3, res.Item2[3, 2].Value);
+			Assert.Equal(3, res.Item2[4, 2].Value);
+
+			Assert.Equal(4, res.Item2[0, 3].Value);
+			Assert.Equal(1, res.Item2[1, 3].Value);
+			Assert.Equal(1, res.Item2[2, 3].Value);
+			Assert.Null(res.Item2[3, 3]);
+			Assert.Equal(4, res.Item2[4, 3].Value);
+
+			Assert.Equal(0, res.Item2[0, 4].Value);
+			Assert.Equal(0, res.Item2[1, 4].Value);
+			Assert.Equal(0, res.Item2[2, 4].Value);
+			Assert.Equal(0, res.Item2[3, 4].Value);
+			Assert.Null(res.Item2[4, 4]);
+		}
+
+		[Fact]
+		public void ShortestsPathsTest2()
+		{
+			var graf = new Graf<char>();
+
+			var v1Vertex = new Vertex<char>('1');
+			var v2Vertex = new Vertex<char>('2');
+			var v3Vertex = new Vertex<char>('3');
+			var v4Vertex = new Vertex<char>('4');
+			var v5Vertex = new Vertex<char>('5');
+
+			v1Vertex.AddDirectedEdge(3, v2Vertex);
+			v1Vertex.AddDirectedEdge(-4, v5Vertex);
+
+			v2Vertex.AddDirectedEdge(1, v4Vertex);
+			v2Vertex.AddDirectedEdge(7, v5Vertex);
+
+			v3Vertex.AddDirectedEdge(4, v2Vertex);
+
+			v4Vertex.AddDirectedEdge(2, v1Vertex);
+			v4Vertex.AddDirectedEdge(-5, v3Vertex);
+
+			v5Vertex.AddDirectedEdge(6, v4Vertex);
+
+			graf.AddVertex(v1Vertex);
+			graf.AddVertex(v2Vertex);
+			graf.AddVertex(v3Vertex);
+			graf.AddVertex(v4Vertex);
+			graf.AddVertex(v5Vertex);
+
+			var res = graf.GetAllPairsShortestsPathsJohnson();
+
+			Assert.Equal(0, res[0, 0]);
+			Assert.Equal(3, res[1, 0]);
+			Assert.Equal(7, res[2, 0]);
+			Assert.Equal(2, res[3, 0]);
+			Assert.Equal(8, res[4, 0]);
+
+			Assert.Equal(1, res[0, 1]);
+			Assert.Equal(0, res[1, 1]);
+			Assert.Equal(4, res[2, 1]);
+			Assert.Equal(-1, res[3, 1]);
+			Assert.Equal(5, res[4, 1]);
+
+			Assert.Equal(-3, res[0, 2]);
+			Assert.Equal(-4, res[1, 2]);
+			Assert.Equal(0, res[2, 2]);
+			Assert.Equal(-5, res[3, 2]);
+			Assert.Equal(1, res[4, 2]);
+
+			Assert.Equal(2, res[0, 3]);
+			Assert.Equal(1, res[1, 3]);
+			Assert.Equal(5, res[2, 3]);
+			Assert.Equal(0, res[3, 3]);
+			Assert.Equal(6, res[4, 3]);
+
+			Assert.Equal(-4, res[0, 4]);
+			Assert.Equal(-1, res[1, 4]);
+			Assert.Equal(3, res[2, 4]);
+			Assert.Equal(-2, res[3, 4]);
+			Assert.Equal(0, res[4, 4]);
+		}
 	}
 }
