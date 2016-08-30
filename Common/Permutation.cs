@@ -4,26 +4,31 @@ namespace Algorithms.Common
 {
 	public class Permutation
 	{
-		public IEnumerable<BaseNode<TKey, TValue>[]> GetPremutations<TKey, TValue>(BaseNode<TKey, TValue>[] a, int n)
+		public IEnumerable<BaseNode<TKey, TValue>[]> GetTranspositions<TKey, TValue>(BaseNode<TKey, TValue>[] a, int p)
 		{
-			int m = a.Length;
-			if (n == 2)
+			int n = a.Length;
+			int m = n - p;
+			if (m == 1)
+				yield return a;
+			else if (m == 2)
 			{
 				yield return a;
-				NodeHelper<TKey, TValue>.SwapWithIndex(a[m - 2], a[m - 1]);
+				NodeHelper<TKey, TValue>.SwapWithIndex(a[p], a[p + 1]);
 				yield return a;
+				NodeHelper<TKey, TValue>.SwapWithIndex(a[p], a[p + 1]);
 			}
 			else
 			{
-				var p = GetPremutations(a, n - 1);
-				foreach (var pItem in p)
+				for (int i = p; i < n; i++)
 				{
-					for (int i = m - n; i < m; i++)
-					{
-						NodeHelper<TKey, TValue>.SwapWithIndex(a[m - n], a[i]);
-						yield return pItem;
-						NodeHelper<TKey, TValue>.SwapWithIndex(a[m - n], a[i]);
-					}
+					if (i != p)
+						NodeHelper<TKey, TValue>.SwapWithIndex(a[p], a[i]);
+
+					foreach (var transposition in GetTranspositions(a, p + 1))
+						yield return transposition;
+
+					if (i != p)
+						NodeHelper<TKey, TValue>.SwapWithIndex(a[p], a[i]);
 				}
 			}
 		}
