@@ -181,7 +181,6 @@ namespace Algorithms.Common
 		#region Fields
 
 		BinaryTreeNode<TKey, TValue> _root;
-		int _count;
 
 		#endregion
 
@@ -190,17 +189,7 @@ namespace Algorithms.Common
 		public BinaryTreeNode<TKey, TValue> Root
 		{
 			get { return _root; }
-			set { _root = value; }
-		}
-
-		public BinaryTreeNode<TKey, TValue> Min => GetMinNode(_root);
-
-		public BinaryTreeNode<TKey, TValue> Max => GetMaxNode(_root);
-
-		public int Count
-		{
-			get { return _count; }
-			set { _count = value; }
+			protected set { _root = value; }
 		}
 
 		#endregion
@@ -227,7 +216,6 @@ namespace Algorithms.Common
 			{
 				node = NewNode(key, value, parent);
 				newNode = node;
-				_count++;
 				DoAddNode(node);
 				return;
 			}
@@ -259,21 +247,6 @@ namespace Algorithms.Common
 			}
 		}
 
-		public bool Contains(TKey key) => Contains(_root, key);
-
-		private bool Contains(BinaryTreeNode<TKey, TValue> node, TKey key)
-		{
-			if (node == null)
-				return false;
-			if (((IComparable<TKey>)node.Key).CompareTo(key) == 0)
-				return true;
-			if (((IComparable<TKey>)node.Key).CompareTo(key) > 0)
-				return Contains(node.Left, key);
-			if (((IComparable<TKey>)node.Key).CompareTo(key) < 0)
-				return Contains(node.Right, key);
-			return false;
-		}
-
 		private BinaryTreeNode<TKey, TValue> GetMinNode(BinaryTreeNode<TKey, TValue> node)
 		{
 			var currentNode = node;
@@ -282,13 +255,6 @@ namespace Algorithms.Common
 			return currentNode;
 		}
 
-		private BinaryTreeNode<TKey, TValue> GetMaxNode(BinaryTreeNode<TKey, TValue> node)
-		{
-			var currentNode = node;
-			while (currentNode.Right != null)
-				currentNode = currentNode.Right;
-			return currentNode;
-		}
 
 		public virtual BinaryTreeNode<TKey, TValue> Remove(TKey key, out BinaryTreeNode<TKey, TValue> replacedNode)
 		{
@@ -333,21 +299,18 @@ namespace Algorithms.Common
 					removedNode = node;
 					replacedNode = node.Left;
 					ReplaceInParent(node, node.Left);
-					_count--;
 				}
 				else if (node.Right != null)
 				{
 					removedNode = node;
 					replacedNode = node.Right;
 					ReplaceInParent(node, node.Right);
-					_count--;
 				}
 				else
 				{
 					removedNode = node;
 					replacedNode = null;
 					ReplaceInParent(node, null);
-					_count--;
 				}
 			}
 		}

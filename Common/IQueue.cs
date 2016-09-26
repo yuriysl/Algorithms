@@ -4,5 +4,6 @@
 	{
 		TValue Dequeue();
 		void Enqueue(TValue value);
+		void Clear();
 	}
 }

@@ -4,7 +4,7 @@ namespace Algorithms.Common
 {
 	public class Randomization
 	{
-		Random rnd = null;
+		private Random _rnd;
 		const double ProbabilityDistribution = 0.42;
 
 		/// <summary>
@@ -13,10 +13,10 @@ namespace Algorithms.Common
 		public void RandomizationInPlace<T>(T[] a, int left, int right)
 			where T : IComparable<T>
 		{
-			rnd = new Random();
+			_rnd = new Random();
 			for (int i = left; i <= right - 1; i++)
 			{
-				int newI = rnd.Next(i, right + 1);
+				int newI = _rnd.Next(i, right + 1);
 				T tmp = a[i];
 				a[i] = a[newI];
 				a[newI] = tmp;
@@ -36,9 +36,9 @@ namespace Algorithms.Common
 
 		int GetBiesedRandom()
 		{
-			if(rnd == null)
-				rnd = new Random();
-			var newVal = rnd.NextDouble();
+			if(_rnd == null)
+				_rnd = new Random();
+			var newVal = _rnd.NextDouble();
 			return newVal < ProbabilityDistribution ? 0 : 1;
 		}
 	}

@@ -822,5 +822,38 @@ namespace Algorithms.AlgorithmsTests.Common
 					Assert.True(output[i].Key >= 0);
 			}
 		}
+
+		[Fact]
+		public void YoungSortMaxTest()
+		{
+			foreach (var testCase in _sortingTestFixture.TestCases)
+			{
+				if (testCase.IsForAdding)
+					continue;
+				int[] input = testCase.Input.ToArray();
+				int[] expected = testCase.Expected.ToArray();
+				int n = input.Length;
+
+				_testOutputHelper.WriteLine("--------------------------------------------------------");
+				_testOutputHelper.WriteLine("Name:[{0}]", testCase.Name);
+				_testOutputHelper.WriteLine("Input:[{0}]", string.Join(", ", input));
+				_testOutputHelper.WriteLine("Expected:[{0}]", string.Join(", ", expected));
+
+				var youngTable = new YoungTable<int, object>((int)Math.Floor(Math.Sqrt(input.Length)) + 1, (int)Math.Floor(Math.Sqrt(input.Length)) + 1);
+				for (int i = 0; i < n; i++)
+					youngTable.Insert(input[i], "value_" + input[i]);
+
+				_testOutputHelper.WriteLine("Output:[{0}]", youngTable.ToString());
+
+				for (int i = 0; i < n; i++)
+				{
+					var minNode = youngTable.ExtractMin();
+					Assert.NotNull(minNode);
+					Assert.Equal(expected[i], minNode.Key);
+				}
+				var remainingNode = youngTable.ExtractMin();
+				Assert.Null(remainingNode);
+			}
+		}
 	}
 }

@@ -63,6 +63,7 @@
     <Compile Include="Set.cs" />
     <Compile Include="Sorting.cs" />
     <Compile Include="Stack.cs" />
+    <Compile Include="YoungTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Common.ruleset" />

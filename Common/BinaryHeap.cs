@@ -6,13 +6,19 @@ namespace Algorithms.Common
 {
 	public class BinaryHeapNode<TKey, TValue> : BaseNode<TKey, TValue>
 	{
-		public int Parent => (Index + 1) / 2 - 1;
-		public int Left => Index * 2 + 1;
-		public int Right => Index * 2 + 2;
-
-		public BinaryHeapNode(int index, TKey key)
-			: base(index, key)
+		public int Parent
 		{
+			get { return (Index + 1 >> 1) - 1; }
+		}
+
+		public int Left
+		{
+			get { return (Index + 1 << 1) - 1; }
+		}
+
+		public int Right
+		{
+			get { return (Index + 1 << 1); }
 		}
 
 		public BinaryHeapNode(int index, TKey key, TValue value)
@@ -27,7 +33,7 @@ namespace Algorithms.Common
 		#region Fields
 
 		readonly List<BinaryHeapNode<TKey, TValue>> _nodes;
-		Action<BinaryHeapNode<TKey, TValue>> _nodeUpdatedAction;
+		readonly Action<BinaryHeapNode<TKey, TValue>> _nodeUpdatedAction;
 		int _heapSize;
 
 		#endregion
@@ -49,10 +55,6 @@ namespace Algorithms.Common
 
 		#region Properties
 
-		public BinaryHeapNode<TKey, TValue> this[int index] => _nodes[index];
-
-		public int Length => _nodes.Count;
-
 		public int HeapSize
 		{
 			get { return _heapSize; }
@@ -61,19 +63,13 @@ namespace Algorithms.Common
 
 		#endregion
 
-		public void Clear()
-		{
-			_nodes.Clear();
-			_heapSize = 0;
-		}
-
 		#region IMaxHeap
 
 		void IMaxHeap<TKey, TValue>.BuildMax()
 		{
 			int n = _nodes.Count;
 			_heapSize = n;
-			for(int i = n / 2 - 1; i >= 0; i--)
+			for(int i = (n >> 1) - 1; i >= 0; i--)
 			{
 				((IMaxHeap<TKey, TValue>)this).MaxHeapify(_nodes[i]);
 			}
@@ -83,7 +79,7 @@ namespace Algorithms.Common
 		{
 			int n = _nodes.Count;
 			_heapSize = n;
-			for (int i = n / 2 - 1; i >= 0; i--)
+			for (int i = (n >> 1) - 1; i >= 0; i--)
 				((IMaxHeap<TKey, TValue>)this).MaxHeapifyTail(_nodes[i]);
 		}
 
@@ -224,7 +220,7 @@ namespace Algorithms.Common
 		{
 			int n = _nodes.Count;
 			_heapSize = n;
-			for (int i = n / 2 - 1; i >= 0; i--)
+			for (int i = (n >> 1) - 1; i >= 0; i--)
 			{
 				((IMinHeap<TKey, TValue>)this).MinHeapify(_nodes[i]);
 			}
@@ -234,7 +230,7 @@ namespace Algorithms.Common
 		{
 			int n = _nodes.Count;
 			_heapSize = n;
-			for (int i = n / 2 - 1; i >= 0; i--)
+			for (int i = (n >> 1) - 1; i >= 0; i--)
 			{
 				((IMinHeap<TKey, TValue>)this).MinHeapifyTail(_nodes[i]);
 			}
@@ -381,7 +377,7 @@ namespace Algorithms.Common
 			for (int i = 0; i < _heapSize; i++)
 			{
 				currLevelN++;
-				treeBuilder.Append(string.Format("[{0}]", _nodes[i].Key.ToString().PadLeft(2)));
+				treeBuilder.Append($"[{_nodes[i].Key.ToString().PadLeft(2)}]");
 				if(currLevelN == levelN)
 				{
 					h--;
@@ -391,6 +387,12 @@ namespace Algorithms.Common
 				}
 			}
 			return treeBuilder.ToString();
+		}
+
+		public void Clear()
+		{
+			_nodes.Clear();
+			_heapSize = 0;
 		}
 
 		#endregion
