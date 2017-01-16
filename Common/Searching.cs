@@ -90,10 +90,10 @@ namespace Algorithms.Common
 			int k = q - p + 1;
 			if (i == k)
 				return a[q];
-			else if (i < k)
+			if (i < k)
 				return RandomizedSelect(a, p, q - 1, i);
-			else
-				return RandomizedSelect(a, q + 1, r, i - k);
+
+			return RandomizedSelect(a, q + 1, r, i - k);
 		}
 
 		public BaseNode<TKey, TValue> Select<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r, int i)
@@ -108,15 +108,15 @@ namespace Algorithms.Common
 				input.Add(a[j]);
 
 			int medianIndex = SelectMedian(input, p, r);
-			int q = Sorting.QuickPartition(a, p, r, medianIndex);
+			var qPivots = Sorting.QuickPartition(a, p, r, medianIndex);
 
-			int k = q - p + 1;
+			int k = qPivots.Item1 - p + 1;
 			if (i == k)
-				return a[q];
-			else if (i < k)
-				return Select(a, p, q - 1, i);
-			else
-				return Select(a, q + 1, r, i - k);
+				return a[qPivots.Item1];
+			if (i < k)
+				return Select(a, p, qPivots.Item1 - 1, i);
+
+			return Select(a, qPivots.Item2 + 1, r, i - k);
 		}
 
 		private int SelectMedian<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r)

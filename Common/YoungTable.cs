@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Algorithms.Common
 {
@@ -11,8 +8,8 @@ namespace Algorithms.Common
 	{
 		#region Fields
 
-		private int _hight;
-		private int _width;
+		private readonly int _hight;
+		private readonly int _width;
 		readonly BaseNode<TKey, TValue>[,] _table;
 
 		#endregion

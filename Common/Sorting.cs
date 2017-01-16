@@ -126,9 +126,9 @@ namespace Algorithms.Common
 		{
 			if (p >= r)
 				return;
-			int q = QuickPartition(a, p, r);
-			QuickSort(a, p, q - 1);
-			QuickSort(a, q + 1, r);
+			var qPivots = QuickPartition(a, p, r);
+			QuickSort(a, p, qPivots.Item1 - 1);
+			QuickSort(a, qPivots.Item2 + 1, r);
 		}
 
 		/// <summary>
@@ -145,25 +145,33 @@ namespace Algorithms.Common
 			}
 		}
 
-		public int QuickPartition<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r, int? xI = null) 
+		public Tuple<int, int> QuickPartition<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r, int? xI = null) 
 			where TKey : IComparable<TKey>
 		{
 			NodeHelper<TKey, TValue>.SwapWithIndex(a[xI.HasValue ? xI.Value : r], a[r]);
 			var x = a[r];
 			int i = p - 1;
-			int xN = 0;
-			for (int j = p; j < r; j++)
+			int k = r;
+			for (int j = p; j < k; j++)
 			{
 				if(a[j].Key.CompareTo(x.Key) <= 0)
 				{
 					if (a[j].Key.CompareTo(x.Key) == 0)
-						xN++;
-					i++;
-					NodeHelper<TKey, TValue>.SwapWithIndex(a[i], a[j]);
+					{
+						k--;
+						NodeHelper<TKey, TValue>.SwapWithIndex(a[k], a[j]);
+						j--;
+					}
+					else
+					{
+						i++;
+						NodeHelper<TKey, TValue>.SwapWithIndex(a[i], a[j]);
+					}
 				}
 			}
-			NodeHelper<TKey, TValue>.SwapWithIndex(a[i + 1], a[r]);
-			return xN + 1 == (r - p + 1) ? (p + r) / 2 : i + 1;
+			for (int j = k; j <= r; j++)
+				NodeHelper<TKey, TValue>.SwapWithIndex(a[i + 1 + j - k], a[j]);
+			return new Tuple<int, int>(i + 1, i + 1 + r - k);
 		}
 
 		public int QuickRandomizedPartition<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r)
