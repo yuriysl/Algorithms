@@ -3,12 +3,6 @@ using System.Collections.Generic;
 
 namespace Algorithms.Common
 {
-	public class SelectionNode<T>
-	{
-		public int Index { get; set; }
-		public T Key { get; set; }
-	}
-
 	public class Searching
 	{
 		static readonly Sorting Sorting = new Sorting();
@@ -57,7 +51,14 @@ namespace Algorithms.Common
 
 			int n = r - p + 1;
 			var min = a[0];
-			var max = n % 2 == 1 ? a[0] : a[1];
+			var max = a[0];
+			if (n % 2 == 0)
+			{
+				max = a[1];
+				if (max.Key.CompareTo(min.Key) < 0)
+					NodeHelper<TKey, TValue>.Swap(max, min);
+			}
+
 			int start = n % 2 == 1 ? 1 : 2;
 			for (int i = start; i < n; i = i + 2)
 			{
@@ -85,15 +86,16 @@ namespace Algorithms.Common
 			if (p == r)
 				return a[p];
 
-			int q = Sorting.QuickRandomizedPartition(a, p, r);
+			var qPivots = Sorting.QuickRandomizedPartition(a, p, r);
 
-			int k = q - p + 1;
-			if (i == k)
-				return a[q];
-			if (i < k)
-				return RandomizedSelect(a, p, q - 1, i);
+			int kMin = qPivots.Item1 - p + 1;
+			int kMax = qPivots.Item2 - p + 1;
+			if (i >= kMin && i <= kMax)
+				return a[qPivots.Item1 + (i - kMin)];
+			if (i < kMin)
+				return RandomizedSelect(a, p, qPivots.Item1 - 1, i);
 
-			return RandomizedSelect(a, q + 1, r, i - k);
+			return RandomizedSelect(a, qPivots.Item2 + 1, r, i - kMax);
 		}
 
 		public BaseNode<TKey, TValue> Select<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r, int i)

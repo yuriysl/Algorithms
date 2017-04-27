@@ -14,22 +14,22 @@ namespace Algorithms.Common
 		{
 			int left = p ?? 0;
 			int right = r ?? (a.Count - 1);
-			for (int i = left + 1; i <= right; ++i)
+			for (int j = left + 1; j <= right; ++j)
 			{
-				var key = a[i].Key;
-				var value = a[i].Value;
-				var index = a[i].Index;
-				int j = i - 1;
-				while (j >= left && a[j].Key.CompareTo(key) > 0)
+				var key = a[j].Key;
+				var value = a[j].Value;
+				var index = a[j].Index;
+				int i = j - 1;
+				while (i >= left && a[i].Key.CompareTo(key) > 0)
 				{
-					a[j + 1].Key = a[j].Key;
-					a[j + 1].Value = a[j].Value;
-					a[j + 1].Index = a[j].Index;
-					j--;
+					a[i + 1].Key = a[i].Key;
+					a[i + 1].Value = a[i].Value;
+					a[i + 1].Index = a[i].Index;
+					i--;
 				}
-				a[j + 1].Key = key;
-				a[j + 1].Value = value;
-				a[j + 1].Index = index;
+				a[i + 1].Key = key;
+				a[i + 1].Value = value;
+				a[i + 1].Index = index;
 			}
 		}
 
@@ -47,7 +47,7 @@ namespace Algorithms.Common
 			int carry = 0;
 			for (int i = 0; i < n; i++)
 			{
-				c[i] = (carry + a[i] + b[i]) % 2; ;
+				c[i] = (carry + a[i] + b[i]) % 2;
 				carry = (carry + a[i] + b[i]) / 2;
 			}
 			c[n] = carry;
@@ -139,9 +139,9 @@ namespace Algorithms.Common
 		{
 			while (p < r)
 			{
-				int q = QuickRandomizedPartition(a, p, r);
-				QuickSortTail(a, p, q - 1);
-				p = q + 1;
+				var qPivots = QuickRandomizedPartition(a, p, r);
+				QuickSortTail(a, p, qPivots.Item1 - 1);
+				p = qPivots.Item2 + 1;
 			}
 		}
 
@@ -174,7 +174,7 @@ namespace Algorithms.Common
 			return new Tuple<int, int>(i + 1, i + 1 + r - k);
 		}
 
-		public int QuickRandomizedPartition<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r)
+		public Tuple<int, int> QuickRandomizedPartition<TKey, TValue>(List<BaseNode<TKey, TValue>> a, int p, int r)
 			where TKey : IComparable<TKey>
 		{
 			int rndR = NodeHelper<TKey, TValue>.Rnd.Next(p, r);
@@ -182,19 +182,27 @@ namespace Algorithms.Common
 
 			var x = a[r];
 			int i = p - 1;
-			int xN = 0;
-			for (int j = p; j < r; j++)
+			int k = r;
+			for (int j = p; j < k; j++)
 			{
 				if (a[j].Key.CompareTo(x.Key) <= 0)
 				{
 					if (a[j].Key.CompareTo(x.Key) == 0)
-						xN++;
-					i++;
-					NodeHelper<TKey, TValue>.SwapWithIndex(a[i], a[j]);
+					{
+						k--;
+						NodeHelper<TKey, TValue>.SwapWithIndex(a[k], a[j]);
+						j--;
+					}
+					else
+					{
+						i++;
+						NodeHelper<TKey, TValue>.SwapWithIndex(a[i], a[j]);
+					}
 				}
 			}
-			NodeHelper<TKey, TValue>.SwapWithIndex(a[i + 1], a[r]);
-			return xN + 1 == (r - p + 1) ? (p + r) / 2 : i + 1;
+			for (int j = k; j <= r; j++)
+				NodeHelper<TKey, TValue>.SwapWithIndex(a[i + 1 + j - k], a[j]);
+			return new Tuple<int, int>(i + 1, i + 1 + r - k);
 		}
 
 		/// <summary>
